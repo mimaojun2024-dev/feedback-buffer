@@ -17,6 +17,7 @@ export default function CountdownPage({ initialTask = '' }) {
   const [dailyCount, setDailyCount] = useState(0);
   const [priorityTask, setPriorityTask] = useState(initialTask);
   const deadlineRef = useRef(null);
+  const hasIncrementedCountRef = useRef(false);
 
   useEffect(() => {
     const storedTask = getStoredPriorityTask();
@@ -31,8 +32,13 @@ export default function CountdownPage({ initialTask = '' }) {
     setRemainingSeconds(COUNTDOWN_SECONDS);
     setProgressPercent(100);
 
-    const nextCount = incrementStoredCount();
-    setDailyCount(nextCount || getStoredCount());
+    if (!hasIncrementedCountRef.current) {
+      hasIncrementedCountRef.current = true;
+      const nextCount = incrementStoredCount();
+      setDailyCount(nextCount || getStoredCount());
+    } else {
+      setDailyCount(getStoredCount());
+    }
 
     deadlineRef.current = Date.now() + COUNTDOWN_SECONDS * 1000;
 
@@ -97,8 +103,8 @@ export default function CountdownPage({ initialTask = '' }) {
           </div>
 
           <div className="screenBottom">
-            <Link href="/?edit=1&next=countdown" passHref>
-              <a className="textLink">修改当前最重要的事</a>
+            <Link href="/?edit=1&next=countdown" className="textLink">
+              修改当前最重要的事
             </Link>
             <p className="microCopy">如果数字没动，页面也会在 23 秒后自动进入下一步。</p>
           </div>

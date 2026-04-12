@@ -54,11 +54,11 @@ export default function ChoicesPage({ initialTask = '' }) {
             <a className="primaryButton buttonLink" href={XIAOHONGSHU_URL}>
               我还是想去看
             </a>
-            <Link href="/?focus=1" passHref>
-              <a className="secondaryButton buttonLink">先回去做5分钟正事</a>
+            <Link href="/?focus=1" className="secondaryButton buttonLink">
+              先回去做5分钟正事
             </Link>
-            <Link href="/?edit=1&next=choices" passHref>
-              <a className="textLink">修改当前最重要的事</a>
+            <Link href="/?edit=1&next=choices" className="textLink">
+              修改当前最重要的事
             </Link>
           </div>
         </section>

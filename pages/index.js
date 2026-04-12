@@ -143,11 +143,9 @@ export default function HomePage() {
                   pathname: '/countdown',
                   query: { task: priorityTask }
                 }}
-                passHref
+                className="primaryButton buttonLink steadyButton"
               >
-                <a className="primaryButton buttonLink steadyButton">
-                  <span className="steadyWord">稳住</span>
-                </a>
+                <span className="steadyWord">稳住</span>
               </Link>
             ) : null}
             {showReturnMessage ? (

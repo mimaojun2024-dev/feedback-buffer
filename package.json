@@ -2,14 +2,18 @@
   "name": "feedback-buffer",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "20.x"
+  },
+  "packageManager": "npm@10.8.2",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
-    "next": "11.1.4",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "next": "14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   }
 }
