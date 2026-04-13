@@ -1,0 +1,158 @@
+import Head from 'next/head';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import HomeShortcut from '../components/HomeShortcut';
+import {
+  getStoredFlowStats,
+  getStoredStateClicks,
+  getStoredTiredOptionClicks
+} from '../lib/buffer';
+import { LOW_QUALITY_STATES } from '../lib/states';
+import { TIRED_OPTIONS } from '../lib/tired-options';
+
+export default function StatsPage() {
+  const [stateClicks, setStateClicks] = useState({});
+  const [flowStats, setFlowStats] = useState({});
+  const [tiredOptionClicks, setTiredOptionClicks] = useState({});
+
+  useEffect(() => {
+    setStateClicks(getStoredStateClicks());
+    setFlowStats(getStoredFlowStats());
+    setTiredOptionClicks(getStoredTiredOptionClicks());
+  }, []);
+
+  const totalClicks = LOW_QUALITY_STATES.reduce(
+    (sum, state) => sum + (stateClicks[state.id] || 0),
+    0
+  );
+
+  const sortedTiredOptions = [...TIRED_OPTIONS]
+    .map((option) => ({
+      ...option,
+      count: tiredOptionClicks[option.id] || 0
+    }))
+    .sort((left, right) => right.count - left.count);
+
+  const topTiredOption = sortedTiredOptions[0] || null;
+  const nextTiredOption = sortedTiredOptions[1] || null;
+
+  const stateDetails = {
+    'drag-start': [
+      {
+        label: '已经开始',
+        value: `${flowStats['drag-start.started'] || 0} 次`
+      },
+      {
+        label: '走完 5 分钟',
+        value: `${flowStats['drag-start.completed'] || 0} 次`
+      }
+    ],
+    escape: [
+      {
+        label: '还是去看',
+        value: `${flowStats['escape.checked-feedback'] || 0} 次`
+      },
+      {
+        label: '先回去做',
+        value: `${flowStats['escape.returned-focus'] || 0} 次`
+      }
+    ],
+    'no-feedback': [
+      {
+        label: '细分记录',
+        value: '还没接上'
+      },
+      {
+        label: '流程状态',
+        value: '先留在这里'
+      }
+    ],
+    tired: [
+      {
+        label: '最常选',
+        value:
+          topTiredOption && topTiredOption.count > 0
+            ? `${topTiredOption.label} · ${topTiredOption.count} 次`
+            : '还没有'
+      },
+      {
+        label: '其次',
+        value:
+          nextTiredOption && nextTiredOption.count > 0
+            ? `${nextTiredOption.label} · ${nextTiredOption.count} 次`
+            : '还没有'
+      }
+    ]
+  };
+
+  return (
+    <>
+      <Head>
+        <title>命名记录</title>
+        <meta property="og:title" content="命名记录" />
+        <meta
+          name="description"
+          content="看看自己最近最常掉进哪一种低质量状态里。"
+        />
+      </Head>
+
+      <main className="shell">
+        <section className="panel launcherPanel">
+          <div className="screenTop">
+            <div className="launcherTop">
+              <p className="eyebrow">Naming Archive</p>
+              <p className="launcherKicker">这些夜里，我最常掉进哪里</p>
+            </div>
+            <div className="screenTopActions">
+              <HomeShortcut />
+              <p className="counter counterBadge">已命名 {totalClicks} 次</p>
+            </div>
+          </div>
+
+          <div className="stack phaseCard launcherStack">
+            <section className="stateList archiveStateList" aria-label="各状态累计点击记录">
+              {LOW_QUALITY_STATES.map((state) => (
+                <article key={state.id} className="stateCard archiveStateCard">
+                  <div className="stateCardTop">
+                    <p className="stateBadge">{state.shortLabel}</p>
+                    <span className="stateHint">累计</span>
+                  </div>
+                  <h2 className="stateTitle">{state.name}</h2>
+                  <p className="stateCount">{stateClicks[state.id] || 0} 次</p>
+                  <div className="stateSubstats" aria-label={`${state.name} 的细分记录`}>
+                    {stateDetails[state.id].map((detail) => (
+                      <div key={`${state.id}-${detail.label}`} className="stateSubstat">
+                        <p className="stateSubstatLabel">{detail.label}</p>
+                        <p className="stateSubstatValue">{detail.value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </section>
+
+            <section className="stack compactStack" aria-label="累了时的恢复动作记录">
+              <div className="sectionHeading">
+                <p className="summaryLabel">累了时，我怎么照顾自己</p>
+              </div>
+              <section className="archiveOptionList">
+                {TIRED_OPTIONS.map((option) => (
+                  <article key={option.id} className="archiveOptionRow">
+                    <p className="archiveOptionLabel">{option.label}</p>
+                    <p className="archiveOptionValue">{tiredOptionClicks[option.id] || 0} 次</p>
+                  </article>
+                ))}
+              </section>
+            </section>
+          </div>
+
+          <div className="screenBottom buttonGroup">
+            <Link href="/" className="secondaryButton buttonLink">
+              回到主页
+            </Link>
+          </div>
+        </section>
+      </main>
+    </>
+  );
+}

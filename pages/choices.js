@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import HomeShortcut from '../components/HomeShortcut';
 import {
   COUNTDOWN_SECONDS,
   getStoredCount,
+  incrementStoredFlowStat,
   getStoredPriorityTask,
   setStoredPriorityTask,
   XIAOHONGSHU_URL
@@ -31,7 +33,10 @@ export default function ChoicesPage({ initialTask = '' }) {
         <section className="panel">
           <div className="screenTop">
             <p className="eyebrow">Feedback Buffer</p>
-            <p className="counter counterBadge">今天已缓冲 {dailyCount} 次</p>
+            <div className="screenTopActions">
+              <HomeShortcut />
+              <p className="counter counterBadge">今天已缓冲 {dailyCount} 次</p>
+            </div>
           </div>
 
           <div className="stack phaseCard">
@@ -44,21 +49,29 @@ export default function ChoicesPage({ initialTask = '' }) {
             </p>
             {priorityTask ? (
               <section className="focusSummary compactSummary" aria-label="当前最重要的事情">
-                <p className="focusLabel">你刚才真正想守住的是</p>
+                <p className="focusLabel">你刚才想守住的是</p>
                 <p className="focusTask">{priorityTask}</p>
               </section>
             ) : null}
           </div>
 
           <div className="screenBottom buttonGroup">
-            <a className="primaryButton buttonLink" href={XIAOHONGSHU_URL}>
+            <a
+              className="primaryButton buttonLink"
+              href={XIAOHONGSHU_URL}
+              onClick={() => incrementStoredFlowStat('escape.checked-feedback')}
+            >
               我还是想去看
             </a>
-            <Link href="/?focus=1" className="secondaryButton buttonLink">
-              先回去做5分钟正事
+            <Link
+              href="/escape?focus=1"
+              className="secondaryButton buttonLink"
+              onClick={() => incrementStoredFlowStat('escape.returned-focus')}
+            >
+              先回去做 5 分钟
             </Link>
-            <Link href="/?edit=1&next=choices" className="textLink">
-              修改当前最重要的事
+            <Link href="/escape?edit=1&next=choices" className="textLink">
+              修改这件事
             </Link>
           </div>
         </section>
