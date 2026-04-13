@@ -1,14 +1,31 @@
 :root {
-  --bg: #eff2f7;
-  --bg-shadow: rgba(20, 28, 45, 0.12);
-  --card: rgba(255, 255, 255, 0.72);
-  --card-border: rgba(65, 76, 98, 0.12);
-  --text: #10131a;
-  --muted: #657084;
-  --accent: #111827;
-  --accent-soft: rgba(17, 24, 39, 0.08);
+  --bg: #dee6f0;
+  --bg-deep: #c7d2e0;
+  --bg-shadow: rgba(15, 23, 42, 0.16);
+  --card: rgba(248, 250, 252, 0.84);
+  --card-strong: rgba(255, 255, 255, 0.93);
+  --card-border: rgba(74, 88, 112, 0.12);
+  --surface-muted: rgba(20, 32, 52, 0.05);
+  --text: #0f1726;
+  --muted: #5b687d;
+  --accent: #172235;
+  --accent-strong: #22324a;
+  --accent-soft: rgba(23, 34, 53, 0.07);
   --button-text: #f8fafc;
-  --hairline: rgba(255, 255, 255, 0.55);
+  --hairline: rgba(255, 255, 255, 0.68);
+  --font-sans:
+    "Avenir Next",
+    "SF Pro Display",
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Noto Sans SC",
+    sans-serif;
+  --font-display:
+    "Iowan Old Style",
+    "Baskerville",
+    "Songti SC",
+    "STSong",
+    serif;
 }
 
 * {
@@ -24,17 +41,56 @@ body,
 }
 
 body {
+  position: relative;
+  overflow-x: hidden;
+  isolation: isolate;
   background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.96), transparent 32%),
-    radial-gradient(circle at bottom left, rgba(204, 216, 235, 0.7), transparent 35%),
-    linear-gradient(180deg, #f7f9fc 0%, #e9eef5 100%);
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.94), transparent 28%),
+    radial-gradient(circle at 88% 10%, rgba(190, 204, 226, 0.46), transparent 24%),
+    radial-gradient(circle at bottom left, rgba(201, 214, 233, 0.62), transparent 30%),
+    linear-gradient(155deg, #edf2f8 0%, #d8e1eb 48%, #c7d2e0 100%);
   color: var(--text);
-  font-family:
-    "SF Pro Display",
-    "SF Pro Text",
-    "PingFang SC",
-    "Helvetica Neue",
-    sans-serif;
+  font-family: var(--font-sans);
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+body::before {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.26)),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 23px,
+      rgba(82, 96, 122, 0.028) 23px,
+      rgba(82, 96, 122, 0.028) 24px
+    );
+  opacity: 0.7;
+  z-index: -2;
+}
+
+body::after {
+  inset: auto -12vw -18vh auto;
+  width: 54vw;
+  height: 54vw;
+  min-width: 260px;
+  min-height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0) 70%);
+  filter: blur(10px);
+  opacity: 0.9;
+  z-index: -1;
+}
+
+#__next {
+  position: relative;
+  z-index: 1;
 }
 
 button,
@@ -63,18 +119,38 @@ a {
 .panel {
   width: min(100%, 430px);
   min-height: min(780px, calc(100vh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 28px;
-  padding: 26px 22px 24px;
-  border-radius: 34px;
+  gap: 30px;
+  padding: 28px 24px 26px;
+  border-radius: 36px;
   border: 1px solid var(--card-border);
-  background: var(--card);
-  backdrop-filter: blur(26px) saturate(150%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.56) 0%, rgba(247, 249, 252, 0.12) 16%),
+    linear-gradient(180deg, var(--card-strong) 0%, var(--card) 100%);
+  backdrop-filter: blur(18px) saturate(135%);
   box-shadow:
     inset 0 1px 0 var(--hairline),
-    0 28px 60px var(--bg-shadow);
+    0 26px 64px var(--bg-shadow),
+    0 6px 18px rgba(255, 255, 255, 0.28);
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.42), transparent 30%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.34), transparent 56%);
+  pointer-events: none;
+}
+
+.panel > * {
+  position: relative;
+  z-index: 1;
 }
 
 .stack {
@@ -89,6 +165,16 @@ a {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.screenTopActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-left: auto;
+  flex-wrap: wrap;
 }
 
 .screenBottom {
@@ -97,47 +183,54 @@ a {
 }
 
 .phaseCard {
-  animation: phaseEnter 260ms cubic-bezier(0.2, 0.9, 0.24, 1);
+  animation: phaseEnter 320ms cubic-bezier(0.2, 0.9, 0.24, 1);
 }
 
 .eyebrow {
   margin: 0 0 24px;
   color: var(--muted);
-  font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 .title {
   margin: 0;
-  font-size: clamp(2.35rem, 9vw, 3.7rem);
-  line-height: 0.98;
-  font-weight: 700;
-  letter-spacing: -0.06em;
+  font-size: clamp(2.45rem, 9vw, 3.95rem);
+  line-height: 0.96;
+  font-family: var(--font-sans);
+  font-weight: 750;
+  letter-spacing: -0.05em;
 }
 
 .titleLine {
   display: block;
 }
 
+.homeTitle .titleLine {
+  display: inline;
+}
+
 .accentLine {
-  margin-top: 6px;
-  color: #324158;
+  margin-top: 8px;
+  color: #42526a;
 }
 
 .stageLabel {
   margin: 0;
   color: var(--muted);
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .body {
   margin: 0;
   color: var(--muted);
-  font-size: 1.08rem;
-  line-height: 1.72;
+  font-size: 1.02rem;
+  line-height: 1.68;
   letter-spacing: -0.01em;
 }
 
@@ -151,24 +244,26 @@ a {
 .focusLabel {
   margin: 0;
   color: var(--muted);
-  font-size: 0.98rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .taskInput {
   width: 100%;
   resize: none;
   border: 0;
-  border-radius: 22px;
+  border-radius: 24px;
   padding: 18px 18px;
-  background: rgba(255, 255, 255, 0.78);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(243, 247, 251, 0.92) 100%);
   box-shadow:
-    inset 0 0 0 1px rgba(17, 24, 39, 0.07),
-    0 10px 24px rgba(17, 24, 39, 0.05);
+    inset 0 0 0 1px rgba(74, 88, 112, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68),
+    0 14px 28px rgba(15, 23, 42, 0.06);
   color: var(--text);
-  font-size: 1.06rem;
-  line-height: 1.6;
+  font-size: 1.03rem;
+  line-height: 1.62;
   outline: none;
 }
 
@@ -178,8 +273,9 @@ a {
 
 .taskInput:focus {
   box-shadow:
-    inset 0 0 0 1.5px rgba(50, 65, 88, 0.28),
-    0 12px 28px rgba(17, 24, 39, 0.08);
+    inset 0 0 0 1.5px rgba(46, 63, 91, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 18px 34px rgba(15, 23, 42, 0.08);
 }
 
 .timer {
@@ -188,20 +284,23 @@ a {
   line-height: 0.84;
   font-weight: 700;
   letter-spacing: -0.1em;
-  font-family:
-    "Iowan Old Style",
-    "Palatino Linotype",
-    "Times New Roman",
-    serif;
+  font-family: var(--font-display);
   text-align: center;
+  color: #101827;
+}
+
+.timerWide {
+  font-size: clamp(4.2rem, 21vw, 6.6rem);
+  letter-spacing: -0.08em;
 }
 
 .timerLabel {
   margin: -10px 0 0;
   color: var(--muted);
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   text-align: center;
 }
 
@@ -210,14 +309,14 @@ a {
   width: 100%;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(17, 24, 39, 0.1);
+  background: rgba(23, 34, 53, 0.09);
 }
 
 .progressBar {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #111827 0%, #1e293b 100%);
+  background: linear-gradient(90deg, #172235 0%, #314564 100%);
   transition: width 220ms ease;
 }
 
@@ -230,6 +329,26 @@ a {
   text-decoration: none;
 }
 
+.topShortcut {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 10px 13px;
+  border-radius: 999px;
+  background: rgba(249, 250, 252, 0.82);
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  color: var(--text);
+}
+
+.topShortcutLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
 .primaryButton,
 .secondaryButton {
   width: 100%;
@@ -240,8 +359,8 @@ a {
   border-radius: 22px;
   padding: 20px 20px;
   min-height: 68px;
-  font-size: 1.12rem;
-  font-weight: 650;
+  font-size: 1.05rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
   cursor: pointer;
   text-decoration: none;
@@ -252,9 +371,10 @@ a {
 }
 
 .primaryButton {
-  background: var(--accent);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
   color: var(--button-text);
-  box-shadow: 0 18px 32px rgba(17, 24, 39, 0.18);
+  box-shadow: 0 20px 38px rgba(15, 23, 42, 0.18);
 }
 
 .steadyButton {
@@ -276,11 +396,12 @@ a {
   border-radius: 22px;
   padding: 20px 20px;
   min-height: 68px;
-  background: #1b2434;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, #182438 0%, #253752 100%);
   color: var(--button-text);
-  box-shadow: 0 18px 32px rgba(17, 24, 39, 0.18);
-  font-size: 1.08rem;
-  font-weight: 650;
+  box-shadow: 0 20px 38px rgba(15, 23, 42, 0.18);
+  font-size: 1.03rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
   cursor: pointer;
   transition:
@@ -290,9 +411,12 @@ a {
 }
 
 .secondaryButton {
-  background: var(--accent-soft);
+  background: rgba(255, 255, 255, 0.54);
   color: var(--text);
-  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.06);
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    0 14px 28px rgba(15, 23, 42, 0.04);
 }
 
 .primaryButton:active,
@@ -305,10 +429,14 @@ a {
   margin: 0;
   padding: 16px 18px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.58);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.84) 0%, rgba(243, 247, 251, 0.78) 100%);
   color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.68;
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.07),
+    0 12px 24px rgba(15, 23, 42, 0.04);
+  font-size: 0.98rem;
+  line-height: 1.64;
 }
 
 .counter {
@@ -321,18 +449,28 @@ a {
 
 .counterBadge {
   margin: 0;
-  padding: 10px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 13px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.56);
-  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.05);
+  background: rgba(249, 250, 252, 0.8);
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76);
   white-space: nowrap;
+}
+
+.pillLink {
+  color: inherit;
+  text-decoration: none;
 }
 
 .microCopy {
   margin: 0;
   color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.55;
+  font-size: 0.92rem;
+  line-height: 1.52;
   letter-spacing: -0.01em;
 }
 
@@ -352,10 +490,12 @@ a {
   gap: 10px;
   padding: 18px 18px;
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.62);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(243, 247, 251, 0.82) 100%);
   box-shadow:
-    inset 0 0 0 1px rgba(17, 24, 39, 0.05),
-    0 12px 28px rgba(17, 24, 39, 0.05);
+    inset 0 0 0 1px rgba(74, 88, 112, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 14px 28px rgba(15, 23, 42, 0.05);
 }
 
 .focusHeader {
@@ -368,9 +508,9 @@ a {
 .focusTask {
   margin: 0;
   color: var(--text);
-  font-size: 1.3rem;
-  line-height: 1.4;
-  font-weight: 650;
+  font-size: 1.24rem;
+  line-height: 1.42;
+  font-weight: 680;
   letter-spacing: -0.03em;
 }
 
@@ -378,7 +518,7 @@ a {
   margin: 4px auto 0;
   width: min(100%, 100%);
   min-height: 176px;
-  padding: 24px 22px;
+  padding: 26px 22px;
   gap: 14px;
   text-align: center;
 }
@@ -396,6 +536,426 @@ a {
   padding: 16px 18px;
 }
 
+.summaryCard,
+.compactSummary {
+  align-items: center;
+  text-align: center;
+}
+
+.launcherPanel {
+  gap: 16px;
+}
+
+.homePanel {
+  justify-content: flex-start;
+  gap: 14px;
+}
+
+.launcherTop {
+  display: grid;
+  gap: 8px;
+}
+
+.launcherKicker {
+  margin: 0;
+  color: #384960;
+  font-size: 0.98rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.launcherStack {
+  gap: 12px;
+}
+
+.launcherIntro {
+  display: grid;
+  gap: 10px;
+}
+
+.homeHeroStack {
+  flex: 1;
+  align-content: center;
+  gap: 22px;
+  padding-top: 2px;
+}
+
+.homeHeroIntro {
+  width: 100%;
+  justify-items: center;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.launcherTitle {
+  max-width: 9ch;
+}
+
+.homeTitle {
+  max-width: none;
+  font-family:
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Noto Sans SC",
+    "Microsoft YaHei",
+    sans-serif;
+  font-size: clamp(2.7rem, 10vw, 4.2rem);
+  font-weight: 760;
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+  white-space: nowrap;
+  width: 100%;
+  text-align: center;
+}
+
+.launcherBody {
+  max-width: none;
+  font-size: 0.92rem;
+  line-height: 1.44;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
+.homeBody {
+  color: #536276;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.launcherBodyMulti {
+  white-space: normal;
+}
+
+.launcherFootnote {
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.homeScreenBottom {
+  gap: 8px;
+  padding-top: 2px;
+}
+
+.homeFootnote {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.homeTop {
+  align-items: center;
+}
+
+.homeTop .eyebrow {
+  margin-bottom: 0;
+}
+
+.homeStateList {
+  width: 100%;
+  gap: 12px;
+}
+
+.stateList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+
+.optionList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+
+.stateCard {
+  display: grid;
+  gap: 8px;
+  min-height: 148px;
+  height: 100%;
+  padding: 14px 13px;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(243, 247, 251, 0.8) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 14px 28px rgba(15, 23, 42, 0.05);
+  align-content: start;
+}
+
+.stateCardActive {
+  color: inherit;
+  text-decoration: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 18px 34px rgba(15, 23, 42, 0.07);
+}
+
+.optionCard {
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+
+.optionCardSelected {
+  background:
+    radial-gradient(circle at top right, rgba(188, 203, 227, 0.34), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(237, 243, 250, 0.94) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(52, 68, 95, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 20px 36px rgba(15, 23, 42, 0.08);
+}
+
+.optionCardStatic {
+  cursor: default;
+}
+
+.stateCardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stateBadge,
+.stateHint,
+.stateArrow,
+.stateAction {
+  margin: 0;
+}
+
+.stateBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(23, 34, 53, 0.06);
+  color: #42526a;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.stateHint,
+.stateArrow {
+  color: #64738a;
+  font-size: 0.68rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.stateTitle {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(0.98rem, 3.2vw, 1.1rem);
+  line-height: 1.14;
+  font-weight: 680;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.stateDescription {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.79rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.stateAction {
+  margin-top: auto;
+  color: #22324a;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.summaryCard {
+  display: grid;
+  gap: 10px;
+  padding: 18px 18px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(188, 203, 227, 0.34), transparent 36%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(241, 246, 251, 0.9) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 16px 30px rgba(15, 23, 42, 0.05);
+}
+
+.summaryLabel,
+.summaryValue,
+.summaryBody,
+.stateCount {
+  margin: 0;
+}
+
+.summaryLabel {
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.summaryValue {
+  color: var(--text);
+  font-size: 2.8rem;
+  line-height: 0.9;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.summaryBody {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.stateCount {
+  margin-top: auto;
+  color: var(--text);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.archiveStateList {
+  gap: 12px;
+}
+
+.archiveStateCard {
+  gap: 10px;
+  min-height: 196px;
+  align-items: center;
+  text-align: center;
+}
+
+.archiveStateCard .stateCardTop {
+  width: 100%;
+  align-items: center;
+}
+
+.archiveStateCard .stateBadge {
+  justify-content: center;
+}
+
+.archiveStateCard .stateTitle,
+.archiveStateCard .stateCount {
+  width: 100%;
+}
+
+.stateSubstats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: auto;
+}
+
+.stateSubstat {
+  display: grid;
+  gap: 5px;
+  min-height: 72px;
+  padding: 10px 10px 11px;
+  border-radius: 16px;
+  background: rgba(22, 34, 53, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(74, 88, 112, 0.06);
+  align-items: center;
+  text-align: center;
+}
+
+.stateSubstatLabel,
+.stateSubstatValue,
+.archiveOptionLabel,
+.archiveOptionValue {
+  margin: 0;
+}
+
+.stateSubstatLabel {
+  color: #64738a;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stateSubstatValue {
+  color: var(--text);
+  font-size: 0.8rem;
+  line-height: 1.38;
+  font-weight: 680;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.archiveOptionList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.archiveOptionRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 16px;
+  background: rgba(249, 250, 252, 0.74);
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74);
+}
+
+.archiveOptionLabel {
+  color: var(--text);
+  font-size: 0.82rem;
+  line-height: 1.35;
+  font-weight: 620;
+  letter-spacing: -0.02em;
+  text-align: left;
+}
+
+.archiveOptionValue {
+  color: #42526a;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+  justify-self: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.compactStack {
+  gap: 12px;
+}
+
+.sectionHeading {
+  display: grid;
+  gap: 8px;
+}
+
 .textButton,
 .textLink {
   appearance: none;
@@ -403,12 +963,13 @@ a {
   border: 0;
   padding: 0;
   background: transparent;
-  color: #324158;
-  font-size: 0.96rem;
-  font-weight: 600;
+  color: #22324a;
+  font-size: 0.92rem;
+  font-weight: 700;
   letter-spacing: -0.01em;
   text-decoration: none;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 @keyframes phaseEnter {
@@ -424,6 +985,14 @@ a {
 }
 
 @media (hover: hover) {
+  .topShortcut:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 0 0 1px rgba(74, 88, 112, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.84),
+      0 16px 26px rgba(15, 23, 42, 0.06);
+  }
+
   .primaryButton:hover,
   .secondaryButton:hover,
   .taskSubmitButton:hover {
@@ -432,19 +1001,69 @@ a {
 
   .primaryButton:hover,
   .taskSubmitButton:hover {
-    box-shadow: 0 22px 38px rgba(17, 24, 39, 0.2);
+    box-shadow: 0 24px 42px rgba(15, 23, 42, 0.2);
+  }
+
+  .stateCardActive:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 0 0 1px rgba(74, 88, 112, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      0 22px 38px rgba(15, 23, 42, 0.09);
+  }
+
+  .optionCard:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 0 0 1px rgba(74, 88, 112, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      0 20px 36px rgba(15, 23, 42, 0.07);
+  }
+}
+
+@media (min-width: 431px) {
+  .panel {
+    width: min(100%, 468px);
+    min-height: min(812px, calc(100vh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+    padding: 30px 26px 28px;
+  }
+
+  .stateList,
+  .optionList {
+    gap: 14px;
+  }
+
+  .stateCard {
+    min-height: 154px;
+    padding: 15px 14px;
+  }
+
+  .archiveStateCard {
+    min-height: 204px;
+  }
+
+  .launcherBody {
+    font-size: 0.95rem;
+  }
+
+  .homeTitle {
+    font-size: clamp(2.9rem, 9.4vw, 4.35rem);
+  }
+
+  .homeStateList {
+    gap: 14px;
   }
 }
 
 @media (max-width: 420px) {
   .panel {
-    border-radius: 30px;
+    border-radius: 32px;
     min-height: calc(100vh - 18px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
     padding: 24px 18px 22px;
   }
 
   .body {
-    font-size: 1.02rem;
+    font-size: 0.99rem;
   }
 
   .primaryButton,
@@ -456,5 +1075,237 @@ a {
   .screenTop {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .screenTopActions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+  }
+
+  .launcherBody {
+    font-size: 0.85rem;
+  }
+
+  .homeTitle {
+    font-size: clamp(2.45rem, 10vw, 3.3rem);
+  }
+
+  .homeHeroStack {
+    gap: 18px;
+  }
+
+  .stateList {
+    gap: 8px;
+  }
+
+  .optionList {
+    gap: 10px;
+  }
+
+  .stateCard {
+    min-height: 138px;
+    padding: 12px 11px;
+  }
+
+  .archiveStateCard {
+    min-height: 188px;
+  }
+
+  .stateTitle {
+    font-size: 0.94rem;
+  }
+
+  .stateDescription {
+    font-size: 0.74rem;
+    line-height: 1.32;
+  }
+
+  .stateAction {
+    font-size: 0.72rem;
+  }
+
+  .summaryValue {
+    font-size: 2.5rem;
+  }
+
+  .archiveOptionLabel {
+    font-size: 0.78rem;
+  }
+
+  .archiveOptionValue {
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 389px) {
+  .shell {
+    padding:
+      calc(18px + env(safe-area-inset-top))
+      12px
+      calc(18px + env(safe-area-inset-bottom));
+  }
+
+  .panel {
+    border-radius: 28px;
+    min-height: calc(100vh - 14px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    padding: 22px 15px 20px;
+    gap: 24px;
+  }
+
+  .title {
+    font-size: clamp(2.18rem, 8.4vw, 3.08rem);
+  }
+
+  .body {
+    font-size: 0.95rem;
+    line-height: 1.58;
+  }
+
+  .topShortcut {
+    min-height: 38px;
+    padding: 9px 12px;
+  }
+
+  .topShortcutLabel {
+    font-size: 0.74rem;
+  }
+
+  .homeTitle {
+    font-size: clamp(2.28rem, 9.2vw, 3rem);
+  }
+
+  .homeHeroIntro {
+    max-width: 270px;
+  }
+
+  .taskInput,
+  .focusSummary,
+  .focusCenter,
+  .summaryCard {
+    padding: 16px 15px;
+  }
+
+  .focusCenter {
+    min-height: 164px;
+  }
+
+  .focusTask {
+    font-size: 1.14rem;
+  }
+
+  .focusCenterTask {
+    font-size: clamp(1.4rem, 5.2vw, 1.86rem);
+  }
+
+  .timer {
+    font-size: clamp(4.9rem, 26vw, 6.6rem);
+  }
+
+  .timerWide {
+    font-size: clamp(3.5rem, 19vw, 5.2rem);
+  }
+
+  .timerBody {
+    max-width: 18rem;
+  }
+
+  .counterBadge {
+    padding: 9px 11px;
+  }
+
+  .stateList,
+  .optionList {
+    gap: 8px;
+  }
+
+  .stateCard {
+    min-height: 126px;
+    padding: 11px 10px;
+  }
+
+  .archiveStateCard {
+    min-height: 178px;
+  }
+
+  .stateTitle {
+    font-size: 0.89rem;
+  }
+
+  .stateDescription {
+    font-size: 0.71rem;
+    line-height: 1.28;
+  }
+
+  .stateAction,
+  .stateArrow,
+  .stateHint,
+  .stateBadge {
+    font-size: 0.68rem;
+  }
+
+  .stateSubstats {
+    gap: 7px;
+  }
+
+  .stateSubstat {
+    min-height: 66px;
+    padding: 9px 9px 10px;
+  }
+
+  .stateSubstatLabel {
+    font-size: 0.62rem;
+  }
+
+  .stateSubstatValue {
+    font-size: 0.74rem;
+    line-height: 1.34;
+  }
+
+  .summaryValue {
+    font-size: 2.2rem;
+  }
+
+  .buttonGroup {
+    gap: 10px;
+  }
+
+  .primaryButton,
+  .secondaryButton,
+  .taskSubmitButton {
+    min-height: 60px;
+    padding: 18px 16px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 359px) {
+  .screenTop {
+    gap: 10px;
+  }
+
+  .screenTopActions {
+    gap: 8px;
+  }
+
+  .archiveOptionList {
+    grid-template-columns: 1fr;
+  }
+
+  .stateList,
+  .optionList {
+    grid-template-columns: 1fr;
+  }
+
+  .stateCard {
+    min-height: 118px;
+  }
+
+  .launcherBody {
+    white-space: normal;
+  }
+
+  .launcherFootnote {
+    font-size: 0.8rem;
   }
 }

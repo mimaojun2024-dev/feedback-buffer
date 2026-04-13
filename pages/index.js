@@ -1,162 +1,69 @@
-import Link from 'next/link';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import {
-  COUNTDOWN_SECONDS,
-  getStoredCount,
-  getStoredPriorityTask,
-  setStoredPriorityTask
-} from '../lib/buffer';
+import Link from 'next/link';
+import { incrementStoredStateClick } from '../lib/buffer';
+import { LOW_QUALITY_STATES } from '../lib/states';
 
 export default function HomePage() {
-  const router = useRouter();
-  const [dailyCount, setDailyCount] = useState(0);
-  const [showReturnMessage, setShowReturnMessage] = useState(false);
-  const [priorityTask, setPriorityTask] = useState('');
-  const [draftTask, setDraftTask] = useState('');
-  const [isEditingTask, setIsEditingTask] = useState(true);
-  const [nextPath, setNextPath] = useState('');
-
-  useEffect(() => {
-    setDailyCount(getStoredCount());
-    const storedTask = getStoredPriorityTask();
-    const searchParams = new URLSearchParams(window.location.search);
-    const isEditMode = searchParams.get('edit') === '1';
-    const requestedNextPath = searchParams.get('next') || '';
-
-    setPriorityTask(storedTask);
-    setDraftTask(storedTask);
-    setShowReturnMessage(searchParams.get('focus') === '1');
-    setIsEditingTask(!storedTask || isEditMode);
-    setNextPath(requestedNextPath);
-  }, []);
-
-  function handleTaskSubmit(event) {
-    const nextTask = setStoredPriorityTask(draftTask);
-    if (!nextTask) {
-      event.preventDefault();
-      return;
-    }
-
-    event.preventDefault();
-    setPriorityTask(nextTask);
-    setDraftTask(nextTask);
-    setIsEditingTask(false);
-
-    const target = !priorityTask
-      ? '/countdown'
-      : nextPath === 'countdown'
-        ? '/countdown'
-        : nextPath === 'choices'
-          ? '/choices'
-          : '/';
-
-    if (target === '/') {
-      router.push('/');
-      return;
-    }
-
-    router.push({
-      pathname: target,
-      query: { task: nextTask }
-    });
-  }
-
-  const submitTarget = !priorityTask
-    ? '/countdown'
-    : nextPath === 'countdown'
-      ? '/countdown'
-      : nextPath === 'choices'
-        ? '/choices'
-        : '/';
-
   return (
     <>
       <Head>
-        <meta property="og:title" content="Feedback Buffer" />
+        <title>夜的命名术</title>
+        <meta property="og:title" content="夜的命名术" />
+        <meta
+          name="description"
+          content="先把模糊的低质量状态命名出来，再决定要怎么回去。"
+        />
         <meta
           property="og:description"
-          content="Wait twenty-three quiet seconds before checking feedback."
+          content="先把模糊的低质量状态命名出来，再决定要怎么回去。"
         />
       </Head>
 
       <main className="shell">
-        <section className="panel">
-          <div className="screenTop">
-            <p className="eyebrow">Feedback Buffer</p>
-            <p className="counter counterBadge">今天已缓冲 {dailyCount} 次</p>
+        <section className="panel launcherPanel homePanel">
+          <div className="screenTop homeTop">
+            <p className="eyebrow">State Launcher</p>
+            <Link href="/stats" className="counter counterBadge buttonLink pillLink">
+              查看记录
+            </Link>
           </div>
 
-          <div className="stack phaseCard">
-            <h1 className="title">
-              <span className="titleLine">先别去看红点</span>
-              <span className="titleLine accentLine">先稳 23 秒</span>
-            </h1>
-            <p className="body">
-              你不是要永远不看，只是先给自己留一小段缓冲，再决定要不要过去。
-            </p>
-            {isEditingTask ? (
-              <form
-                className="taskEditor"
-                action={submitTarget}
-                method="get"
-                onSubmit={handleTaskSubmit}
-              >
-                <label className="taskLabel" htmlFor="priorityTask">
-                  我当前最重要的事情是
-                </label>
-                <textarea
-                  id="priorityTask"
-                  name="task"
-                  className="taskInput"
-                  rows="3"
-                  value={draftTask}
-                  onChange={(event) => setDraftTask(event.target.value)}
-                  placeholder="比如：先把今天最关键的那件事往前推进一点"
-                />
-                <button type="submit" className="taskSubmitButton">
-                  记住这件事
-                </button>
-              </form>
-            ) : (
-              <section className="focusSummary" aria-label="当前最重要的事情">
-                <div className="focusHeader">
-                  <p className="focusLabel">我当前最重要的事情是</p>
-                  <button
-                    type="button"
-                    className="textButton"
-                    onClick={() => setIsEditingTask(true)}
-                  >
-                    修改
-                  </button>
-                </div>
-                <p className="focusTask">{priorityTask}</p>
-              </section>
-            )}
-          </div>
-
-          <div className="screenBottom">
-            {!isEditingTask && priorityTask ? (
-              <Link
-                href={{
-                  pathname: '/countdown',
-                  query: { task: priorityTask }
-                }}
-                className="primaryButton buttonLink steadyButton"
-              >
-                <span className="steadyWord">稳住</span>
-              </Link>
-            ) : null}
-            {showReturnMessage ? (
-              <p className="note">好，先回去做 5 分钟正事。小红点可以等一会。</p>
-            ) : (
-              <p className="microCopy">
-                {isEditingTask
-                  ? '这件事会保存在当前浏览器里，之后可以随时修改。'
-                  : `点下去以后，页面会直接开始 ${COUNTDOWN_SECONDS} 秒倒计时。`}
+          <div className="stack phaseCard launcherStack homeHeroStack">
+            <section className="launcherIntro homeHeroIntro">
+              <h1 className="title launcherTitle homeTitle">
+                <span className="titleLine">夜的命名术</span>
+              </h1>
+              <p className="body launcherBody homeBody">
+                先给现在一个名字。
               </p>
-            )}
+            </section>
+
+            <section className="stateList homeStateList" aria-label="低质量状态列表">
+              {LOW_QUALITY_STATES.map((state) => (
+                <Link
+                  key={state.id}
+                  href={state.href}
+                  className="stateCard stateCardActive"
+                  onClick={() => incrementStoredStateClick(state.id)}
+                >
+                  <div className="stateCardTop">
+                    <p className="stateBadge">{state.shortLabel}</p>
+                    <span className="stateArrow" aria-hidden="true">
+                      进入
+                    </span>
+                  </div>
+                  <h2 className="stateTitle">{state.name}</h2>
+                  <p className="stateDescription">{state.description}</p>
+                  <p className="stateAction">{state.cta || '先把它认出来'}</p>
+                </Link>
+              ))}
+            </section>
+          </div>
+
+          <div className="screenBottom homeScreenBottom">
+            <p className="microCopy launcherFootnote homeFootnote">
+              认出来，再接住自己。
+            </p>
           </div>
         </section>
       </main>

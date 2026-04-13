@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import HomeShortcut from '../components/HomeShortcut';
 import {
   COUNTDOWN_SECONDS,
   getStoredPriorityTask,
@@ -24,7 +25,7 @@ export default function CountdownPage({ initialTask = '' }) {
     const resolvedTask = initialTask ? setStoredPriorityTask(initialTask) : storedTask;
 
     if (!resolvedTask) {
-      router.replace('/?edit=1');
+      router.replace('/escape?edit=1');
       return undefined;
     }
 
@@ -78,13 +79,16 @@ export default function CountdownPage({ initialTask = '' }) {
         <section className="panel">
           <div className="screenTop">
             <p className="eyebrow">Feedback Buffer</p>
-            <p className="counter counterBadge">今天已缓冲 {dailyCount} 次</p>
+            <div className="screenTopActions">
+              <HomeShortcut />
+              <p className="counter counterBadge">今天已缓冲 {dailyCount} 次</p>
+            </div>
           </div>
 
           <div className="stack phaseCard timerStage">
             <p className="stageLabel">先稳一下</p>
             <section className="focusCenter" aria-label="当前最重要的事情">
-              <p className="focusLabel centerLabel">我当前最重要的事情是</p>
+              <p className="focusLabel centerLabel">我现在最重要的是</p>
               <p className="focusTask focusCenterTask">{priorityTask}</p>
             </section>
             <h1 className="timer" aria-live="polite">
@@ -103,8 +107,8 @@ export default function CountdownPage({ initialTask = '' }) {
           </div>
 
           <div className="screenBottom">
-            <Link href="/?edit=1&next=countdown" className="textLink">
-              修改当前最重要的事
+            <Link href="/escape?edit=1&next=countdown" className="textLink">
+              修改这件事
             </Link>
             <p className="microCopy">如果数字没动，页面也会在 23 秒后自动进入下一步。</p>
           </div>
