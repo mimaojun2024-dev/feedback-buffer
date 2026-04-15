@@ -153,45 +153,41 @@ export default function StatsPage() {
 
           <div className="stack phaseCard launcherStack">
             <section className="stateList archiveStateList" aria-label="各状态累计点击记录">
-              {LOW_QUALITY_STATES.map((state) => (
-                <article key={state.id} className="stateCard archiveStateCard">
-                  <div className="stateCardTop">
-                    <p className="stateBadge">{state.shortLabel}</p>
-                    <span className="stateHint">累计</span>
-                  </div>
-                  <h2 className="stateTitle">{state.name}</h2>
-                  <p className="stateCount">{stateClicks[state.id] || 0} 次</p>
-                  <div className="stateSubstats" aria-label={`${state.name} 的细分记录`}>
-                    {(stateDetails[state.id] || []).map((detail) => (
-                      <div key={`${state.id}-${detail.label}`} className="stateSubstat">
-                        <p className="stateSubstatLabel">{detail.label}</p>
-                        <p className="stateSubstatValue">{detail.value}</p>
-                      </div>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </section>
+              {LOW_QUALITY_STATES.map((state) => {
+                const cardContent = (
+                  <>
+                    <div className="stateCardTop">
+                      <p className="stateBadge">{state.shortLabel}</p>
+                      <span className="stateHint">累计</span>
+                    </div>
+                    <h2 className="stateTitle">{state.name}</h2>
+                    <p className="stateCount">{stateClicks[state.id] || 0} 次</p>
+                    <div className="stateSubstats" aria-label={`${state.name} 的细分记录`}>
+                      {(stateDetails[state.id] || []).map((detail) => (
+                        <div key={`${state.id}-${detail.label}`} className="stateSubstat">
+                          <p className="stateSubstatLabel">{detail.label}</p>
+                          <p className="stateSubstatValue">{detail.value}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                );
 
-            <section className="stack compactStack" aria-label="累了时的恢复动作记录">
-              <div className="sectionHeading">
-                <p className="summaryLabel">累了时，我怎么照顾自己</p>
-              </div>
-              <section className="archiveOptionList">
-                {TIRED_OPTIONS.map((option) => (
-                  <article key={option.id} className="archiveOptionRow">
-                    <p className="archiveOptionLabel">{option.label}</p>
-                    <p className="archiveOptionValue">{tiredOptionClicks[option.id] || 0} 次</p>
+                if (state.id === 'tired') {
+                  return (
+                    <Link key={state.id} href="/tired/care" className="stateCard archiveStateCard archiveStateCardLink">
+                      {cardContent}
+                    </Link>
+                  );
+                }
+
+                return (
+                  <article key={state.id} className="stateCard archiveStateCard">
+                    {cardContent}
                   </article>
-                ))}
-              </section>
+                );
+              })}
             </section>
-          </div>
-
-          <div className="screenBottom buttonGroup">
-            <Link href="/" className="secondaryButton buttonLink">
-              回到主页
-            </Link>
           </div>
         </section>
       </main>

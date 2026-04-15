@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import HomeShortcut from './HomeShortcut';
 import AxisRail from './AxisRail';
@@ -18,7 +19,9 @@ export default function AxisListPage({
   badge,
   title,
   accent,
-  description
+  description,
+  relatedHref,
+  relatedLabel
 }) {
   const [entries, setEntries] = useState(createEmptyEntries());
   const [isEditing, setIsEditing] = useState(true);
@@ -69,7 +72,7 @@ export default function AxisListPage({
           </div>
         </div>
 
-        <div className="stack phaseCard">
+        <div className="stack phaseCard axisStack">
           <AxisRail currentLevel={sectionId} />
           <h1 className="title axisTitle">
             <span className="titleLine">{title}</span>
@@ -112,6 +115,11 @@ export default function AxisListPage({
             <button type="button" className="textButton axisEditButton" onClick={() => setIsEditing(true)}>
               修改这几条
             </button>
+          ) : null}
+          {relatedHref && relatedLabel ? (
+            <Link href={relatedHref} className="textLink axisRelatedLink">
+              {relatedLabel}
+            </Link>
           ) : null}
         </div>
       </section>

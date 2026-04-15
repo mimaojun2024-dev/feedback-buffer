@@ -1,102 +1,23 @@
 import Head from 'next/head';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import HomeShortcut from '../components/HomeShortcut';
-import {
-  getStoredTiredOptionClicks,
-  incrementStoredTiredOptionClick
-} from '../lib/buffer';
-import { TIRED_OPTIONS } from '../lib/tired-options';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-export default function TiredPage() {
-  const [selectedOptionId, setSelectedOptionId] = useState('');
-  const [optionClicks, setOptionClicks] = useState({});
+export default function TiredRedirectPage() {
+  const router = useRouter();
 
   useEffect(() => {
-    setOptionClicks(getStoredTiredOptionClicks());
-  }, []);
-
-  function handleOptionClick(optionId) {
-    incrementStoredTiredOptionClick(optionId);
-    setSelectedOptionId(optionId);
-    setOptionClicks((current) => ({
-      ...current,
-      [optionId]: (current[optionId] || 0) + 1
-    }));
-  }
-
-  const selectedOption = TIRED_OPTIONS.find((option) => option.id === selectedOptionId) || null;
+    router.replace('/tired/care');
+  }, [router]);
 
   return (
     <>
       <Head>
         <title>我只是累了</title>
-        <meta property="og:title" content="我只是累了" />
-        <meta
-          name="description"
-          content="先不要逼自己恢复产出，先选一个最适合处理累了的动作。"
-        />
       </Head>
-
       <main className="shell">
-        <section className="panel launcherPanel">
-          <div className="screenTop">
-            <div className="launcherTop">
-              <p className="eyebrow">State Launcher</p>
-              <p className="launcherKicker">先恢复，不急着逼自己</p>
-            </div>
-            <div className="screenTopActions">
-              <HomeShortcut />
-              <p className="counter counterBadge">能量见底</p>
-            </div>
-          </div>
-
-          <div className="stack phaseCard launcherStack">
-            <section className="launcherIntro">
-              <h1 className="title launcherTitle">
-                <span className="titleLine">我只是累了</span>
-              </h1>
-              <p className="body launcherBodyMulti">
-                现在先不要问怎么继续卷回来。先选一个更适合处理累了的动作，把自己带回一点点。
-              </p>
-            </section>
-
-            <section className="optionList" aria-label="处理累了的选项">
-              {TIRED_OPTIONS.map((option) => (
-                <button
-                  key={option.id}
-                  type="button"
-                  className={`stateCard optionCard ${selectedOptionId === option.id ? 'optionCardSelected' : ''}`}
-                  onClick={() => handleOptionClick(option.id)}
-                >
-                  <div className="stateCardTop">
-                    <p className="stateBadge">恢复动作</p>
-                    <span className="stateHint">已选 {optionClicks[option.id] || 0} 次</span>
-                  </div>
-                  <h2 className="stateTitle">{option.label}</h2>
-                  <p className="stateDescription">{option.description}</p>
-                </button>
-              ))}
-            </section>
-
-            {selectedOption ? (
-              <section className="summaryCard" aria-label="当前选择">
-                <p className="summaryLabel">现在就先做这一件</p>
-                <p className="focusTask">{selectedOption.label}</p>
-                <p className="summaryBody">
-                  不用顺便解决别的。先把这件恢复动作做掉，回来再看下一步。
-                </p>
-              </section>
-            ) : null}
-          </div>
-
-          <div className="screenBottom buttonGroup">
-            <Link href="/stats" className="textLink">
-              看累计记录
-            </Link>
-            <Link href="/" className="secondaryButton buttonLink">
-              回到主页
-            </Link>
+        <section className="panel">
+          <div className="stack phaseCard">
+            <p className="body">正在进入照顾自己的方式。</p>
           </div>
         </section>
       </main>
