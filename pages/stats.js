@@ -35,6 +35,22 @@ export default function StatsPage() {
 
   const topTiredOption = sortedTiredOptions[0] || null;
   const nextTiredOption = sortedTiredOptions[1] || null;
+  const escapedActions = [
+    {
+      label: '站起来',
+      count: flowStats['escaped.stand-up'] || 0
+    },
+    {
+      label: '喝一口水',
+      count: flowStats['escaped.drink-water'] || 0
+    },
+    {
+      label: '回到桌面',
+      count: flowStats['escaped.back-to-desktop'] || 0
+    }
+  ].sort((left, right) => right.count - left.count);
+  const topEscapedAction = escapedActions[0] || null;
+  const nextEscapedAction = escapedActions[1] || null;
 
   const stateDetails = {
     'drag-start': [
@@ -43,7 +59,7 @@ export default function StatsPage() {
         value: `${flowStats['drag-start.started'] || 0} 次`
       },
       {
-        label: '走完 5 分钟',
+        label: '走完 2 分钟',
         value: `${flowStats['drag-start.completed'] || 0} 次`
       }
     ],
@@ -57,7 +73,33 @@ export default function StatsPage() {
         value: `${flowStats['escape.returned-focus'] || 0} 次`
       }
     ],
-    'no-feedback': [
+    escaped: [
+      {
+        label: '最常做',
+        value:
+          topEscapedAction && topEscapedAction.count > 0
+            ? `${topEscapedAction.label} · ${topEscapedAction.count} 次`
+            : '还没有'
+      },
+      {
+        label: '其次',
+        value:
+          nextEscapedAction && nextEscapedAction.count > 0
+            ? `${nextEscapedAction.label} · ${nextEscapedAction.count} 次`
+            : '还没有'
+      }
+    ],
+    'emotion-amplitude': [
+      {
+        label: '细分记录',
+        value: '还没接上'
+      },
+      {
+        label: '流程状态',
+        value: '先留在这里'
+      }
+    ],
+    'empty-dreaming': [
       {
         label: '细分记录',
         value: '还没接上'
@@ -120,7 +162,7 @@ export default function StatsPage() {
                   <h2 className="stateTitle">{state.name}</h2>
                   <p className="stateCount">{stateClicks[state.id] || 0} 次</p>
                   <div className="stateSubstats" aria-label={`${state.name} 的细分记录`}>
-                    {stateDetails[state.id].map((detail) => (
+                    {(stateDetails[state.id] || []).map((detail) => (
                       <div key={`${state.id}-${detail.label}`} className="stateSubstat">
                         <p className="stateSubstatLabel">{detail.label}</p>
                         <p className="stateSubstatValue">{detail.value}</p>

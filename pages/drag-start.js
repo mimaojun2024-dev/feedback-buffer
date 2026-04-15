@@ -46,11 +46,11 @@ export default function DragStartPage() {
   return (
     <>
       <Head>
-        <title>我在拖启动</title>
-        <meta property="og:title" content="我在拖启动" />
+        <title>我不想启动</title>
+        <meta property="og:title" content="我不想启动" />
         <meta
           name="description"
-          content="先把眼前这五分钟该做什么写下来，然后只做这五分钟。"
+          content="先把眼前这两分钟该做什么写下来，然后只做这两分钟。"
         />
       </Head>
 
@@ -60,7 +60,7 @@ export default function DragStartPage() {
             <p className="eyebrow">State Launcher</p>
             <div className="screenTopActions">
               <HomeShortcut />
-              <p className="counter counterBadge">启动阻力</p>
+              <p className="counter counterBadge">不想启动</p>
             </div>
           </div>
 
@@ -70,7 +70,7 @@ export default function DragStartPage() {
               <span className="titleLine accentLine">只写眼前这一步</span>
             </h1>
             <p className="body">
-              先不要想整件事。只写下你现在真正应该碰的那一件事，然后给它五分钟。
+              先不要想整件事。只写下你现在真正应该碰的那一件事，然后给它两分钟。
             </p>
             {isEditingTask ? (
               <form
@@ -92,7 +92,7 @@ export default function DragStartPage() {
                   placeholder="比如：先把文档打开，写下第一段提纲"
                 />
                 <button type="submit" className="taskSubmitButton">
-                  只做 5 分钟
+                  只做 2 分钟
                 </button>
               </form>
             ) : (
@@ -121,11 +121,11 @@ export default function DragStartPage() {
                 }}
                 className="primaryButton buttonLink steadyButton"
               >
-                <span className="steadyWord">开始这 5 分钟</span>
+                <span className="steadyWord">开始这 2 分钟</span>
               </Link>
             ) : null}
             <p className="microCopy">
-              你不用马上进入很厉害的状态。只要把这 5 分钟借给眼前这件事。
+              你不用马上进入很厉害的状态。只要把这 2 分钟借给眼前这件事。
             </p>
           </div>
         </section>

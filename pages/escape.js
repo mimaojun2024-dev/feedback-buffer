@@ -9,6 +9,7 @@ import {
   getStoredPriorityTask,
   setStoredPriorityTask
 } from '../lib/buffer';
+import { getFeedbackOptionById } from '../lib/feedback-options';
 
 export default function EscapePage() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function EscapePage() {
   const [draftTask, setDraftTask] = useState('');
   const [isEditingTask, setIsEditingTask] = useState(true);
   const [nextPath, setNextPath] = useState('');
+  const [selectedReason, setSelectedReason] = useState(null);
 
   useEffect(() => {
     setDailyCount(getStoredCount());
@@ -25,12 +27,14 @@ export default function EscapePage() {
     const searchParams = new URLSearchParams(window.location.search);
     const isEditMode = searchParams.get('edit') === '1';
     const requestedNextPath = searchParams.get('next') || '';
+    const selectedReasonId = searchParams.get('reason') || '';
 
     setPriorityTask(storedTask);
     setDraftTask(storedTask);
     setShowReturnMessage(searchParams.get('focus') === '1');
     setIsEditingTask(!storedTask || isEditMode);
     setNextPath(requestedNextPath);
+    setSelectedReason(getFeedbackOptionById(selectedReasonId));
   }, []);
 
   function handleTaskSubmit(event) {
@@ -100,6 +104,12 @@ export default function EscapePage() {
             <p className="body">
               你不是要永远不看，只是先给自己留一小段缓冲，再决定要不要过去。
             </p>
+            {selectedReason ? (
+              <section className="focusSummary compactSummary" aria-label="当前反馈冲动">
+                <p className="focusLabel">你现在更像是</p>
+                <p className="focusTask">{selectedReason.label}</p>
+              </section>
+            ) : null}
             {isEditingTask ? (
               <form
                 className="taskEditor"

@@ -73,7 +73,7 @@ export default function DragStartCountdownPage({ initialTask = '' }) {
   return (
     <>
       <Head>
-        <title>只做 5 分钟</title>
+        <title>只做 2 分钟</title>
       </Head>
 
       <main className="shell">
@@ -82,7 +82,7 @@ export default function DragStartCountdownPage({ initialTask = '' }) {
             <p className="eyebrow">State Launcher</p>
             <div className="screenTopActions">
               <HomeShortcut />
-              <p className="counter counterBadge">只做这 5 分钟</p>
+              <p className="counter counterBadge">只做这 2 分钟</p>
             </div>
           </div>
 
@@ -95,7 +95,7 @@ export default function DragStartCountdownPage({ initialTask = '' }) {
             <h1 className="timer timerWide" aria-live="polite">
               {formatRemainingTime(remainingSeconds)}
             </h1>
-            <p className="timerLabel">只做五分钟</p>
+            <p className="timerLabel">只做两分钟</p>
             <div className="progressTrack" aria-hidden="true">
               <span
                 className="progressBar"
@@ -103,7 +103,7 @@ export default function DragStartCountdownPage({ initialTask = '' }) {
               />
             </div>
             <p className="body timerBody">
-              不用解决全部。只要把这 5 分钟交给眼前这件事，让自己先真正碰上去。
+              不用解决全部。只要把这 2 分钟交给眼前这件事，让自己先真正碰上去。
             </p>
           </div>
 
@@ -112,7 +112,7 @@ export default function DragStartCountdownPage({ initialTask = '' }) {
               重写这一步
             </Link>
             <p className="microCopy">
-              就算只推进了一点点，这 5 分钟也已经算数。
+              就算只推进了一点点，这 2 分钟也已经算数。
             </p>
           </div>
         </section>

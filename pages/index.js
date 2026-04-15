@@ -61,9 +61,9 @@ export default function HomePage() {
           </div>
 
           <div className="screenBottom homeScreenBottom">
-            <p className="microCopy launcherFootnote homeFootnote">
-              认出来，再接住自己。
-            </p>
+            <Link href="/axis/today" className="textLink homeAxisLink">
+              今天最重要的是什么？
+            </Link>
           </div>
         </section>
       </main>
