@@ -26,6 +26,12 @@
     "Songti SC",
     "STSong",
     serif;
+  --font-numeric:
+    "Iowan Old Style",
+    "Baskerville",
+    "Avenir Next",
+    "SF Pro Display",
+    serif;
 }
 
 * {
@@ -284,7 +290,9 @@ a {
   line-height: 0.84;
   font-weight: 700;
   letter-spacing: -0.1em;
-  font-family: var(--font-display);
+  font-family: var(--font-numeric);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
   text-align: center;
   color: #101827;
 }
@@ -323,6 +331,63 @@ a {
 .buttonGroup {
   display: grid;
   gap: 14px;
+}
+
+.choiceList {
+  display: grid;
+  gap: 12px;
+}
+
+.choiceCard {
+  width: 100%;
+  display: grid;
+  gap: 8px;
+  padding: 18px 18px;
+  border: 0;
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(241, 246, 251, 0.9) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 16px 30px rgba(15, 23, 42, 0.05);
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.choiceCardSelected {
+  background:
+    radial-gradient(circle at top right, rgba(188, 203, 227, 0.34), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(237, 243, 250, 0.94) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(52, 68, 95, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 20px 36px rgba(15, 23, 42, 0.08);
+}
+
+.choiceLabel,
+.choiceHint {
+  margin: 0;
+}
+
+.choiceLabel {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.32;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.choiceHint {
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.42;
+  letter-spacing: -0.01em;
 }
 
 .buttonLink {
@@ -408,6 +473,12 @@ a {
     transform 160ms ease,
     box-shadow 160ms ease,
     background-color 160ms ease;
+}
+
+.taskSubmitButton:disabled {
+  cursor: default;
+  opacity: 0.48;
+  box-shadow: none;
 }
 
 .secondaryButton {
@@ -548,7 +619,7 @@ a {
 
 .homePanel {
   justify-content: flex-start;
-  gap: 14px;
+  gap: 12px;
 }
 
 .launcherTop {
@@ -576,17 +647,17 @@ a {
 .homeHeroStack {
   flex: 1;
   align-content: center;
-  gap: 22px;
+  gap: 18px;
   padding-top: 2px;
 }
 
 .homeHeroIntro {
   width: 100%;
-  justify-items: center;
-  align-items: center;
+  justify-items: stretch;
+  align-items: stretch;
   text-align: center;
-  gap: 14px;
-  max-width: 300px;
+  gap: 10px;
+  max-width: none;
   margin: 0 auto;
 }
 
@@ -609,6 +680,7 @@ a {
   white-space: nowrap;
   width: 100%;
   text-align: center;
+  justify-self: center;
 }
 
 .launcherBody {
@@ -625,6 +697,7 @@ a {
   font-weight: 600;
   letter-spacing: 0.02em;
   white-space: nowrap;
+  justify-self: center;
 }
 
 .launcherBodyMulti {
@@ -637,13 +710,467 @@ a {
 }
 
 .homeScreenBottom {
-  gap: 8px;
-  padding-top: 2px;
+  gap: 6px;
+  padding-top: 0;
 }
 
 .homeFootnote {
   text-align: center;
   white-space: nowrap;
+}
+
+.homeAxisLink {
+  align-self: center;
+  text-align: center;
+  font-size: 0.84rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.homeTodayAnchor {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top right, rgba(188, 203, 227, 0.22), transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(239, 245, 251, 0.82) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(52, 68, 95, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    0 12px 22px rgba(15, 23, 42, 0.05);
+  color: var(--text);
+  text-align: center;
+  text-decoration: none;
+}
+
+.homeTodayAnchorLabel,
+.homeTodayAnchorTask {
+  margin: 0;
+}
+
+.homeTodayAnchorLabel {
+  color: #536276;
+  font-size: 0.66rem;
+  font-weight: 760;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.homeTodayAnchorTask {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 740;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dailyCheckPanel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.dailyCheckButton {
+  display: grid;
+  gap: 4px;
+  min-height: 58px;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(239, 245, 251, 0.82) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    0 12px 22px rgba(15, 23, 42, 0.05);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    opacity 160ms ease;
+}
+
+.dailyCheckButton:disabled {
+  cursor: default;
+}
+
+.dailyCheckButtonLocked {
+  opacity: 0.52;
+}
+
+.dailyCheckButtonDone {
+  background:
+    radial-gradient(circle at top right, rgba(188, 203, 227, 0.28), transparent 44%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(232, 239, 248, 0.9) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(52, 68, 95, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 14px 24px rgba(15, 23, 42, 0.06);
+}
+
+.dailyCheckLabel,
+.dailyCheckMeta {
+  margin: 0;
+}
+
+.dailyCheckLabel {
+  font-size: 0.86rem;
+  line-height: 1.2;
+  font-weight: 740;
+  letter-spacing: -0.025em;
+}
+
+.dailyCheckMeta {
+  color: #687589;
+  font-size: 0.66rem;
+  line-height: 1.25;
+  font-weight: 680;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.axisEditor {
+  gap: 12px;
+}
+
+.axisStack {
+  align-content: start;
+  align-self: stretch;
+  gap: 18px;
+  padding-top: 2px;
+}
+
+.axisField {
+  display: grid;
+  gap: 8px;
+}
+
+.axisInput {
+  min-height: 88px;
+}
+
+.axisOwnerInput {
+  min-height: 56px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.axisMeta {
+  text-align: center;
+  max-width: 27ch;
+  justify-self: center;
+}
+
+.axisRail {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 6px 2px 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.axisRail::before {
+  content: "";
+  position: absolute;
+  left: calc(16.666% + 14px);
+  right: calc(16.666% + 14px);
+  top: 43px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(100, 115, 138, 0.14), rgba(100, 115, 138, 0.22), rgba(100, 115, 138, 0.14));
+  border-radius: 999px;
+}
+
+.axisRailLink {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto auto;
+  justify-items: center;
+  gap: 8px;
+  min-height: 58px;
+  padding: 0 4px;
+  color: #66758b;
+  text-decoration: none;
+  transition:
+    transform 160ms ease,
+    color 160ms ease;
+}
+
+.axisRailText {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  min-width: 58px;
+  padding: 6px 11px;
+  border: 1px solid rgba(74, 88, 112, 0.06);
+  border-radius: 999px;
+  background: rgba(249, 250, 252, 0.8);
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease;
+}
+
+.axisRailMarker {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(100, 115, 138, 0.28);
+  box-shadow: 0 0 0 5px rgba(100, 115, 138, 0.06);
+  transition:
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.axisRailMarkerActive {
+  background: #172235;
+  box-shadow: 0 0 0 6px rgba(23, 34, 53, 0.1);
+}
+
+.axisRailMarkerWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 20px;
+}
+
+.axisRailMarkerWrap::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% - 1px);
+  width: 1px;
+  height: 8px;
+  background: rgba(100, 115, 138, 0.2);
+  border-radius: 999px;
+  transition: background 160ms ease;
+}
+
+.axisRailLinkActive {
+  color: var(--text);
+}
+
+.axisRailLinkActive .axisRailText {
+  background:
+    radial-gradient(circle at top right, rgba(188, 203, 227, 0.26), transparent 45%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(241, 246, 251, 0.94) 100%);
+  border-color: rgba(52, 68, 95, 0.12);
+  box-shadow:
+    inset 0 0 0 1px rgba(52, 68, 95, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 10px 22px rgba(15, 23, 42, 0.06);
+}
+
+.axisRailLinkActive .axisRailMarkerWrap::before {
+  background: rgba(23, 34, 53, 0.28);
+}
+
+.axisRailLink:focus-visible {
+  outline: none;
+  color: var(--text);
+}
+
+.axisRailLink:focus-visible .axisRailText {
+  border-color: rgba(52, 68, 95, 0.16);
+  box-shadow:
+    inset 0 0 0 1px rgba(52, 68, 95, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+    0 0 0 4px rgba(23, 34, 53, 0.08);
+}
+
+.axisEntryCard,
+.axisSummaryItem {
+  display: grid;
+  gap: 10px;
+  padding: 16px 16px;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(241, 246, 251, 0.9) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 14px 28px rgba(15, 23, 42, 0.05);
+}
+
+.axisSummaryList {
+  display: grid;
+  gap: 12px;
+}
+
+.axisSummaryIndex,
+.axisSummaryTask {
+  margin: 0;
+}
+
+.axisSummaryIndex {
+  color: #536276;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.axisSummaryTask {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.46;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.axisTodayCard {
+  gap: 12px;
+}
+
+.axisEditButton {
+  justify-self: start;
+}
+
+.axisTitle {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  text-align: center;
+  font-size: clamp(2rem, 7.4vw, 2.8rem);
+  line-height: 1;
+}
+
+.axisTitle .accentLine {
+  margin-top: 0;
+  color: #536276;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+}
+
+.axisRelatedLink {
+  justify-self: start;
+}
+
+.monthDoneStampGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.monthDoneStamp {
+  min-height: 66px;
+}
+
+.monthDoneList {
+  display: grid;
+  gap: 10px;
+}
+
+.monthDoneListTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.monthPlanLink {
+  font-size: 0.78rem;
+}
+
+.completionLimitHint {
+  margin: 0;
+  color: #687589;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.monthDoneRows {
+  display: grid;
+  gap: 8px;
+  max-height: 210px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.monthDoneRow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 11px 12px;
+  border-radius: 16px;
+  background: rgba(249, 250, 252, 0.74);
+  box-shadow:
+    inset 0 0 0 1px rgba(74, 88, 112, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74);
+}
+
+.monthDoneDate,
+.monthDoneThing,
+.monthDoneTimes,
+.monthDoneEmpty {
+  margin: 0;
+}
+
+.monthDoneDate {
+  color: #536276;
+  font-family: var(--font-numeric);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.monthDoneRowBody {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.monthDoneThing {
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 680;
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+}
+
+.monthDoneTimes {
+  color: #687589;
+  font-size: 0.68rem;
+  font-weight: 680;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+.monthDoneEmpty {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(249, 250, 252, 0.58);
+  color: var(--muted);
+  font-size: 0.84rem;
+  text-align: center;
 }
 
 .homeTop {
@@ -654,9 +1181,44 @@ a {
   margin-bottom: 0;
 }
 
+.homeTopActions {
+  gap: 7px;
+}
+
+.homeTopActionLink {
+  padding: 9px 11px;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
 .homeStateList {
   width: 100%;
-  gap: 12px;
+  gap: 10px;
+}
+
+.homeStateList .stateCard {
+  min-height: 88px;
+  padding: 12px 10px;
+  gap: 6px;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.homeStateList .homeStateLabel {
+  width: 100%;
+  font-size: 0.98rem;
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+}
+
+.homeStateList .homeStateDescription {
+  width: 100%;
+  color: #687589;
+  font-size: 0.7rem;
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  -webkit-line-clamp: 1;
 }
 
 .stateList {
@@ -718,6 +1280,12 @@ a {
 
 .optionCardStatic {
   cursor: default;
+}
+
+.archiveStateCardLink {
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .stateCardTop {
@@ -819,11 +1387,12 @@ a {
   color: var(--text);
   font-size: 2.8rem;
   line-height: 0.9;
-  font-family: var(--font-sans);
+  font-family: var(--font-numeric);
   font-weight: 700;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.07em;
   text-align: center;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
 
 .summaryBody {
@@ -836,10 +1405,12 @@ a {
   margin-top: auto;
   color: var(--text);
   font-size: 1.12rem;
+  font-family: var(--font-numeric);
   font-weight: 700;
   letter-spacing: -0.03em;
   text-align: center;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
 
 .archiveStateList {
@@ -905,9 +1476,11 @@ a {
   color: var(--text);
   font-size: 0.8rem;
   line-height: 1.38;
+  font-family: var(--font-numeric);
   font-weight: 680;
   letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
 
 .archiveOptionList {
@@ -941,10 +1514,12 @@ a {
 .archiveOptionValue {
   color: #42526a;
   font-size: 0.76rem;
+  font-family: var(--font-numeric);
   font-weight: 700;
   white-space: nowrap;
   justify-self: end;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
 
 .compactStack {
@@ -995,12 +1570,12 @@ a {
 
   .primaryButton:hover,
   .secondaryButton:hover,
-  .taskSubmitButton:hover {
+  .taskSubmitButton:not(:disabled):hover {
     transform: translateY(-1px);
   }
 
   .primaryButton:hover,
-  .taskSubmitButton:hover {
+  .taskSubmitButton:not(:disabled):hover {
     box-shadow: 0 24px 42px rgba(15, 23, 42, 0.2);
   }
 
@@ -1018,6 +1593,48 @@ a {
       inset 0 0 0 1px rgba(74, 88, 112, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.8),
       0 20px 36px rgba(15, 23, 42, 0.07);
+  }
+
+  .choiceCard:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 0 0 1px rgba(74, 88, 112, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      0 20px 36px rgba(15, 23, 42, 0.07);
+  }
+
+  .axisRailLink:hover {
+    color: var(--text);
+    transform: translateY(-1px);
+  }
+
+  .axisRailLink:hover .axisRailText {
+    border-color: rgba(52, 68, 95, 0.12);
+    box-shadow:
+      inset 0 0 0 1px rgba(52, 68, 95, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.84),
+      0 10px 20px rgba(15, 23, 42, 0.05);
+  }
+
+  .axisRailLink:hover .axisRailMarker {
+    background: rgba(52, 68, 95, 0.46);
+    transform: scale(1.06);
+  }
+
+  .dailyCheckButton:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 0 0 1px rgba(74, 88, 112, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.84),
+      0 18px 30px rgba(15, 23, 42, 0.07);
+  }
+
+  .archiveStateCardLink:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 0 0 1px rgba(74, 88, 112, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      0 22px 38px rgba(15, 23, 42, 0.09);
   }
 }
 
@@ -1059,7 +1676,45 @@ a {
   .panel {
     border-radius: 32px;
     min-height: calc(100vh - 18px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-    padding: 24px 18px 22px;
+    padding: 21px 16px 18px;
+  }
+
+  .axisRail {
+    gap: 6px;
+    padding-top: 4px;
+  }
+
+  .axisRail::before {
+    left: calc(16.666% + 10px);
+    right: calc(16.666% + 10px);
+    top: 40px;
+  }
+
+  .axisRailLink {
+    min-height: 54px;
+    gap: 7px;
+    padding: 0 2px;
+  }
+
+  .axisRailText {
+    min-width: 52px;
+    min-height: 28px;
+    padding: 5px 9px;
+    font-size: 0.68rem;
+  }
+
+  .axisRailMarkerWrap::before {
+    height: 7px;
+  }
+
+  .axisTitle {
+    gap: 8px;
+    font-size: clamp(1.8rem, 7.2vw, 2.35rem);
+  }
+
+  .axisTitle .accentLine {
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
   }
 
   .body {
@@ -1083,16 +1738,25 @@ a {
     justify-content: space-between;
   }
 
+  .homeTopActionLink {
+    padding: 8px 10px;
+    font-size: 0.68rem;
+  }
+
   .launcherBody {
     font-size: 0.85rem;
   }
 
   .homeTitle {
-    font-size: clamp(2.45rem, 10vw, 3.3rem);
+    font-size: clamp(2.3rem, 9.6vw, 3.1rem);
   }
 
   .homeHeroStack {
-    gap: 18px;
+    gap: 14px;
+  }
+
+  .homeHeroIntro {
+    gap: 8px;
   }
 
   .stateList {
@@ -1106,6 +1770,53 @@ a {
   .stateCard {
     min-height: 138px;
     padding: 12px 11px;
+  }
+
+  .homeStateList {
+    gap: 8px;
+  }
+
+  .dailyCheckPanel {
+    gap: 7px;
+  }
+
+  .homeTodayAnchor {
+    padding: 11px 12px;
+  }
+
+  .homeTodayAnchorLabel {
+    font-size: 0.62rem;
+  }
+
+  .homeTodayAnchorTask {
+    font-size: 0.82rem;
+  }
+
+  .dailyCheckButton {
+    min-height: 54px;
+    padding: 10px 10px;
+  }
+
+  .dailyCheckLabel {
+    font-size: 0.8rem;
+  }
+
+  .dailyCheckMeta {
+    font-size: 0.62rem;
+  }
+
+  .homeStateList .stateCard {
+    min-height: 78px;
+    padding: 10px 9px;
+    gap: 5px;
+  }
+
+  .homeStateList .homeStateLabel {
+    font-size: 0.92rem;
+  }
+
+  .homeStateList .homeStateDescription {
+    font-size: 0.66rem;
   }
 
   .archiveStateCard {
@@ -1135,6 +1846,18 @@ a {
 
   .archiveOptionValue {
     font-size: 0.72rem;
+  }
+
+  .choiceCard {
+    padding: 16px 16px;
+  }
+
+  .choiceLabel {
+    font-size: 0.94rem;
+  }
+
+  .choiceHint {
+    font-size: 0.78rem;
   }
 }
 
@@ -1177,6 +1900,63 @@ a {
 
   .homeHeroIntro {
     max-width: 270px;
+  }
+
+  .homeStateList .stateCard {
+    min-height: 74px;
+    padding: 9px 8px;
+  }
+
+  .homeTopActionLink {
+    padding: 8px 9px;
+    font-size: 0.64rem;
+  }
+
+  .homeTodayAnchor {
+    padding: 10px 11px;
+  }
+
+  .homeTodayAnchorTask {
+    font-size: 0.78rem;
+  }
+
+  .dailyCheckButton {
+    min-height: 50px;
+    padding: 9px 9px;
+    border-radius: 16px;
+  }
+
+  .dailyCheckLabel {
+    font-size: 0.76rem;
+  }
+
+  .dailyCheckMeta {
+    font-size: 0.58rem;
+  }
+
+  .homeStateList .homeStateLabel {
+    font-size: 0.88rem;
+  }
+
+  .homeStateList .homeStateDescription {
+    font-size: 0.64rem;
+  }
+
+  .homeFootnote {
+    font-size: 0.78rem;
+  }
+
+  .choiceCard {
+    padding: 14px 14px;
+    gap: 7px;
+  }
+
+  .choiceLabel {
+    font-size: 0.88rem;
+  }
+
+  .choiceHint {
+    font-size: 0.74rem;
   }
 
   .taskInput,

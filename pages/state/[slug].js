@@ -1,9 +1,40 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo } from 'react';
 import HomeShortcut from '../../components/HomeShortcut';
 import { getStateById } from '../../lib/states';
 
-export default function StatePlaceholderPage({ state }) {
+const LIVE_STATE_IDS = new Set(['escape', 'drag-start', 'escaped', 'tired']);
+
+export default function StatePlaceholderPage() {
+  const router = useRouter();
+
+  const slug = useMemo(
+    () => (typeof router.query.slug === 'string' ? router.query.slug : ''),
+    [router.query.slug]
+  );
+  const state = useMemo(() => getStateById(slug), [slug]);
+
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
+
+    if (!state) {
+      router.replace('/');
+      return;
+    }
+
+    if (LIVE_STATE_IDS.has(state.id)) {
+      router.replace(state.href);
+    }
+  }, [router, state]);
+
+  if (!router.isReady) {
+    return null;
+  }
+
   if (!state) {
     return null;
   }
@@ -35,7 +66,7 @@ export default function StatePlaceholderPage({ state }) {
               <span className="titleLine accentLine">先认出来</span>
             </h1>
             <p className="body">
-              这一条我先给你留成占位页。你已经能把这股状态叫出来了，这件事本身就很重要。后面的干预流程，我们可以再慢慢长出来。
+              这条线我先给你留成一个轻一点的占位页，避免测试时把整个开发服务拖住。后面的流程我们可以再慢慢长出来。
             </p>
             <section className="focusSummary compactSummary" aria-label="当前状态说明">
               <p className="focusLabel">你现在更像是</p>
@@ -55,25 +86,4 @@ export default function StatePlaceholderPage({ state }) {
       </main>
     </>
   );
-}
-
-export async function getServerSideProps(context) {
-  const slug =
-    typeof context.params.slug === 'string' ? context.params.slug : '';
-  const state = getStateById(slug);
-
-  if (!state || state.id === 'escape' || state.id === 'drag-start' || state.id === 'tired') {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false
-      }
-    };
-  }
-
-  return {
-    props: {
-      state
-    }
-  };
 }
