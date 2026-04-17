@@ -92,7 +92,7 @@ export default function DragStartPage() {
                   placeholder="比如：先把文档打开，写下第一段提纲"
                 />
                 <button type="submit" className="taskSubmitButton">
-                  只做 2 分钟
+                  只做两分钟
                 </button>
               </form>
             ) : (
@@ -121,11 +121,11 @@ export default function DragStartPage() {
                 }}
                 className="primaryButton buttonLink steadyButton"
               >
-                <span className="steadyWord">开始这 2 分钟</span>
+                <span className="steadyWord">开始这两分钟</span>
               </Link>
             ) : null}
             <p className="microCopy">
-              你不用马上进入很厉害的状态。只要把这 2 分钟借给眼前这件事。
+              你不用马上进入很厉害的状态。只要把这两分钟借给眼前这件事。
             </p>
           </div>
         </section>

@@ -109,6 +109,16 @@ export default function StatsPage() {
         value: '先留在这里'
       }
     ],
+    stimulation: [
+      {
+        label: '细分记录',
+        value: '还没接上'
+      },
+      {
+        label: '流程状态',
+        value: '先留在这里'
+      }
+    ],
     tired: [
       {
         label: '最常选',
@@ -172,6 +182,14 @@ export default function StatsPage() {
                     </div>
                   </>
                 );
+
+                if (state.id === 'stimulation') {
+                  return (
+                    <Link key={state.id} href="/stimulation" className="stateCard archiveStateCard archiveStateCardLink">
+                      {cardContent}
+                    </Link>
+                  );
+                }
 
                 if (state.id === 'tired') {
                   return (

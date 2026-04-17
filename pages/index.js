@@ -8,7 +8,8 @@ import {
   incrementStoredStateClick,
   isDailyEndWindowOpen,
   isDailyStartWindowOpen,
-  setStoredDailyCheckinEvent
+  setStoredDailyCheckinEvent,
+  setStoredMainAxisSection
 } from '../lib/buffer';
 import { LOW_QUALITY_STATES } from '../lib/states';
 
@@ -40,10 +41,12 @@ export default function HomePage() {
   const router = useRouter();
   const [dailyCheckin, setDailyCheckin] = useState(EMPTY_DAILY_CHECKIN);
   const [todayAxisTask, setTodayAxisTask] = useState('');
+  const [todayAxisDraft, setTodayAxisDraft] = useState('');
   const [canStartToday, setCanStartToday] = useState(false);
   const [canEndToday, setCanEndToday] = useState(false);
   const [hasLoadedDailyCheckin, setHasLoadedDailyCheckin] = useState(false);
   const [clockNow, setClockNow] = useState(null);
+  const [isTodayAxisFocused, setIsTodayAxisFocused] = useState(false);
 
   const hasStartedToday = Boolean(dailyCheckin.startedAt);
   const hasEndedToday = Boolean(dailyCheckin.endedAt);
@@ -57,13 +60,18 @@ export default function HomePage() {
     : canEndToday
       ? `可收束 ${formatCheckinTime(clockNow)}`
       : '18:30 后可收束';
+  const canSaveTodayAxis = todayAxisDraft.replace(/\s+/g, ' ').trim().length > 0;
 
   useEffect(() => {
     function refreshDailyCheckin() {
       const now = new Date();
+      const nextTodayTask = getStoredMainAxisSection('today')?.task || '';
 
       setDailyCheckin(getStoredDailyCheckinForToday());
-      setTodayAxisTask(getStoredMainAxisSection('today')?.task || '');
+      setTodayAxisTask(nextTodayTask);
+      if (!isTodayAxisFocused) {
+        setTodayAxisDraft(nextTodayTask);
+      }
       setCanStartToday(isDailyStartWindowOpen(now));
       setCanEndToday(isDailyEndWindowOpen(now));
       setClockNow(now);
@@ -74,7 +82,7 @@ export default function HomePage() {
     const intervalId = window.setInterval(refreshDailyCheckin, 30 * 1000);
 
     return () => window.clearInterval(intervalId);
-  }, []);
+  }, [isTodayAxisFocused]);
 
   function handleStartToday() {
     if (!canStartToday || hasStartedToday) {
@@ -94,11 +102,26 @@ export default function HomePage() {
     router.push('/axis/month/completed');
   }
 
+  function handleHomeTodaySubmit(event) {
+    event.preventDefault();
+
+    if (!canSaveTodayAxis) {
+      return;
+    }
+
+    const nextAxis = setStoredMainAxisSection('today', { task: todayAxisDraft });
+    const nextTask = nextAxis.today?.task || '';
+
+    setTodayAxisTask(nextTask);
+    setTodayAxisDraft(nextTask);
+    setIsTodayAxisFocused(false);
+  }
+
   return (
     <>
       <Head>
-        <title>夜的命名术</title>
-        <meta property="og:title" content="夜的命名术" />
+        <title>稳稳接住自己</title>
+        <meta property="og:title" content="稳稳接住自己" />
         <meta
           name="description"
           content="先把模糊的低质量状态命名出来，再决定要怎么回去。"
@@ -126,7 +149,7 @@ export default function HomePage() {
           <div className="stack phaseCard launcherStack homeHeroStack">
             <section className="launcherIntro homeHeroIntro">
               <h1 className="title launcherTitle homeTitle">
-                <span className="titleLine">夜的命名术</span>
+                <span className="titleLine">稳稳接住自己</span>
               </h1>
               <p className="body launcherBody homeBody">
                 先给现在一个名字。
@@ -152,12 +175,30 @@ export default function HomePage() {
             <Link href="/axis/today" className="textLink homeAxisLink">
               今天最重要的事是什么？
             </Link>
-            <Link href="/axis/today" className="homeTodayAnchor">
-              <span className="homeTodayAnchorLabel">今日主轴</span>
-              <span className="homeTodayAnchorTask">
-                {todayAxisTask || '还没有写下今天最重要的事'}
-              </span>
-            </Link>
+            {todayAxisTask ? (
+              <Link href="/axis/today" className="homeTodayAnchor">
+                <span className="homeTodayAnchorLabel">今日主轴</span>
+                <span className="homeTodayAnchorTask">{todayAxisTask}</span>
+              </Link>
+            ) : (
+              <section className="homeTodayPanel homeTodayPanelEmpty" aria-label="填写今日主轴">
+                <p className="homeTodayAnchorLabel">今日主轴</p>
+                <form className="homeTodayForm" onSubmit={handleHomeTodaySubmit}>
+                  <textarea
+                    className="taskInput homeTodayInput"
+                    rows="2"
+                    value={todayAxisDraft}
+                    onChange={(event) => setTodayAxisDraft(event.target.value)}
+                    onFocus={() => setIsTodayAxisFocused(true)}
+                    onBlur={() => setIsTodayAxisFocused(false)}
+                    placeholder="写下今天最重要的事"
+                  />
+                  <button type="submit" className="taskSubmitButton homeTodaySubmit" disabled={!canSaveTodayAxis}>
+                    写下今天这件事
+                  </button>
+                </form>
+              </section>
+            )}
             <section className="dailyCheckPanel" aria-label="每日打卡">
               <button
                 type="button"
