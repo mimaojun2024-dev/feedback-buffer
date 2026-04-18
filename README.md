@@ -1,37 +1,29 @@
-# Feedback Buffer
+# 稳稳接住自己
 
-一个极简的手机网页应用，用来在打开小红书之前先给自己 23 秒缓冲。
+一个给状态留白的小网页。
 
-## 本地开发
+当人快要被启动困难、逃避、反馈冲动、情绪下坠、勇气不足，或者刺激冲动带走时，  
+先不要急着解决自己。  
+先停一下。  
+给状态一个名字，给自己一个很轻的动作，再慢慢回到今天真正重要的事。
+
+它不是为了把人变得更高效。  
+它只是想在一些快要滑下去的时刻，稳稳接住自己。
+
+## 状态
+
+- 我不想启动
+- 我需要勇气
+- 我在逃避
+- 我想看反馈
+- 我有点 down
+- 我想来点刺激
+
+## 本地运行
 
 ```bash
-nvm use
-npm ci
+npm install
 npm run dev
 ```
 
-打开终端里输出的本地地址，默认通常是 [http://localhost:3000](http://localhost:3000)。
-
-推荐使用 Node.js `20.x`，与当前 Vercel 部署目标保持一致。
-
-## 生产构建
-
-```bash
-npm run build
-npm run start
-```
-
-## 部署说明
-
-- 项目当前使用 Pages Router，适合直接导入 Vercel 部署
-- `package.json` 中的 `engines.node` 已约束为 `20.x`，用于减少本地与 Vercel 的运行时偏差
-- 仓库提交时不应包含 `node_modules`、`.next`、`.vercel` 等本地产物
-- 使用仓库内的 `package-lock.json`，本地建议优先用 `npm ci` 做从零安装验证
-
-## 功能
-
-- 首页只保留一句提醒和一个主按钮
-- 点击后进入 23 秒倒计时
-- 倒计时结束后给出两个选择
-- 今日点击次数保存在浏览器本地 `localStorage`
-- 包含 `manifest` 和 `service worker`，支持基础 PWA 安装
+打开 [http://localhost:3000](http://localhost:3000)
