@@ -5,7 +5,7 @@ import { useEffect, useMemo } from 'react';
 import HomeShortcut from '../../components/HomeShortcut';
 import { getStateById } from '../../lib/states';
 
-const LIVE_STATE_IDS = new Set(['escape', 'drag-start', 'escaped', 'tired']);
+const LIVE_STATE_IDS = new Set(['escape', 'drag-start', 'escaped', 'tired', 'empty-dreaming']);
 
 export default function StatePlaceholderPage() {
   const router = useRouter();
@@ -39,6 +39,13 @@ export default function StatePlaceholderPage() {
     return null;
   }
 
+  const isCourageState = state.id === 'empty-dreaming';
+  const accent = isCourageState ? '先鼓起一点' : '先认出来';
+  const intro = isCourageState
+    ? '这条线我先帮你收成一个更轻的入口。先承认自己需要一点勇气，去碰一个可能被拒绝的尝试，后面的结构我们再慢慢长出来。'
+    : '这条线我先给你留成一个轻一点的占位页，避免测试时把整个开发服务拖住。后面的流程我们可以再慢慢长出来。';
+  const summaryLabel = isCourageState ? '你现在要面对的是' : '你现在更像是';
+
   return (
     <>
       <Head>
@@ -63,13 +70,11 @@ export default function StatePlaceholderPage() {
           <div className="stack phaseCard">
             <h1 className="title">
               <span className="titleLine">{state.name}</span>
-              <span className="titleLine accentLine">先认出来</span>
+              <span className="titleLine accentLine">{accent}</span>
             </h1>
-            <p className="body">
-              这条线我先给你留成一个轻一点的占位页，避免测试时把整个开发服务拖住。后面的流程我们可以再慢慢长出来。
-            </p>
+            <p className="body">{intro}</p>
             <section className="focusSummary compactSummary" aria-label="当前状态说明">
-              <p className="focusLabel">你现在更像是</p>
+              <p className="focusLabel">{summaryLabel}</p>
               <p className="focusTask">{state.description}</p>
             </section>
           </div>

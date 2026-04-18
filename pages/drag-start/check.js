@@ -1,15 +1,21 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import HomeShortcut from '../../components/HomeShortcut';
 import { incrementStoredFlowStat } from '../../lib/buffer';
 
 export default function DragStartCheckPage() {
+  const router = useRouter();
   const [selectedAnswer, setSelectedAnswer] = useState('');
 
   function handleSelect(answer) {
     setSelectedAnswer(answer);
     incrementStoredFlowStat(`drag-start.check.${answer}`);
+
+    if (answer === 'yes') {
+      router.push('/drag-start');
+    }
   }
 
   return (
@@ -35,10 +41,10 @@ export default function DragStartCheckPage() {
 
           <div className="stack phaseCard">
             <h1 className="title">
-              <span className="titleLine">只做 2 分钟</span>
+              <span className="titleLine">只做两分钟</span>
               <span className="titleLine accentLine">可以吗</span>
             </h1>
-            <p className="body">先不谈宏大目标。只问眼前这 2 分钟，能不能借给第一步。</p>
+            <p className="body">先不谈宏大目标。只问眼前这两分钟，能不能借给第一步。</p>
 
             <section className="choiceList" aria-label="启动判断">
               <button
@@ -61,11 +67,6 @@ export default function DragStartCheckPage() {
           </div>
 
           <div className="screenBottom buttonGroup">
-            {selectedAnswer === 'yes' ? (
-              <Link href="/drag-start" className="primaryButton buttonLink">
-                那就开始这 2 分钟
-              </Link>
-            ) : null}
             {selectedAnswer === 'no' ? (
               <Link href="/" className="secondaryButton buttonLink">
                 先回主页

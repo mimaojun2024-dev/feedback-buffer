@@ -17,7 +17,7 @@ export default function DragStartDonePage({ initialTask = '' }) {
   return (
     <>
       <Head>
-        <title>这 2 分钟已经算数</title>
+        <title>这两分钟已经算数</title>
       </Head>
 
       <main className="shell">
@@ -32,7 +32,7 @@ export default function DragStartDonePage({ initialTask = '' }) {
 
           <div className="stack phaseCard">
             <h1 className="title">
-              <span className="titleLine">这 2 分钟</span>
+              <span className="titleLine">这两分钟</span>
               <span className="titleLine accentLine">已经算数</span>
             </h1>
             <p className="body">
@@ -54,7 +54,7 @@ export default function DragStartDonePage({ initialTask = '' }) {
               }}
               className="primaryButton buttonLink"
             >
-              再做 2 分钟
+              再做两分钟
             </Link>
             <Link href="/" className="secondaryButton buttonLink">
               回到主页
