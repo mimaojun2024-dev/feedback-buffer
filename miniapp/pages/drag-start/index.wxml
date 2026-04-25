@@ -1,0 +1,42 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">状态入口</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <text class="badge">不想启动</text>
+      </view>
+    </view>
+
+    <view class="stack flow-page-stack">
+      <view class="flow-hero">
+        <text class="flow-title">只写眼前这一步</text>
+        <text class="flow-copy">先把真正要碰的那一件事放到纸面上。</text>
+      </view>
+
+      <block wx:if="{{isEditingTask}}">
+        <view class="flow-card">
+          <text class="input-label">我现在要做的是</text>
+          <textarea class="textarea textarea--compact" value="{{draftTask}}" placeholder="比如：先把文档打开，写下第一段提纲" bindinput="handleInput" />
+          <button class="button-primary" bindtap="handleSubmit">只做两分钟</button>
+        </view>
+      </block>
+
+      <block wx:else>
+        <view class="summary">
+          <text class="summary-label">我现在要做的是</text>
+          <text class="summary-value">{{startTask}}</text>
+        </view>
+      </block>
+
+      <view class="button-group">
+        <block wx:if="{{!isEditingTask}}">
+          <button class="button-primary" bindtap="handleStartCountdown">开始这两分钟</button>
+          <button class="button-ghost" bindtap="handleEdit">修改</button>
+        </block>
+      </view>
+    </view>
+  </view>
+</view>

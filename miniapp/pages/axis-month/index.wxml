@@ -1,0 +1,52 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">主轴</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <text class="badge">月度</text>
+      </view>
+    </view>
+
+    <view class="stack axis-page-stack">
+      <view class="nav-rail">
+        <navigator url="/pages/axis-year/index" class="nav-rail-link">年度</navigator>
+        <text class="nav-rail-link nav-rail-link--active">月度</text>
+        <navigator url="/pages/axis-today/index" class="nav-rail-link">今天</navigator>
+      </view>
+
+      <view class="axis-compact-head">
+        <text class="axis-compact-title">这个月最重要的事</text>
+        <text class="axis-compact-meta">最多三条</text>
+      </view>
+
+      <block wx:if="{{isEditing}}">
+        <view class="axis-entry-list">
+          <view wx:for="{{entries}}" wx:key="index" class="axis-entry-card">
+            <text class="axis-entry-label">重点 {{index + 1}}</text>
+            <textarea class="axis-entry-input" value="{{item.task}}" placeholder="写下这一条重点" bindinput="handleInput" data-index="{{index}}" />
+          </view>
+          <button class="axis-save-button" bindtap="handleSave" disabled="{{!canSave}}">保存这几条</button>
+        </view>
+      </block>
+
+      <block wx:else>
+        <view class="axis-entry-list">
+          <view wx:for="{{entries}}" wx:key="index" wx:if="{{item.task}}" class="axis-entry-card axis-entry-card--saved">
+            <text class="axis-entry-label">重点 {{index + 1}}</text>
+            <text class="axis-entry-value">{{item.task}}</text>
+          </view>
+        </view>
+      </block>
+
+      <view class="button-group">
+        <block wx:if="{{!isEditing}}">
+          <button class="button-ghost" bindtap="handleEdit">修改这几条</button>
+        </block>
+        <navigator url="/pages/month-completed/index" class="button-ghost">这个月完成的事情</navigator>
+      </view>
+    </view>
+  </view>
+</view>

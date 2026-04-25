@@ -1,0 +1,32 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">反馈缓冲</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <text class="badge">今天已缓冲 {{dailyCount}} 次</text>
+      </view>
+    </view>
+
+    <view class="stack flow-page-stack">
+      <view class="flow-hero flow-hero--center">
+        <text class="flow-title">23 秒到了</text>
+        <text class="flow-copy">现在再决定。</text>
+      </view>
+
+      <block wx:if="{{priorityTask}}">
+        <view class="summary">
+          <text class="summary-label">你刚才想守住的是</text>
+          <text class="summary-value">{{priorityTask}}</text>
+        </view>
+      </block>
+
+      <view class="button-group flow-action-row">
+        <button class="button-primary" bindtap="handleOpenFeedback">我还是想去看</button>
+        <button class="button-secondary" bindtap="handleReturnFocus">先回去做 5 分钟</button>
+      </view>
+    </view>
+  </view>
+</view>

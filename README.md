@@ -27,3 +27,19 @@ npm run dev
 ```
 
 打开 [http://localhost:3000](http://localhost:3000)
+
+## 微信小程序分支
+
+这次新增的小程序版没有直接改掉 Web 版，而是从当前仓库分出了一条独立分支：
+
+- 分支名：`codex/wechat-miniprogram`
+- 小程序代码目录：`miniapp/`
+- 微信工程配置：`project.config.json`
+
+这样在 GitHub 上会比较清楚：
+
+1. `main` 或你原来的主分支继续保留 Web 版
+2. `codex/wechat-miniprogram` 专门承载小程序版演进
+3. 后面如果你觉得小程序版已经足够稳定，再决定是长期保留分支、合并回主仓库，还是拆成独立仓库
+
+小程序打开方式见 [miniapp/README.md](miniapp/README.md)。

@@ -1,0 +1,28 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">勇气挑战</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/courage-list/index" class="pill-link">顶住记录</navigator>
+      </view>
+    </view>
+
+    <view class="stack flow-page-stack">
+      <view class="flow-hero">
+        <text class="flow-title">哪件事需要一点勇气？</text>
+        <text class="flow-copy">把它写清楚，然后决定现在碰一下。</text>
+      </view>
+
+      <view class="flow-card">
+        <textarea class="textarea textarea--compact" value="{{task}}" placeholder="写下那件需要勇气去做的事" bindinput="handleInput" />
+        <view class="button-group courage-action-group">
+          <button class="button-primary courage-action-button" bindtap="handleSubmit" disabled="{{!canSubmit}}">我可以现在做</button>
+          <navigator url="/pages/home/index" class="button-secondary courage-action-button">我还需要一点时间</navigator>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

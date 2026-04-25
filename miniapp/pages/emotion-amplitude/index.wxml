@@ -1,0 +1,25 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">状态入口</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <text class="badge">情绪振幅</text>
+      </view>
+    </view>
+
+    <view class="stack flow-page-stack">
+      <view class="flow-hero">
+        <text class="flow-title">没事的</text>
+      </view>
+
+      <view class="flow-card">
+        <textarea class="textarea textarea--compact" value="{{trigger}}" placeholder="写下刚才戳到你的那一下" bindinput="handleInput" />
+      </view>
+
+      <button class="button-primary emotion-continue-button" bindtap="handleContinue" disabled="{{!canContinue}}">没事的</button>
+    </view>
+  </view>
+</view>
