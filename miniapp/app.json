@@ -1,0 +1,36 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/axis-today/index",
+    "pages/axis-month/index",
+    "pages/axis-year/index",
+    "pages/month-completed/index",
+    "pages/drag-start-check/index",
+    "pages/drag-start/index",
+    "pages/drag-start-countdown/index",
+    "pages/drag-start-done/index",
+    "pages/escape-why/index",
+    "pages/escape/index",
+    "pages/countdown/index",
+    "pages/choices/index",
+    "pages/courage/index",
+    "pages/courage-list/index",
+    "pages/courage-done/index",
+    "pages/escaped/index",
+    "pages/emotion-amplitude/index",
+    "pages/emotion-steady/index",
+    "pages/tired-care/index",
+    "pages/stimulation/index",
+    "pages/stats/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "稳稳接住自己",
+    "navigationBarBackgroundColor": "#f2ebdd",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f2ebdd",
+    "backgroundTextStyle": "dark"
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

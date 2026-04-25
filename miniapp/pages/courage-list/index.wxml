@@ -1,0 +1,28 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">勇气存档</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+      </view>
+    </view>
+
+    <view class="stack">
+      <text class="title">我顶住过的时刻</text>
+
+      <block wx:if="{{items.length}}">
+        <view class="list-rows">
+          <view wx:for="{{items}}" wx:key="id" class="list-row">
+            <text class="list-row-meta">{{item.createdAtLabel}}</text>
+            <text class="list-row-title">{{item.title}}</text>
+          </view>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="empty-state">还没有记录。</view>
+      </block>
+    </view>
+  </view>
+</view>

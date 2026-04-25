@@ -1,0 +1,38 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">命名记录</text>
+        <text class="kicker">这些夜里，我最常掉进哪里</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <text class="badge">已命名 {{totalClicks}} 次</text>
+      </view>
+    </view>
+
+    <view class="stack">
+      <view class="stats-card-grid">
+        <view wx:for="{{summaryRows}}" wx:for-item="row" wx:key="index" class="stats-row">
+          <view wx:for="{{row}}" wx:for-item="state" wx:key="id" class="stats-cell">
+            <view class="card stats-state-card">
+              <view class="stats-state-head">
+                <text class="state-card-emoji">{{state.emoji}}</text>
+                <text class="stats-state-title">{{state.name}}</text>
+              </view>
+              <text class="stats-state-count">累计 {{state.count}} 次</text>
+              <view class="stats-detail-list">
+                <text wx:for="{{state.details}}" wx:for-item="detail" wx:key="*this" class="stats-detail">{{detail}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="summary">
+        <text class="summary-label">累了时怎么照顾自己</text>
+        <text class="summary-value">{{tiredSummary}}</text>
+      </view>
+    </view>
+  </view>
+</view>

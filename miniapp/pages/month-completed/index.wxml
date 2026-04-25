@@ -1,0 +1,74 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">月度完成</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <text class="badge">月度</text>
+      </view>
+    </view>
+
+    <view class="stack">
+      <view class="nav-rail">
+        <navigator url="/pages/axis-year/index" class="nav-rail-link">年度</navigator>
+        <text class="nav-rail-link nav-rail-link--active">月度</text>
+        <navigator url="/pages/axis-today/index" class="nav-rail-link">今天</navigator>
+      </view>
+
+      <view class="stack">
+        <text class="title">这个月完成的事情</text>
+        <text class="body">把今天真正落地的事保存下来，月底回看会更清楚。</text>
+      </view>
+
+      <view class="stats-grid">
+        <view class="stat-card">
+          <text class="stat-label">开始</text>
+          <text class="stat-value">{{startedAtLabel}}</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-label">收束</text>
+          <text class="stat-value">{{endedAtLabel}}</text>
+        </view>
+      </view>
+
+      <block wx:if="{{isEditing}}">
+        <view class="stack">
+          <text class="input-label">今天真正完成的事</text>
+          <textarea class="textarea textarea--compact" value="{{completedThing}}" placeholder="写下今天最重要的完成" bindinput="handleInput" />
+          <button class="button-primary" bindtap="handleSave" disabled="{{!canSave}}">保存完成事项</button>
+        </view>
+      </block>
+
+      <block wx:else>
+        <view class="summary">
+          <text class="summary-label">今天完成</text>
+          <text class="summary-value">{{completedThing}}</text>
+        </view>
+      </block>
+
+      <view class="stack">
+        <view class="top-bar">
+          <text class="input-label">{{monthLabel}}</text>
+          <navigator url="/pages/axis-month/index" class="button-ghost">查看月度计划</navigator>
+        </view>
+        <block wx:if="{{monthEntries.length}}">
+          <view class="list-rows">
+            <view wx:for="{{monthEntries}}" wx:key="dateKey" class="list-row">
+              <text class="list-row-meta">{{item.dateLabel}} · 开始 {{item.startLabel}} / 收束 {{item.endLabel}}</text>
+              <text class="list-row-title">{{item.completedThing || '还没写完成事项'}}</text>
+            </view>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="empty-state">这个月还没有记录。</view>
+        </block>
+      </view>
+
+      <block wx:if="{{!isEditing}}">
+        <button class="button-ghost" bindtap="handleEdit">修改今天完成的事</button>
+      </block>
+    </view>
+  </view>
+</view>

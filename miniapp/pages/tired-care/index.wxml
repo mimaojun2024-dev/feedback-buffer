@@ -1,0 +1,45 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">恢复清单</text>
+        <text class="kicker">先恢复，不急着逼自己</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <text class="badge">能量见底</text>
+      </view>
+    </view>
+
+    <view class="stack flow-page-stack">
+      <view class="flow-hero">
+        <text class="flow-title">累了时怎么照顾自己</text>
+        <text class="flow-copy">先选一个恢复动作，把自己带回一点点。</text>
+      </view>
+
+      <view class="card-list state-grid care-state-grid">
+        <view wx:for="{{optionRows}}" wx:for-item="row" wx:key="index" class="state-row">
+          <view wx:for="{{row}}" wx:for-item="option" wx:key="id" class="state-cell">
+            <view
+              class="card card--interactive card--grid care-state-card {{selectedOptionId === option.id ? 'card--selected' : ''}}"
+              bindtap="handleSelect"
+              data-id="{{option.id}}"
+            >
+              <text class="card-title">{{option.label}}</text>
+              <text class="card-desc">已选 {{option.count}} 次</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <block wx:if="{{selectedOptionLabel}}">
+        <view class="summary summary--quiet">
+          <text class="summary-label">现在就先做这一件</text>
+          <text class="summary-value">{{selectedOptionLabel}}</text>
+        </view>
+      </block>
+
+      <navigator url="/pages/stats/index" class="button-ghost">看命名记录</navigator>
+    </view>
+  </view>
+</view>

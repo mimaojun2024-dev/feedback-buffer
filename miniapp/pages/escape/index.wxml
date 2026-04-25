@@ -1,0 +1,64 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">反馈缓冲</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <text class="badge">今天已缓冲 {{dailyCount}} 次</text>
+      </view>
+    </view>
+
+    <view class="stack flow-page-stack">
+      <view class="flow-hero">
+        <text class="flow-title">先别去看，先稳 23 秒</text>
+        <text class="flow-copy">你不是永远不看。先给自己留一小段缓冲。</text>
+      </view>
+
+      <view class="feedback-axis-panel">
+        <view class="feedback-axis-head">
+          <text class="summary-label">我今天最重要的事</text>
+          <navigator url="/pages/axis-today/index" class="feedback-axis-link">
+            {{hasTodayAxisTask ? '修改' : '填写'}}
+          </navigator>
+        </view>
+        <block wx:if="{{hasTodayAxisTask}}">
+          <text class="feedback-axis-main">{{todayAxisTask}}</text>
+        </block>
+        <block wx:else>
+          <text class="feedback-axis-empty">今天主轴还没填。先钉住一件事，再回来缓冲。</text>
+        </block>
+      </view>
+
+      <view class="feedback-axis-panel feedback-axis-panel--month">
+        <view class="feedback-axis-head">
+          <text class="summary-label">这个月最重要的事</text>
+          <navigator url="/pages/axis-month/index" class="feedback-axis-link">
+            {{hasMonthAxisEntries ? '查看' : '填写'}}
+          </navigator>
+        </view>
+        <block wx:if="{{hasMonthAxisEntries}}">
+          <view class="feedback-month-list">
+            <view wx:for="{{monthAxisEntries}}" wx:key="index" class="feedback-month-item">
+              <text class="feedback-month-index">{{item.index}}</text>
+              <text class="feedback-month-task">{{item.task}}</text>
+            </view>
+          </view>
+        </block>
+        <block wx:else>
+          <text class="feedback-axis-empty">本月重点还没填。可以先留空，但这里会提醒你补上。</text>
+        </block>
+      </view>
+
+      <view class="button-group">
+        <block wx:if="{{hasTodayAxisTask}}">
+          <button class="button-primary" bindtap="handleSteady">开始 23 秒缓冲</button>
+        </block>
+        <block wx:else>
+          <navigator url="/pages/axis-today/index" class="button-primary">先填写今日主轴</navigator>
+        </block>
+      </view>
+    </view>
+  </view>
+</view>

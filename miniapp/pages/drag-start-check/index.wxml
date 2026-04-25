@@ -1,0 +1,41 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">状态入口</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <text class="badge">不想启动</text>
+      </view>
+    </view>
+
+    <view class="stack drag-check-stack">
+      <view class="drag-check-hero">
+        <view class="drag-check-title">
+          <text>只做两分钟</text>
+          <text class="drag-check-title-accent">可以吗</text>
+        </view>
+        <view class="drag-check-copy">
+          <text>先不谈宏大目标。</text>
+          <text>只问这两分钟，能不能借给第一步。</text>
+        </view>
+      </view>
+
+      <view class="drag-choice-row">
+        <button class="drag-choice-card {{selectedAnswer === 'yes' ? 'drag-choice-card--selected' : ''}}" bindtap="handleSelect" data-answer="yes">
+          <text class="drag-choice-title">可以</text>
+          <text class="drag-choice-desc">先碰第一步</text>
+        </button>
+        <button class="drag-choice-card {{selectedAnswer === 'no' ? 'drag-choice-card--selected' : ''}}" bindtap="handleSelect" data-answer="no">
+          <text class="drag-choice-title">不可以</text>
+          <text class="drag-choice-desc">先退半步</text>
+        </button>
+      </view>
+
+      <block wx:if="{{selectedAnswer === 'no'}}">
+        <navigator url="/pages/home/index" class="button-secondary">先回主页</navigator>
+      </block>
+    </view>
+  </view>
+</view>

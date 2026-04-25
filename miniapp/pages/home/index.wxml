@@ -1,0 +1,96 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">状态入口</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/stats/index" class="pill-link">查看命名</navigator>
+        <navigator url="/pages/month-completed/index" class="pill-link">月度完成日志</navigator>
+      </view>
+    </view>
+
+    <view class="stack">
+      <view class="stack home-hero">
+        <text class="title">稳稳接住自己</text>
+        <text class="body home-slogan">慢半拍，就是自由开始出现的地方。✨</text>
+      </view>
+
+      <view class="stack home-axis-stack">
+        <block wx:if="{{hasTodayAxisTask}}">
+          <navigator url="/pages/axis-today/index" class="home-axis-card home-axis-card--saved">
+            <view class="home-axis-head">
+              <text class="summary-label">今日主轴</text>
+              <text class="home-axis-chip">已钉住</text>
+            </view>
+            <text class="home-axis-task">{{todayAxisTask}}</text>
+            <text class="home-axis-footnote">进入今天主轴</text>
+          </navigator>
+        </block>
+
+        <block wx:else>
+          <view class="home-axis-card home-axis-card--draft">
+            <view class="home-axis-head">
+              <text class="summary-label">今日主轴</text>
+              <text class="home-axis-chip">只留一件</text>
+            </view>
+            <textarea
+              class="home-axis-input"
+              value="{{todayAxisDraft}}"
+              placeholder="写下今天最重要的一件事"
+              bindinput="handleTodayAxisInput"
+            />
+            <view class="button-group button-group--axis">
+              <button class="home-axis-submit" bindtap="handleSaveTodayAxis" disabled="{{!canSaveTodayAxis}}">
+                写下今天
+              </button>
+            </view>
+          </view>
+        </block>
+      </view>
+
+      <view class="card-list state-grid">
+        <view wx:for="{{stateRows}}" wx:for-item="row" wx:key="index" class="state-row">
+          <view
+            wx:for="{{row}}"
+            wx:for-item="state"
+            wx:key="id"
+            class="state-cell"
+          >
+            <view
+              class="card card--interactive card--grid"
+              bindtap="handleStateTap"
+              data-id="{{state.id}}"
+              data-route="{{state.route}}"
+            >
+              <view class="state-card-head">
+                <text class="state-card-emoji">{{state.emoji}}</text>
+                <text class="state-card-name">{{state.name}}</text>
+              </view>
+              <text class="card-desc">{{state.description}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="button-group button-group--split">
+        <button
+          class="button-secondary button-secondary--panel"
+          bindtap="handleStartToday"
+          disabled="{{!canStartToday || hasStartedToday}}"
+        >
+          <text class="button-panel-title">开始今天</text>
+          <text class="button-panel-meta">{{startMeta}}</text>
+        </button>
+        <button
+          class="button-secondary button-secondary--panel"
+          bindtap="handleEndToday"
+          disabled="{{!canEndToday || hasEndedToday}}"
+        >
+          <text class="button-panel-title">收束今天</text>
+          <text class="button-panel-meta">{{endMeta}}</text>
+        </button>
+      </view>
+    </view>
+  </view>
+</view>
