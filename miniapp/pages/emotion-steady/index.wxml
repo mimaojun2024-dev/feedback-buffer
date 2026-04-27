@@ -2,37 +2,34 @@
   <view class="panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">状态入口</text>
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <text class="badge">情绪振幅</text>
       </view>
     </view>
 
-    <view class="stack flow-page-stack">
-      <view class="flow-hero flow-hero--center">
+    <view class="stack flow-page-stack emotion-steady-stack">
+      <view class="flow-hero flow-hero--center emotion-steady-hero">
         <text class="flow-title">缓一缓，别下坠</text>
-        <text class="flow-copy">先把自己从最陡的地方扶住。</text>
+        <text class="flow-copy">现在先不追问原因，把自己从最陡的地方扶住。</text>
       </view>
 
-      <view class="emotion-calm-grid">
-        <view wx:for="{{stepRows}}" wx:for-item="row" wx:key="index" class="emotion-calm-row">
-          <view wx:for="{{row}}" wx:for-item="step" wx:key="*this" class="emotion-calm-cell">
+      <view class="card-list state-grid emotion-calm-grid">
+        <view wx:for="{{stepRows}}" wx:for-item="row" wx:key="index" class="state-row">
+          <view wx:for="{{row}}" wx:for-item="step" wx:key="id" class="state-cell">
             <view class="card card--grid emotion-calm-card">
-              <text class="card-title">{{step}}</text>
+              <view class="state-card-head">
+                <text class="state-card-emoji">{{step.emoji}}</text>
+                <text class="state-card-name">{{step.title}}</text>
+              </view>
             </view>
           </view>
         </view>
       </view>
 
-      <view class="emotion-final-card">
-        <text>{{finalStep}}</text>
-      </view>
-
       <view class="button-group flow-action-row">
-        <navigator url="/pages/tired-care/index" class="button-secondary">好的，去休息</navigator>
-        <navigator url="/pages/month-completed/index" class="button-secondary">你已经做到很多了</navigator>
+        <navigator url="/pages/tired-care/index" class="button-secondary">先去休息</navigator>
+        <navigator url="/pages/month-completed/index" class="button-secondary">看看完成</navigator>
       </view>
     </view>
   </view>

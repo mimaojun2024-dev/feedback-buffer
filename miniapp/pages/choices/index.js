@@ -1,5 +1,4 @@
 const {
-  XIAOHONGSHU_URL,
   getStoredCount,
   getStoredPriorityTask,
   incrementStoredFlowStat,
@@ -10,7 +9,9 @@ const { normalizeText } = require('../../utils/time');
 Page({
   data: {
     dailyCount: 0,
-    priorityTask: ''
+    priorityTask: '',
+    isFeedbackPauseVisible: false,
+    isFeedbackPauseOpened: false
   },
 
   onLoad(options) {
@@ -24,23 +25,29 @@ Page({
     });
   },
 
-  handleOpenFeedback() {
-    incrementStoredFlowStat('escape.checked-feedback');
-
-    wx.setClipboardData({
-      data: XIAOHONGSHU_URL,
-      success() {
-        wx.showToast({
-          title: '链接已复制',
-          icon: 'none'
-        });
-      }
+  handleShowFeedbackPause() {
+    this.setData({
+      isFeedbackPauseVisible: true,
+      isFeedbackPauseOpened: false
     });
   },
 
-  handleReturnFocus() {
+  handleOpenFeedbackPause() {
+    if (this.data.isFeedbackPauseOpened) {
+      return;
+    }
+
+    this.setData({ isFeedbackPauseOpened: true });
+  },
+
+  handleReturnAxis() {
     incrementStoredFlowStat('escape.returned-focus');
-    wx.redirectTo({ url: '/pages/escape/index?focus=1' });
+    wx.redirectTo({ url: '/pages/axis-today/index' });
+  },
+
+  handleStartFiveMinuteCountdown() {
+    incrementStoredFlowStat('escape.checked-feedback');
+    wx.redirectTo({ url: '/pages/feedback-five-countdown/index' });
   }
 });
 

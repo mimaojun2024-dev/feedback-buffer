@@ -4,7 +4,16 @@
   "libVersion": "3.15.2",
   "miniprogramRoot": "miniapp/",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "file",
+        "value": ".DS_Store"
+      },
+      {
+        "type": "file",
+        "value": "README.md"
+      }
+    ],
     "include": []
   },
   "setting": {

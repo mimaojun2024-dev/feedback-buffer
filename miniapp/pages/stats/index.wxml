@@ -1,37 +1,66 @@
-<view class="page-shell">
-  <view class="panel">
+<view class="page-shell stats-page">
+  <view class="panel stats-panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">命名记录</text>
-        <text class="kicker">这些夜里，我最常掉进哪里</text>
+        <text class="eyebrow">记录</text>
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <text class="badge">已命名 {{totalClicks}} 次</text>
       </view>
     </view>
 
-    <view class="stack">
+    <view class="stack stats-stack">
+      <view class="stats-hero-card">
+        <text class="stats-hero-label">跨过阻碍</text>
+        <view class="stats-hero-main">
+          <text class="stats-hero-number">{{totalClicks}}</text>
+          <text class="stats-hero-unit">次</text>
+        </view>
+      </view>
+
+      <view class="stats-insight-row">
+        <view class="stats-insight-card">
+          <text class="stats-insight-label">最常跨过</text>
+          <text class="stats-insight-value">{{strongestText}}</text>
+        </view>
+        <view class="stats-insight-card">
+          <text class="stats-insight-label">最常照顾</text>
+          <text class="stats-insight-value">{{tiredText}}</text>
+        </view>
+      </view>
+
+      <view class="stats-section-head">
+        <text class="stats-section-title">细分记录</text>
+      </view>
+
       <view class="stats-card-grid">
         <view wx:for="{{summaryRows}}" wx:for-item="row" wx:key="index" class="stats-row">
           <view wx:for="{{row}}" wx:for-item="state" wx:key="id" class="stats-cell">
             <view class="card stats-state-card">
-              <view class="stats-state-head">
-                <text class="state-card-emoji">{{state.emoji}}</text>
-                <text class="stats-state-title">{{state.name}}</text>
+              <view class="stats-state-topline">
+                <view class="stats-state-head">
+                  <text class="state-card-emoji">{{state.emoji}}</text>
+                </view>
+                <text class="stats-state-count">{{state.countLabel}}</text>
               </view>
-              <text class="stats-state-count">累计 {{state.count}} 次</text>
               <view class="stats-detail-list">
-                <text wx:for="{{state.details}}" wx:for-item="detail" wx:key="*this" class="stats-detail">{{detail}}</text>
+                <view
+                  wx:for="{{state.details}}"
+                  wx:for-item="detail"
+                  wx:key="label"
+                  class="stats-detail-row {{detail.isWide ? 'stats-detail-row--wide' : ''}}"
+                >
+                  <text class="stats-detail-label">{{detail.label}}</text>
+                  <text class="stats-detail-value">{{detail.value}}</text>
+                </view>
               </view>
             </view>
           </view>
         </view>
       </view>
 
-      <view class="summary">
-        <text class="summary-label">累了时怎么照顾自己</text>
-        <text class="summary-value">{{tiredSummary}}</text>
+      <view class="closing-line stats-closing-line">
+        <text>不远复，无祗悔。元吉。</text>
       </view>
     </view>
   </view>

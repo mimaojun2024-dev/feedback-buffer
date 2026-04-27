@@ -1,7 +1,37 @@
+const { getStoredMonthlyDailyCheckins } = require('../../utils/storage');
+const { formatDateLabel, normalizeText } = require('../../utils/time');
+
+const MONTH_COMPLETED_LIMIT = 5;
+
+function getMonthCompletedItems() {
+  return getStoredMonthlyDailyCheckins()
+    .filter((entry) => entry.completedThing)
+    .slice(0, MONTH_COMPLETED_LIMIT)
+    .map((entry) => ({
+      ...entry,
+      dateLabel: formatDateLabel(entry.dateKey)
+    }));
+}
+
 Page({
   data: {
     trigger: '',
-    canContinue: false
+    canContinue: false,
+    monthCompletedItems: [],
+    hasMonthCompletedItems: false
+  },
+
+  onShow() {
+    this.refreshMonthCompleted();
+  },
+
+  refreshMonthCompleted() {
+    const monthCompletedItems = getMonthCompletedItems();
+
+    this.setData({
+      monthCompletedItems,
+      hasMonthCompletedItems: monthCompletedItems.length > 0
+    });
   },
 
   handleInput(event) {
@@ -9,7 +39,7 @@ Page({
 
     this.setData({
       trigger,
-      canContinue: trigger.trim().length > 0
+      canContinue: normalizeText(trigger).length > 0
     });
   },
 

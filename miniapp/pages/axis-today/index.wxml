@@ -6,55 +6,90 @@
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <text class="badge">今天</text>
       </view>
     </view>
 
-    <view class="stack">
+    <view class="stack today-axis-stack">
       <view class="nav-rail">
         <navigator url="/pages/axis-year/index" class="nav-rail-link">年度</navigator>
         <navigator url="/pages/axis-month/index" class="nav-rail-link">月度</navigator>
         <text class="nav-rail-link nav-rail-link--active">今天</text>
       </view>
 
-      <view class="stack">
-        <text class="title">今天最重要的事</text>
-        <text class="body">只保留一件最主要的事。今天先把现实动作钉住。</text>
+      <view class="flow-hero today-axis-hero">
+        <text class="flow-title">今天</text>
+        <text class="flow-copy">早上钉住主轴，晚上收束它。</text>
+      </view>
+
+      <view class="button-group button-group--split today-checkin-actions">
+        <button
+          class="button-secondary button-secondary--panel"
+          bindtap="handleStartToday"
+          disabled="{{!canStartToday || hasStartedToday}}"
+        >
+          <text class="button-panel-title">今天开始</text>
+          <text class="button-panel-meta">{{startMeta}}</text>
+        </button>
+        <button
+          class="button-secondary button-secondary--panel"
+          bindtap="handleEndToday"
+          disabled="{{!canEndToday}}"
+        >
+          <text class="button-panel-title">今天收束</text>
+          <text class="button-panel-meta">{{endMeta}}</text>
+        </button>
       </view>
 
       <block wx:if="{{isEditing}}">
-        <view class="stack">
-          <text class="input-label">最主要的任务</text>
-          <textarea class="textarea textarea--compact" value="{{task}}" placeholder="写下今天最重要的那件事" bindinput="handleTaskInput" />
-          <button class="button-primary" bindtap="handleSave" disabled="{{!canSave}}">保存今天这件事</button>
+        <view class="month-completed-write-card today-axis-write-card">
+          <view class="month-completed-card-head">
+            <text class="summary-label">今日主轴</text>
+          </view>
+          <textarea class="textarea textarea--compact month-completed-textarea" value="{{task}}" placeholder="写下今天最重要的那件事" bindinput="handleTaskInput" />
+          <button class="button-primary month-completed-save-button" bindtap="handleSave" disabled="{{!canSave}}">钉住今天</button>
         </view>
       </block>
 
       <block wx:else>
-        <view class="summary">
-          <text class="summary-label">今天最重要的事</text>
+        <view class="summary action-summary month-completed-summary">
+          <text class="summary-label">今日主轴</text>
           <text class="summary-value">{{task}}</text>
+          <button class="button-ghost micro-action-button action-summary-button" bindtap="handleEdit">修改</button>
         </view>
       </block>
 
-      <view class="stack">
-        <text class="input-label">提交的每天完成</text>
-        <block wx:if="{{recentCompletions.length}}">
-          <view class="list-rows">
-            <view wx:for="{{recentCompletions}}" wx:key="dateKey" class="list-row">
-              <text class="list-row-meta">{{item.dateLabel}} · 开始 {{item.startLabel}} / 收束 {{item.endLabel}}</text>
-              <text class="list-row-title">{{item.completedThing}}</text>
+      <block wx:if="{{isCompletionEditing}}">
+        <block wx:if="{{canWriteCompletion}}">
+          <view class="month-completed-write-card today-axis-completion-card">
+            <view class="month-completed-card-head">
+              <text class="summary-label">今天真正推进的轴线</text>
             </view>
+            <textarea class="textarea textarea--compact month-completed-textarea" value="{{completedThing}}" placeholder="比如 把第一版小程序跑起来" bindinput="handleCompletionInput" />
+            <button class="button-primary month-completed-save-button" bindtap="handleSaveCompletion" disabled="{{!canSaveCompletion}}">主轴推进完成</button>
           </view>
         </block>
         <block wx:else>
-          <view class="empty-state">还没有提交过每天完成。</view>
+          <view class="month-completed-write-card month-completed-locked-card today-axis-completion-card">
+            <text class="summary-label">今天真正推进的轴线</text>
+            <text class="month-completed-lock-copy">18:30 后可收束</text>
+          </view>
         </block>
+      </block>
+
+      <block wx:else>
+        <view class="summary action-summary month-completed-summary">
+          <text class="summary-label">今天真正推进的轴线</text>
+          <text class="summary-value">{{completedThing}}</text>
+          <button class="button-ghost micro-action-button action-summary-button" bindtap="handleEditCompletion">修改</button>
+        </view>
+      </block>
+
+      <view wx:if="{{canToggleCompletionPreviewForTest}}" class="test-tools">
+        <button class="button-ghost test-reset-button" bindtap="handleToggleCompletionPreviewForTest">
+          {{completionPreviewButtonLabel}}
+        </button>
       </view>
 
-      <block wx:if="{{!isEditing}}">
-        <button class="button-ghost" bindtap="handleEdit">修改今天这件事</button>
-      </block>
     </view>
   </view>
 </view>

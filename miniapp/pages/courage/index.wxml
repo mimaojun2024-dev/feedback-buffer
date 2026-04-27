@@ -6,22 +6,80 @@
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <navigator url="/pages/courage-list/index" class="pill-link">顶住记录</navigator>
       </view>
     </view>
 
     <view class="stack flow-page-stack">
       <view class="flow-hero">
-        <text class="flow-title">哪件事需要一点勇气？</text>
-        <text class="flow-copy">把它写清楚，然后决定现在碰一下。</text>
+        <text class="flow-title">现在哪件事需要一点勇气？</text>
+        <text class="flow-copy">先把它写下来，再决定要不要现在去碰一下。</text>
       </view>
 
-      <view class="flow-card">
-        <textarea class="textarea textarea--compact" value="{{task}}" placeholder="写下那件需要勇气去做的事" bindinput="handleInput" />
+      <view class="flow-card courage-flow-card">
+        <textarea class="textarea textarea--compact courage-input" value="{{task}}" placeholder="写下那件需要勇气去做的事" bindinput="handleInput" />
         <view class="button-group courage-action-group">
           <button class="button-primary courage-action-button" bindtap="handleSubmit" disabled="{{!canSubmit}}">我可以现在做</button>
-          <navigator url="/pages/home/index" class="button-secondary courage-action-button">我还需要一点时间</navigator>
+          <button class="button-secondary courage-action-button" bindtap="handleNeedTime">我还需要一点时间</button>
         </view>
+      </view>
+
+      <block wx:if="{{needsTime}}">
+        <view class="drag-encouragement-card courage-encouragement-card" bindtap="handleOpenEncouragement">
+          <text class="drag-encouragement-title">现在是梁静茹在借给你勇气</text>
+          <text class="drag-encouragement-copy">你再深吸一口气</text>
+          <text class="drag-encouragement-hint">只碰一下边缘，也算靠近</text>
+        </view>
+
+        <block wx:if="{{encouragementOpened}}">
+          <view class="button-group courage-action-group courage-action-group--retry">
+            <button class="button-primary courage-action-button" bindtap="handleSubmit" disabled="{{!canSubmit}}">我可以现在做</button>
+            <navigator url="/pages/home/index" class="button-secondary courage-action-button">那就再积蓄能量</navigator>
+          </view>
+        </block>
+      </block>
+
+      <view class="start-history-panel courage-history-panel">
+        <view class="start-history-head">
+          <view class="start-history-copy">
+            <text class="summary-label start-history-label">已经鼓起过的勇气</text>
+          </view>
+          <button
+            wx:if="{{hasCourageItems}}"
+            class="button-ghost micro-action-button start-history-manage"
+            bindtap="handleToggleCourageManagement"
+          >
+            {{isManagingCourage ? '完成' : '管理'}}
+          </button>
+        </view>
+
+        <block wx:if="{{hasCourageItems}}">
+          <view class="start-history-list">
+            <view wx:for="{{courageItems}}" wx:key="id" class="start-history-item">
+              <view class="start-history-item-copy">
+                <text class="start-history-task">{{item.title}}</text>
+                <text class="start-history-time">{{item.createdAtLabel}}</text>
+              </view>
+              <button
+                wx:if="{{isManagingCourage}}"
+                class="button-ghost micro-action-button micro-action-button--danger start-history-delete"
+                bindtap="handleDeleteCourageItem"
+                data-id="{{item.id}}"
+              >
+                删除
+              </button>
+            </view>
+          </view>
+        </block>
+
+        <block wx:else>
+          <text class="start-history-empty">每鼓起过一次勇气，这里会多一条记录</text>
+        </block>
+      </view>
+
+      <view wx:if="{{canToggleCouragePreviewForTest}}" class="test-tools">
+        <button class="button-ghost test-reset-button" bindtap="handleToggleCouragePreviewForTest">
+          {{isPreviewingEmptyCourageForTest ? '恢复勇气记录' : '预览空状态'}}
+        </button>
       </view>
     </view>
   </view>

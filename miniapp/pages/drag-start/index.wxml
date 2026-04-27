@@ -2,11 +2,9 @@
   <view class="panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">状态入口</text>
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <text class="badge">不想启动</text>
       </view>
     </view>
 
@@ -25,16 +23,54 @@
       </block>
 
       <block wx:else>
-        <view class="summary">
+        <view class="summary start-task-summary">
           <text class="summary-label">我现在要做的是</text>
           <text class="summary-value">{{startTask}}</text>
+          <button class="button-ghost micro-action-button start-task-edit" bindtap="handleEdit">修改</button>
         </view>
       </block>
 
-      <view class="button-group">
+      <view class="button-group start-action-group">
         <block wx:if="{{!isEditingTask}}">
-          <button class="button-primary" bindtap="handleStartCountdown">开始这两分钟</button>
-          <button class="button-ghost" bindtap="handleEdit">修改</button>
+          <button class="button-primary start-countdown-button" bindtap="handleStartCountdown">开始这两分钟</button>
+        </block>
+      </view>
+
+      <view class="start-history-panel">
+        <view class="start-history-head">
+          <view class="start-history-copy">
+            <text class="summary-label start-history-label">已经成功启动过</text>
+          </view>
+          <button
+            wx:if="{{hasStartHistory}}"
+            class="button-ghost micro-action-button start-history-manage"
+            bindtap="handleToggleHistoryManagement"
+          >
+            {{isManagingHistory ? '完成' : '管理'}}
+          </button>
+        </view>
+
+        <block wx:if="{{hasStartHistory}}">
+          <view class="start-history-list">
+            <view wx:for="{{startHistoryItems}}" wx:key="id" class="start-history-item">
+              <view class="start-history-item-copy">
+                <text class="start-history-task">{{item.task}}</text>
+                <text class="start-history-time">{{item.completedAtLabel}}</text>
+              </view>
+              <button
+                wx:if="{{isManagingHistory}}"
+                class="button-ghost micro-action-button micro-action-button--danger start-history-delete"
+                bindtap="handleDeleteHistoryItem"
+                data-id="{{item.id}}"
+              >
+                删除
+              </button>
+            </view>
+          </view>
+        </block>
+
+        <block wx:else>
+          <text class="start-history-empty">每启动过一次，这里会多一条记录</text>
         </block>
       </view>
     </view>

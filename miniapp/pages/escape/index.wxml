@@ -6,20 +6,19 @@
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <text class="badge">今天已缓冲 {{dailyCount}} 次</text>
       </view>
     </view>
 
     <view class="stack flow-page-stack">
       <view class="flow-hero">
         <text class="flow-title">先别去看，先稳 23 秒</text>
-        <text class="flow-copy">你不是永远不看。先给自己留一小段缓冲。</text>
+        <text class="flow-copy">你不是永远不看。只是先给自己留一小段缓冲。</text>
       </view>
 
       <view class="feedback-axis-panel">
         <view class="feedback-axis-head">
-          <text class="summary-label">我今天最重要的事</text>
-          <navigator url="/pages/axis-today/index" class="feedback-axis-link">
+          <text class="summary-label">今天最重要的事</text>
+          <navigator url="/pages/axis-today/index" class="feedback-axis-link micro-action-button">
             {{hasTodayAxisTask ? '修改' : '填写'}}
           </navigator>
         </view>
@@ -34,7 +33,7 @@
       <view class="feedback-axis-panel feedback-axis-panel--month">
         <view class="feedback-axis-head">
           <text class="summary-label">这个月最重要的事</text>
-          <navigator url="/pages/axis-month/index" class="feedback-axis-link">
+          <navigator url="/pages/axis-month/index" class="feedback-axis-link micro-action-button">
             {{hasMonthAxisEntries ? '查看' : '填写'}}
           </navigator>
         </view>

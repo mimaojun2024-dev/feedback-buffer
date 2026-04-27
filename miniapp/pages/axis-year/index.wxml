@@ -6,7 +6,6 @@
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <text class="badge">年度</text>
       </view>
     </view>
 
@@ -20,6 +19,7 @@
       <view class="axis-compact-head">
         <text class="axis-compact-title">今年最重要的事</text>
         <text class="axis-compact-meta">先立方向</text>
+        <button wx:if="{{!isEditing}}" class="button-ghost micro-action-button axis-head-action" bindtap="handleEdit">修改</button>
       </view>
 
       <block wx:if="{{isEditing}}">
@@ -41,9 +41,6 @@
         </view>
       </block>
 
-      <block wx:if="{{!isEditing}}">
-        <button class="button-ghost" bindtap="handleEdit">修改这几条</button>
-      </block>
     </view>
   </view>
 </view>

@@ -2,11 +2,9 @@
   <view class="panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">状态入口</text>
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <text class="badge">不想启动</text>
       </view>
     </view>
 
@@ -34,7 +32,28 @@
       </view>
 
       <block wx:if="{{selectedAnswer === 'no'}}">
-        <navigator url="/pages/home/index" class="button-secondary">先回主页</navigator>
+        <view class="drag-encouragement-card" bindtap="handleOpenEncouragement">
+          <text class="drag-encouragement-title">再想想呢？</text>
+          <text class="drag-encouragement-copy">不用启动整个世界</text>
+          <text class="drag-encouragement-hint">只把门缝推开一点，也算开始</text>
+        </view>
+
+        <block wx:if="{{encouragementOpened}}">
+          <view class="drag-choice-row drag-choice-row--retry">
+            <button class="drag-choice-card {{retryAnswer === 'yes' ? 'drag-choice-card--selected' : ''}}" bindtap="handleRetrySelect" data-answer="yes">
+              <text class="drag-choice-title">可以</text>
+              <text class="drag-choice-desc">只推开一点</text>
+            </button>
+            <button class="drag-choice-card {{retryAnswer === 'no' ? 'drag-choice-card--selected' : ''}}" bindtap="handleRetrySelect" data-answer="no">
+              <text class="drag-choice-title">不可以</text>
+              <text class="drag-choice-desc">先保住自己</text>
+            </button>
+          </view>
+        </block>
+      </block>
+
+      <block wx:if="{{retryAnswer === 'no'}}">
+        <navigator url="/pages/home/index" class="button-secondary">休息一下</navigator>
       </block>
     </view>
   </view>

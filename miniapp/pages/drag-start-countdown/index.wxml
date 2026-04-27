@@ -2,29 +2,32 @@
   <view class="panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">状态入口</text>
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <text class="badge">只做这两分钟</text>
       </view>
     </view>
 
     <view class="stack timer-wrap flow-page-stack">
-      <view class="summary">
+      <view class="summary countdown-task-summary">
         <text class="summary-label">我现在要做的是</text>
         <text class="summary-value">{{startTask}}</text>
       </view>
       <view class="flow-timer-card">
         <text class="timer timer--steady">{{timeLabel}}</text>
-        <text class="timer-subtitle">只做两分钟</text>
       </view>
       <view class="progress-track">
         <view class="progress-bar" style="width: {{progressPercent}}%;"></view>
       </view>
 
-      <view class="button-group">
-        <navigator url="/pages/drag-start/index?edit=1" class="button-ghost">重写这一步</navigator>
+      <view class="timer-encouragement">
+        <text>不积跬步，无以至千里</text>
+      </view>
+
+      <view wx:if="{{canSkipCountdownForTest}}" class="test-tools">
+        <button class="button-ghost test-reset-button" bindtap="handleSkipCountdownForTest">
+          跳过倒计时
+        </button>
       </view>
     </view>
   </view>
