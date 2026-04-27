@@ -1,16 +1,39 @@
 const CALM_STEPS = [
-  '时间',
-  '睡眠',
-  '身体动作',
-  '呼吸',
-  '离开刺激',
-  '不再自我攻击'
+  {
+    id: 'body',
+    emoji: '🧍',
+    title: '站起来动一动'
+  },
+  {
+    id: 'breath',
+    emoji: '🌬️',
+    title: '慢慢呼吸'
+  },
+  {
+    id: 'distance',
+    emoji: '📴',
+    title: '先别看手机'
+  },
+  {
+    id: 'supply',
+    emoji: '🍵',
+    title: '喝口水吃点东西'
+  },
+  {
+    id: 'rest',
+    emoji: '🛏️',
+    title: '闭眼躺一会儿'
+  },
+  {
+    id: 'kindness',
+    emoji: '🤲',
+    title: '别攻击自己'
+  }
 ];
 
 Page({
   data: {
-    stepRows: chunkSteps(CALM_STEPS),
-    finalStep: '有时就是熬过去'
+    stepRows: chunkSteps(CALM_STEPS)
   }
 });
 

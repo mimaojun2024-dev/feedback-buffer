@@ -1,33 +1,51 @@
 const ESCAPED_ACTIONS = [
   {
-    id: 'stand-up',
-    label: '站起来',
-    hint: '换个姿势'
+    id: 'walk-to-door',
+    emoji: '👣',
+    label: '走到门口再走回来',
+    prompt: '那就先走到门口再走回来'
+  },
+  {
+    id: 'turn-phone-down',
+    emoji: '📵',
+    label: '把手机扣在桌上',
+    prompt: '那就先把手机扣在桌上'
+  },
+  {
+    id: 'spin-in-place',
+    emoji: '🔄',
+    label: '站起来原地转五圈',
+    prompt: '那就先站起来原地转五圈'
   },
   {
     id: 'drink-water',
-    label: '喝一口水',
-    hint: '打断滑走'
+    emoji: '🥛',
+    label: '倒杯水喝一口',
+    prompt: '那就先倒杯水喝一口'
   },
   {
-    id: 'back-to-desktop',
-    label: '回到桌面',
-    hint: '回到界面'
+    id: 'wash-face',
+    emoji: '🧼',
+    label: '去洗把脸',
+    prompt: '那就先去洗把脸'
   },
   {
-    id: 'write-next-step',
-    label: '写下一步',
-    hint: '只写动作'
+    id: 'clear-desk',
+    emoji: '🧹',
+    label: '清理一下桌面',
+    prompt: '那就先清理一下桌面'
   },
   {
-    id: 'close-tabs',
-    label: '收起窗口',
-    hint: '关掉入口'
+    id: 'take-out-trash',
+    emoji: '🗑️',
+    label: '去倒一下垃圾',
+    prompt: '那就先去倒一下垃圾'
   },
   {
-    id: 'two-minute-touch',
-    label: '碰两分钟',
-    hint: '先碰事情'
+    id: 'open-window',
+    emoji: '🪟',
+    label: '打开窗户看一眼',
+    prompt: '那就先打开窗户看一眼'
   }
 ];
 

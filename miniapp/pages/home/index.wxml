@@ -2,18 +2,17 @@
   <view class="panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">状态入口</text>
       </view>
       <view class="top-actions">
-        <navigator url="/pages/stats/index" class="pill-link">查看命名</navigator>
-        <navigator url="/pages/month-completed/index" class="pill-link">月度完成日志</navigator>
+        <navigator url="/pages/month-completed/index" class="pill-link">我的轴线</navigator>
+        <navigator url="/pages/stats/index" class="pill-link">跨过阻碍</navigator>
       </view>
     </view>
 
-    <view class="stack">
+    <view class="stack home-stack">
       <view class="stack home-hero">
         <text class="title">稳稳接住自己</text>
-        <text class="body home-slogan">慢半拍，就是自由开始出现的地方。✨</text>
+        <text class="body home-slogan">慢半拍，就是自由开始出现的地方✨</text>
       </view>
 
       <view class="stack home-axis-stack">
@@ -24,7 +23,6 @@
               <text class="home-axis-chip">已钉住</text>
             </view>
             <text class="home-axis-task">{{todayAxisTask}}</text>
-            <text class="home-axis-footnote">进入今天主轴</text>
           </navigator>
         </block>
 
@@ -73,7 +71,7 @@
         </view>
       </view>
 
-      <view class="button-group button-group--split">
+      <view class="button-group button-group--split home-checkin-actions">
         <button
           class="button-secondary button-secondary--panel"
           bindtap="handleStartToday"
@@ -85,11 +83,21 @@
         <button
           class="button-secondary button-secondary--panel"
           bindtap="handleEndToday"
-          disabled="{{!canEndToday || hasEndedToday}}"
+          disabled="{{!canEndToday}}"
         >
           <text class="button-panel-title">收束今天</text>
           <text class="button-panel-meta">{{endMeta}}</text>
         </button>
+      </view>
+
+      <view wx:if="{{canResetTodayForTest}}" class="test-tools">
+        <button class="button-ghost test-reset-button" bindtap="handleResetTodayForTest">
+          重置今日测试
+        </button>
+      </view>
+
+      <view class="closing-line home-closing-line">
+        <text>天之历数在尔躬，允执其中。</text>
       </view>
     </view>
   </view>

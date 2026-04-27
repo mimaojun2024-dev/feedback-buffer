@@ -3,6 +3,7 @@ const { normalizeText } = require('./time');
 const STORAGE_KEY = 'feedback-buffer.daily-counts';
 const PRIORITY_TASK_KEY = 'feedback-buffer.priority-task';
 const START_TASK_KEY = 'feedback-buffer.start-task';
+const START_HISTORY_KEY = 'feedback-buffer.start-history';
 const STATE_CLICK_KEY = 'feedback-buffer.state-clicks';
 const TIRED_OPTION_CLICK_KEY = 'feedback-buffer.tired-option-clicks';
 const FLOW_STAT_KEY = 'feedback-buffer.flow-stats';
@@ -13,8 +14,10 @@ const COUNTDOWN_SECONDS = 23;
 const START_COUNTDOWN_SECONDS = 2 * 60;
 const XIAOHONGSHU_URL = 'https://www.xiaohongshu.com/';
 const MAIN_AXIS_LIST_LIMIT = 3;
+const START_HISTORY_LIMIT = 5;
+const COURAGE_LIST_LIMIT = 5;
 const DAILY_START_HOUR = 6;
-const DAILY_START_MINUTE = 0;
+const DAILY_START_MINUTE = 30;
 const DAILY_END_HOUR = 18;
 const DAILY_END_MINUTE = 30;
 
@@ -105,6 +108,21 @@ function setStoredDailyCheckinEvent(eventId) {
   return todayCheckin;
 }
 
+function resetStoredDailyCheckinForToday() {
+  const today = getTodayKey();
+  const storedCheckins = getStoredDailyCheckins();
+
+  if (!storedCheckins[today]) {
+    return createEmptyDailyCheckin();
+  }
+
+  const nextCheckins = { ...storedCheckins };
+  delete nextCheckins[today];
+  safeSetStorage(DAILY_CHECKIN_KEY, nextCheckins);
+
+  return createEmptyDailyCheckin();
+}
+
 function setStoredDailyCheckinCompletion(value) {
   const today = getTodayKey();
   const storedCheckins = getStoredDailyCheckins();
@@ -180,6 +198,57 @@ function setStoredStartTask(value) {
   return normalizedValue;
 }
 
+function normalizeStartHistoryItem(item) {
+  return {
+    id: normalizeText(item && item.id),
+    task: normalizeText(item && item.task),
+    completedAt: normalizeText(item && item.completedAt)
+  };
+}
+
+function getStoredStartHistory() {
+  const stored = safeGetStorage(START_HISTORY_KEY, []);
+
+  if (!Array.isArray(stored)) {
+    return [];
+  }
+
+  return stored
+    .map((item) => normalizeStartHistoryItem(item))
+    .filter((item) => item.id && item.task && item.completedAt)
+    .sort((left, right) => right.completedAt.localeCompare(left.completedAt))
+    .slice(0, START_HISTORY_LIMIT);
+}
+
+function appendStoredStartHistory(task) {
+  const normalizedTask = normalizeText(task);
+
+  if (!normalizedTask) {
+    return null;
+  }
+
+  const nextItem = {
+    id: `start-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    task: normalizedTask,
+    completedAt: new Date().toISOString()
+  };
+
+  safeSetStorage(START_HISTORY_KEY, [nextItem, ...getStoredStartHistory()].slice(0, START_HISTORY_LIMIT));
+  return nextItem;
+}
+
+function deleteStoredStartHistoryItem(itemId) {
+  const normalizedId = normalizeText(itemId);
+
+  if (!normalizedId) {
+    return getStoredStartHistory();
+  }
+
+  const nextHistory = getStoredStartHistory().filter((item) => item.id !== normalizedId);
+  safeSetStorage(START_HISTORY_KEY, nextHistory);
+  return nextHistory;
+}
+
 function getStoredStateClicks() {
   const stored = safeGetStorage(STATE_CLICK_KEY, {});
   return stored && typeof stored === 'object' ? stored : {};
@@ -249,7 +318,8 @@ function getStoredCourageList() {
   return stored
     .map((item) => normalizeCourageItem(item))
     .filter((item) => item.id && item.title && item.createdAt)
-    .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+    .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
+    .slice(0, COURAGE_LIST_LIMIT);
 }
 
 function appendStoredCourageItem(title) {
@@ -265,8 +335,20 @@ function appendStoredCourageItem(title) {
     createdAt: new Date().toISOString()
   };
 
-  safeSetStorage(COURAGE_LIST_KEY, [nextItem, ...getStoredCourageList()]);
+  safeSetStorage(COURAGE_LIST_KEY, [nextItem, ...getStoredCourageList()].slice(0, COURAGE_LIST_LIMIT));
   return nextItem;
+}
+
+function deleteStoredCourageItem(itemId) {
+  const normalizedId = normalizeText(itemId);
+
+  if (!normalizedId) {
+    return getStoredCourageList();
+  }
+
+  const nextItems = getStoredCourageList().filter((item) => item.id !== normalizedId);
+  safeSetStorage(COURAGE_LIST_KEY, nextItems);
+  return nextItems;
 }
 
 function createEmptyAxisItem() {
@@ -385,6 +467,7 @@ function setStoredMainAxisSection(sectionId, value) {
 module.exports = {
   COUNTDOWN_SECONDS,
   COURAGE_LIST_KEY,
+  COURAGE_LIST_LIMIT,
   DAILY_CHECKIN_KEY,
   DAILY_END_HOUR,
   DAILY_END_MINUTE,
@@ -395,12 +478,17 @@ module.exports = {
   MAIN_AXIS_LIST_LIMIT,
   PRIORITY_TASK_KEY,
   START_COUNTDOWN_SECONDS,
+  START_HISTORY_KEY,
+  START_HISTORY_LIMIT,
   START_TASK_KEY,
   STATE_CLICK_KEY,
   STORAGE_KEY,
   TIRED_OPTION_CLICK_KEY,
   XIAOHONGSHU_URL,
+  appendStoredStartHistory,
+  deleteStoredStartHistoryItem,
   appendStoredCourageItem,
+  deleteStoredCourageItem,
   getStoredCount,
   getStoredCourageList,
   getStoredDailyCheckinForToday,
@@ -410,6 +498,7 @@ module.exports = {
   getStoredMonthlyDailyCheckins,
   getStoredPriorityTask,
   getStoredStartTask,
+  getStoredStartHistory,
   getStoredStateClicks,
   getStoredTiredOptionClicks,
   getTodayKey,
@@ -419,6 +508,7 @@ module.exports = {
   incrementStoredTiredOptionClick,
   isDailyEndWindowOpen,
   isDailyStartWindowOpen,
+  resetStoredDailyCheckinForToday,
   setStoredDailyCheckinCompletion,
   setStoredDailyCheckinEvent,
   setStoredMainAxis,

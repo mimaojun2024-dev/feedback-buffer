@@ -2,24 +2,50 @@
   <view class="panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">状态入口</text>
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <text class="badge">情绪振幅</text>
       </view>
     </view>
 
-    <view class="stack flow-page-stack">
-      <view class="flow-hero">
-        <text class="flow-title">没事的</text>
+    <view class="stack flow-page-stack emotion-amplitude-stack">
+      <view class="flow-hero flow-hero--center emotion-amplitude-hero">
+        <text class="flow-title emotion-amplitude-title">有点 down 也没事</text>
+        <text class="flow-copy">先写下被戳到的那一下，再把自己扶稳。</text>
       </view>
 
-      <view class="flow-card">
-        <textarea class="textarea textarea--compact" value="{{trigger}}" placeholder="写下刚才戳到你的那一下" bindinput="handleInput" />
+      <view class="flow-card emotion-trigger-card">
+        <text class="input-label">刚才戳到我的是</text>
+        <textarea
+          class="textarea textarea--compact emotion-trigger-input"
+          value="{{trigger}}"
+          placeholder="一句话、一个消息，或者一个没有推进的下午"
+          bindinput="handleInput"
+        />
+        <button class="button-primary emotion-continue-button" bindtap="handleContinue" disabled="{{!canContinue}}">没事的宝，先稳住</button>
       </view>
 
-      <button class="button-primary emotion-continue-button" bindtap="handleContinue" disabled="{{!canContinue}}">没事的</button>
+      <view class="start-history-panel emotion-month-panel">
+        <view class="start-history-head">
+          <view class="start-history-copy">
+            <text class="summary-label start-history-label">这个月已经完成的事情</text>
+          </view>
+          <navigator url="/pages/month-completed/index" class="button-ghost micro-action-button start-history-manage">全部</navigator>
+        </view>
+
+        <block wx:if="{{hasMonthCompletedItems}}">
+          <view class="start-history-list">
+            <view wx:for="{{monthCompletedItems}}" wx:key="dateKey" class="start-history-item emotion-month-item">
+              <text class="month-completed-date">{{item.dateLabel}}</text>
+              <text class="start-history-task emotion-month-title">{{item.completedThing}}</text>
+            </view>
+          </view>
+        </block>
+
+        <block wx:else>
+          <text class="start-history-empty emotion-month-empty">每天收束时写下推进过的轴线，这里会慢慢长出来</text>
+        </block>
+      </view>
     </view>
   </view>
 </view>

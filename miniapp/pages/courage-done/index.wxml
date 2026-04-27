@@ -6,19 +6,18 @@
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <navigator url="/pages/courage-list/index" class="pill-link">顶住记录</navigator>
       </view>
     </view>
 
     <view class="stack flow-page-stack">
       <view class="flow-hero flow-hero--center">
-        <text class="flow-title">已经做了这一下</text>
+        <text class="flow-title">你果然很有勇气</text>
         <text class="flow-copy">先稳住，不追着结果跑。</text>
       </view>
 
-      <view class="button-group flow-action-row">
-        <navigator url="/pages/escape/index" class="button-primary">我悬住了</navigator>
-        <navigator url="/pages/axis-today/index" class="button-secondary">回到今天主任务</navigator>
+      <view class="button-group flow-action-row courage-done-actions">
+        <navigator url="/pages/axis-today/index" class="button-primary">回到今天主轴</navigator>
+        <navigator url="/pages/escape/index" class="button-secondary">我好想知道结果</navigator>
       </view>
     </view>
   </view>

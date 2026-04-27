@@ -9,10 +9,10 @@
     "pages/drag-start/index",
     "pages/drag-start-countdown/index",
     "pages/drag-start-done/index",
-    "pages/escape-why/index",
     "pages/escape/index",
     "pages/countdown/index",
     "pages/choices/index",
+    "pages/feedback-five-countdown/index",
     "pages/courage/index",
     "pages/courage-list/index",
     "pages/courage-done/index",
@@ -23,6 +23,7 @@
     "pages/stimulation/index",
     "pages/stats/index"
   ],
+  "entryPagePath": "pages/home/index",
   "window": {
     "navigationBarTitleText": "稳稳接住自己",
     "navigationBarBackgroundColor": "#f2ebdd",

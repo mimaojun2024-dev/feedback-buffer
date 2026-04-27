@@ -6,27 +6,41 @@
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <text class="badge">今天已缓冲 {{dailyCount}} 次</text>
       </view>
     </view>
 
     <view class="stack flow-page-stack">
       <view class="flow-hero flow-hero--center">
         <text class="flow-title">23 秒到了</text>
-        <text class="flow-copy">现在再决定。</text>
+        <text class="flow-copy">你已经很厉害了。</text>
       </view>
 
       <block wx:if="{{priorityTask}}">
-        <view class="summary">
+        <view class="summary choice-summary">
           <text class="summary-label">你刚才想守住的是</text>
           <text class="summary-value">{{priorityTask}}</text>
         </view>
       </block>
 
       <view class="button-group flow-action-row">
-        <button class="button-primary" bindtap="handleOpenFeedback">我还是想去看</button>
-        <button class="button-secondary" bindtap="handleReturnFocus">先回去做 5 分钟</button>
+        <button class="button-primary" bindtap="handleReturnAxis">回到今天主轴</button>
+        <button class="button-secondary" bindtap="handleShowFeedbackPause">还是想看</button>
       </view>
+
+      <block wx:if="{{isFeedbackPauseVisible}}">
+        <view class="drag-encouragement-card choice-encouragement-card" bindtap="handleOpenFeedbackPause">
+          <text class="drag-encouragement-title">再给自己一个缓冲</text>
+          <text class="drag-encouragement-copy">不是永远不看</text>
+          <text class="drag-encouragement-hint">只是先把注意力收回来一次</text>
+        </view>
+      </block>
+
+      <block wx:if="{{isFeedbackPauseOpened}}">
+        <view class="button-group flow-action-row">
+          <button class="button-primary" bindtap="handleReturnAxis">回到今天主轴</button>
+          <button class="button-secondary" bindtap="handleStartFiveMinuteCountdown">那就看五分钟</button>
+        </view>
+      </block>
     </view>
   </view>
 </view>

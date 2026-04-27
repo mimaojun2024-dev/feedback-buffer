@@ -6,11 +6,15 @@
       </view>
       <view class="top-actions">
         <navigator url="/pages/home/index" class="pill-link">主页</navigator>
-        <text class="badge">今天已缓冲 {{dailyCount}} 次</text>
       </view>
     </view>
 
-    <view class="stack timer-wrap">
+    <view class="stack timer-wrap flow-page-stack">
+      <view class="summary countdown-task-summary">
+        <text class="summary-label">今天最重要的事</text>
+        <text class="summary-value">{{priorityTask}}</text>
+      </view>
+
       <view class="feedback-timer-card">
         <view class="feedback-timer-line">
           <text class="timer">{{remainingSeconds}}</text>
@@ -19,6 +23,12 @@
       </view>
       <view class="progress-track">
         <view class="progress-bar" style="width: {{progressPercent}}%;"></view>
+      </view>
+
+      <view wx:if="{{canSkipCountdownForTest}}" class="test-tools">
+        <button class="button-ghost test-reset-button" bindtap="handleSkipCountdownForTest">
+          跳过倒计时
+        </button>
       </view>
     </view>
   </view>

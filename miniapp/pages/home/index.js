@@ -5,6 +5,7 @@ const {
   incrementStoredStateClick,
   isDailyEndWindowOpen,
   isDailyStartWindowOpen,
+  resetStoredDailyCheckinForToday,
   setStoredDailyCheckinEvent,
   setStoredMainAxisSection
 } = require('../../utils/storage');
@@ -28,6 +29,7 @@ function getHomeState() {
   const hasEndedToday = Boolean(dailyCheckin.endedAt);
   const canStartToday = isDailyStartWindowOpen(now);
   const canEndToday = isDailyEndWindowOpen(now);
+  const isTestBuild = getIsTestBuild();
 
   return {
     dailyCheckin,
@@ -37,17 +39,28 @@ function getHomeState() {
     hasEndedToday,
     canStartToday,
     canEndToday,
+    canResetTodayForTest: isTestBuild && (hasStartedToday || hasEndedToday),
     startMeta: hasStartedToday
       ? formatTime(dailyCheckin.startedAt)
       : canStartToday
         ? '可开始'
-        : '06:00 后',
+        : '06:30 后',
     endMeta: hasEndedToday
       ? formatTime(dailyCheckin.endedAt)
       : canEndToday
         ? '可收束'
         : '18:30 后'
   };
+}
+
+function getIsTestBuild() {
+  try {
+    const accountInfo = wx.getAccountInfoSync ? wx.getAccountInfoSync() : null;
+    const envVersion = accountInfo && accountInfo.miniProgram && accountInfo.miniProgram.envVersion;
+    return envVersion === 'develop' || envVersion === 'trial';
+  } catch (error) {
+    return false;
+  }
 }
 
 Page({
@@ -66,6 +79,7 @@ Page({
     hasEndedToday: false,
     canStartToday: false,
     canEndToday: false,
+    canResetTodayForTest: false,
     canSaveTodayAxis: false,
     startMeta: '',
     endMeta: ''
@@ -138,15 +152,31 @@ Page({
     }
 
     setStoredDailyCheckinEvent('start');
-    wx.navigateTo({ url: '/pages/axis-today/index' });
+    this.refreshPage(false);
+  },
+
+  handleResetTodayForTest() {
+    if (!this.data.canResetTodayForTest) {
+      return;
+    }
+
+    resetStoredDailyCheckinForToday();
+    this.refreshPage(false);
+
+    if (wx.showToast) {
+      wx.showToast({
+        title: '已重置今日测试',
+        icon: 'none'
+      });
+    }
   },
 
   handleEndToday() {
-    if (!this.data.canEndToday || this.data.hasEndedToday) {
+    if (!this.data.canEndToday) {
       return;
     }
 
     setStoredDailyCheckinEvent('end');
-    wx.navigateTo({ url: '/pages/month-completed/index' });
+    wx.navigateTo({ url: '/pages/axis-today/index' });
   }
 });

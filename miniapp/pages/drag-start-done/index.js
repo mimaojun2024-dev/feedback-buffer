@@ -1,25 +1,34 @@
-const { incrementStoredFlowStat } = require('../../utils/storage');
+const { appendStoredStartHistory, incrementStoredFlowStat } = require('../../utils/storage');
 const { normalizeText } = require('../../utils/time');
 
 Page({
   data: {
-    initialTask: ''
+    initialTask: '',
+    doneTitle: '这两分钟已经算数'
   },
 
   onLoad(options) {
+    const initialTask = normalizeText(decodeTask(options && options.task));
+    const duration = normalizeText(options && options.duration);
+
     this.setData({
-      initialTask: normalizeText(decodeTask(options && options.task))
+      initialTask,
+      doneTitle: duration === 'half-hour' ? '这半小时已经算数' : '这两分钟已经算数'
     });
 
     incrementStoredFlowStat('drag-start.completed');
+
+    if (initialTask) {
+      appendStoredStartHistory(initialTask);
+    }
   },
 
-  handleRestart() {
+  handleStartHalfHour() {
     const task = this.data.initialTask;
 
     wx.redirectTo({
       url: task
-        ? `/pages/drag-start-countdown/index?task=${encodeURIComponent(task)}`
+        ? `/pages/drag-start-countdown/index?task=${encodeURIComponent(task)}&duration=half-hour`
         : '/pages/drag-start/index'
     });
   }

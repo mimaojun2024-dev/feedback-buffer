@@ -1,15 +1,27 @@
 const {
+  deleteStoredStartHistoryItem,
+  getStoredStartHistory,
   getStoredStartTask,
   setStoredStartTask,
   START_COUNTDOWN_SECONDS
 } = require('../../utils/storage');
-const { normalizeText } = require('../../utils/time');
+const { formatDateTime, normalizeText } = require('../../utils/time');
+
+function getStartHistoryItems() {
+  return getStoredStartHistory().map((item) => ({
+    ...item,
+    completedAtLabel: formatDateTime(item.completedAt)
+  }));
+}
 
 Page({
   data: {
     startTask: '',
     draftTask: '',
     isEditingTask: true,
+    isManagingHistory: false,
+    startHistoryItems: [],
+    hasStartHistory: false,
     countdownMinutes: Math.floor(START_COUNTDOWN_SECONDS / 60)
   },
 
@@ -24,8 +36,19 @@ Page({
     this.setData({
       startTask: storedTask,
       draftTask: storedTask,
-      isEditingTask: !storedTask || isEditMode
+      isEditingTask: !storedTask || isEditMode,
+      ...this.getHistoryState()
     });
+  },
+
+  getHistoryState(isManagingHistory = this.data.isManagingHistory) {
+    const startHistoryItems = getStartHistoryItems();
+
+    return {
+      startHistoryItems,
+      hasStartHistory: startHistoryItems.length > 0,
+      isManagingHistory: isManagingHistory && startHistoryItems.length > 0
+    };
   },
 
   handleInput(event) {
@@ -52,6 +75,21 @@ Page({
 
   handleEdit() {
     this.setData({ isEditingTask: true });
+  },
+
+  handleToggleHistoryManagement() {
+    if (!this.data.hasStartHistory) {
+      return;
+    }
+
+    this.setData(this.getHistoryState(!this.data.isManagingHistory));
+  },
+
+  handleDeleteHistoryItem(event) {
+    const itemId = event.currentTarget.dataset.id;
+
+    deleteStoredStartHistoryItem(itemId);
+    this.setData(this.getHistoryState(true));
   },
 
   handleStartCountdown() {

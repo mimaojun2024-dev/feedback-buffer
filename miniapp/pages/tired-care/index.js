@@ -1,31 +1,77 @@
 const { TIRED_OPTIONS } = require('../../data/tired-options');
 const {
-  getStoredTiredOptionClicks,
+  incrementStoredFlowStat,
   incrementStoredTiredOptionClick
 } = require('../../utils/storage');
+
+const REASSURANCE_STAT_ID = 'tired-care.reassurance';
+const REASSURANCE_MAX_COUNT = 99;
+const REASSURANCE_MILESTONES = {
+  30: {
+    className: 'tired-care-reassurance-card--soft',
+    text: '小小火光亮起来了'
+  },
+  50: {
+    className: 'tired-care-reassurance-card--bright',
+    text: '已经给自己撑住半程'
+  },
+  99: {
+    className: 'tired-care-reassurance-card--max',
+    text: '今天的自己，被稳稳接住了'
+  }
+};
+
+function getReassuranceDisplay(nextCount) {
+  const count = Math.min(nextCount, REASSURANCE_MAX_COUNT);
+  const milestone = count >= REASSURANCE_MAX_COUNT
+    ? REASSURANCE_MILESTONES[REASSURANCE_MAX_COUNT]
+    : REASSURANCE_MILESTONES[count];
+
+  return {
+    reassuranceCount: count,
+    reassuranceCountText: count >= REASSURANCE_MAX_COUNT
+      ? '提气值拉满'
+      : `已经给自己提气 ${count} 次`,
+    reassuranceCelebrationClass: milestone ? milestone.className : '',
+    reassuranceCelebrationText: milestone ? milestone.text : '',
+    showReassuranceFirework: Boolean(milestone)
+  };
+}
 
 Page({
   data: {
     options: [],
     optionRows: [],
     selectedOptionId: '',
-    selectedOptionLabel: ''
+    selectedPrompt: '',
+    showReassurance: false,
+    showReassuranceFirework: false,
+    reassuranceCount: 0,
+    reassuranceCountText: '已经给自己提气 0 次',
+    reassuranceCelebrationClass: '',
+    reassuranceCelebrationText: ''
   },
 
   onShow() {
     this.refreshOptions();
+    this.resetReassuranceSession();
   },
 
   refreshOptions() {
-    const optionClicks = getStoredTiredOptionClicks();
-    const options = TIRED_OPTIONS.map((option) => ({
-      ...option,
-      count: optionClicks[option.id] || 0
-    }));
+    this.setData({
+      options: TIRED_OPTIONS,
+      optionRows: chunkOptions(TIRED_OPTIONS)
+    });
+  },
+
+  resetReassuranceSession() {
+    if (this.fireworkTimer) {
+      clearTimeout(this.fireworkTimer);
+    }
 
     this.setData({
-      options,
-      optionRows: chunkOptions(options)
+      ...getReassuranceDisplay(0),
+      showReassuranceFirework: false
     });
   },
 
@@ -37,8 +83,57 @@ Page({
     this.refreshOptions();
     this.setData({
       selectedOptionId: optionId,
-      selectedOptionLabel: option ? option.label : ''
+      selectedPrompt: option ? option.prompt : '',
+      showReassurance: false,
+      showReassuranceFirework: false,
+      reassuranceCelebrationClass: '',
+      reassuranceCelebrationText: ''
     });
+  },
+
+  handleOpenReassurance() {
+    if (!this.data.selectedPrompt) {
+      return;
+    }
+
+    this.setData({
+      showReassurance: true
+    });
+  },
+
+  handleReassure() {
+    incrementStoredFlowStat(REASSURANCE_STAT_ID);
+
+    const nextCount = Math.min(this.data.reassuranceCount + 1, REASSURANCE_MAX_COUNT);
+    const nextDisplay = getReassuranceDisplay(nextCount);
+
+    this.setData({
+      ...nextDisplay
+    });
+
+    if (nextDisplay.showReassuranceFirework) {
+      this.restartFirework();
+    }
+  },
+
+  restartFirework() {
+    if (this.fireworkTimer) {
+      clearTimeout(this.fireworkTimer);
+    }
+
+    this.fireworkTimer = setTimeout(() => {
+      this.setData({
+        showReassuranceFirework: false,
+        reassuranceCelebrationClass: '',
+        reassuranceCelebrationText: ''
+      });
+    }, 1400);
+  },
+
+  onUnload() {
+    if (this.fireworkTimer) {
+      clearTimeout(this.fireworkTimer);
+    }
   }
 });
 

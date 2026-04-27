@@ -1,0 +1,53 @@
+<view class="page-shell">
+  <view class="panel">
+    <view class="top-bar">
+      <view class="top-copy">
+        <text class="eyebrow">五分钟缓冲</text>
+      </view>
+      <view class="top-actions">
+        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+      </view>
+    </view>
+
+    <view class="stack timer-wrap flow-page-stack">
+      <view class="summary countdown-task-summary feedback-five-axis-summary">
+        <text class="summary-label">今年最重要的事</text>
+        <block wx:if="{{hasYearAxisEntries}}">
+          <view class="feedback-five-axis-list">
+            <view wx:for="{{yearAxisEntries}}" wx:key="index" class="feedback-five-axis-item">
+              <text class="feedback-five-axis-index">{{item.index}}</text>
+              <text class="feedback-five-axis-task">{{item.task}}</text>
+            </view>
+          </view>
+        </block>
+        <block wx:else>
+          <text class="feedback-five-axis-empty">今年主轴还没填。先留一个方向，回来会更稳。</text>
+          <navigator url="/pages/axis-year/index" class="button-ghost micro-action-button feedback-five-axis-action">去填写</navigator>
+        </block>
+      </view>
+
+      <view class="flow-timer-card feedback-five-timer-card">
+        <text class="timer timer--steady">{{timeLabel}}</text>
+        <text class="feedback-five-timer-copy">五分钟就到这里。</text>
+      </view>
+      <view class="progress-track">
+        <view class="progress-bar" style="width: {{progressPercent}}%;"></view>
+      </view>
+
+      <view wx:if="{{canUseTestTools}}" class="test-tools feedback-five-test-tools">
+        <button class="button-ghost test-reset-button" bindtap="handleToggleYearAxisPreviewForTest">
+          {{axisPreviewButtonLabel}}
+        </button>
+        <button class="button-ghost test-reset-button" bindtap="handleSkipCountdownForTest">
+          跳过倒计时
+        </button>
+      </view>
+
+      <block wx:if="{{isComplete}}">
+        <view class="button-group flow-action-row feedback-five-done-actions">
+          <navigator url="/pages/axis-today/index" open-type="redirect" class="button-primary">回到今天主轴</navigator>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

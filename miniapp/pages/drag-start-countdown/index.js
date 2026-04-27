@@ -6,12 +6,16 @@ const {
 } = require('../../utils/storage');
 const { formatRemainingTime, normalizeText } = require('../../utils/time');
 
+const HALF_HOUR_COUNTDOWN_SECONDS = 30 * 60;
+const HALF_HOUR_DURATION = 'half-hour';
+
 Page({
   data: {
     remainingSeconds: START_COUNTDOWN_SECONDS,
     progressPercent: 100,
     startTask: '',
-    timeLabel: formatRemainingTime(START_COUNTDOWN_SECONDS)
+    timeLabel: formatRemainingTime(START_COUNTDOWN_SECONDS),
+    canSkipCountdownForTest: false
   },
 
   onLoad(options) {
@@ -24,8 +28,11 @@ Page({
       return;
     }
 
+    this.duration = normalizeText(options && options.duration);
+    this.countdownSeconds = getCountdownSeconds(this.duration);
     this.startTask = resolvedTask;
     this.hasTrackedStart = false;
+    this.hasCompletedCountdown = false;
   },
 
   onShow() {
@@ -34,10 +41,11 @@ Page({
     }
 
     this.setData({
-      remainingSeconds: START_COUNTDOWN_SECONDS,
+      remainingSeconds: this.countdownSeconds,
       progressPercent: 100,
       startTask: this.startTask,
-      timeLabel: formatRemainingTime(START_COUNTDOWN_SECONDS)
+      timeLabel: formatRemainingTime(this.countdownSeconds),
+      canSkipCountdownForTest: getIsTestBuild()
     });
 
     if (!this.hasTrackedStart) {
@@ -49,9 +57,9 @@ Page({
 
     this.timer = setInterval(() => {
       const elapsed = Date.now() - startAt;
-      const millisecondsLeft = Math.max(0, START_COUNTDOWN_SECONDS * 1000 - elapsed);
+      const millisecondsLeft = Math.max(0, this.countdownSeconds * 1000 - elapsed);
       const nextSeconds = Math.max(0, Math.ceil(millisecondsLeft / 1000));
-      const nextProgress = (millisecondsLeft / (START_COUNTDOWN_SECONDS * 1000)) * 100;
+      const nextProgress = (millisecondsLeft / (this.countdownSeconds * 1000)) * 100;
 
       this.setData({
         remainingSeconds: nextSeconds,
@@ -60,12 +68,34 @@ Page({
       });
 
       if (nextSeconds === 0) {
-        clearInterval(this.timer);
-        wx.redirectTo({
-          url: `/pages/drag-start-done/index?task=${encodeURIComponent(this.startTask)}`
-        });
+        this.completeCountdown();
       }
     }, 100);
+  },
+
+  completeCountdown() {
+    if (this.hasCompletedCountdown) {
+      return;
+    }
+
+    this.hasCompletedCountdown = true;
+
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+
+    wx.redirectTo({
+      url: `/pages/drag-start-done/index?task=${encodeURIComponent(this.startTask)}&duration=${this.duration}`
+    });
+  },
+
+  handleSkipCountdownForTest() {
+    if (!this.data.canSkipCountdownForTest) {
+      return;
+    }
+
+    this.completeCountdown();
   },
 
   onHide() {
@@ -80,6 +110,20 @@ Page({
     }
   }
 });
+
+function getCountdownSeconds(duration) {
+  return duration === HALF_HOUR_DURATION ? HALF_HOUR_COUNTDOWN_SECONDS : START_COUNTDOWN_SECONDS;
+}
+
+function getIsTestBuild() {
+  try {
+    const accountInfo = wx.getAccountInfoSync ? wx.getAccountInfoSync() : null;
+    const envVersion = accountInfo && accountInfo.miniProgram && accountInfo.miniProgram.envVersion;
+    return envVersion === 'develop' || envVersion === 'trial';
+  } catch (error) {
+    return false;
+  }
+}
 
 function decodeTask(value) {
   const rawValue = normalizeText(value);

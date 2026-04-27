@@ -3,6 +3,7 @@ const { ESCAPED_ACTIONS } = require('../../data/escaped-actions');
 const { TIRED_OPTIONS } = require('../../data/tired-options');
 const {
   getStoredFlowStats,
+  getStoredCourageList,
   getStoredStateClicks,
   getStoredTiredOptionClicks
 } = require('../../utils/storage');
@@ -17,41 +18,151 @@ function chunkItems(items) {
   return rows;
 }
 
+function getCount(source, key) {
+  return source[key] || 0;
+}
+
+function countText(count) {
+  return count > 0 ? `${count} 次` : '还没有';
+}
+
+function detail(label, value, isWide = false) {
+  return {
+    label,
+    value,
+    isWide
+  };
+}
+
+function sortByCount(items) {
+  return [...items].sort((left, right) => right.count - left.count);
+}
+
+function getTopItem(items) {
+  const [topItem] = sortByCount(items).filter((item) => item.count > 0);
+  return topItem || null;
+}
+
+function getStartDetails(flowStats) {
+  const checkCount = getCount(flowStats, 'drag-start.check.yes') + getCount(flowStats, 'drag-start.check.no');
+  const startedCount = getCount(flowStats, 'drag-start.started');
+  const completedCount = getCount(flowStats, 'drag-start.completed');
+
+  return [
+    detail('问过自己', countText(checkCount)),
+    detail('真正启动', countText(startedCount)),
+    detail('启动成功', countText(completedCount))
+  ];
+}
+
+function getCourageDetails(courageItems) {
+  const latestCourage = courageItems[0] ? courageItems[0].title : '还没有';
+
+  return [
+    detail('写下勇气', courageItems.length > 0 ? `${courageItems.length} 条` : '还没有'),
+    detail('最近一条', latestCourage, true),
+    detail('最前一条', latestCourage, true)
+  ];
+}
+
+function getEscapedActionStats(flowStats) {
+  return ESCAPED_ACTIONS.map((action) => ({
+    id: action.id,
+    emoji: action.emoji,
+    label: action.label,
+    count: getCount(flowStats, `escaped.${action.id}`)
+  }));
+}
+
+function getEscapedDetails(escapedActionStats) {
+  const totalActionCount = escapedActionStats.reduce((sum, action) => sum + action.count, 0);
+  const rankedActions = sortByCount(escapedActionStats).filter((action) => action.count > 0);
+  const topAction = rankedActions[0];
+  const secondAction = rankedActions[1];
+
+  return [
+    detail('回到现实', countText(totalActionCount)),
+    detail('最常动作', topAction ? `${topAction.emoji} · ${topAction.count} 次` : '还没有'),
+    detail('其次动作', secondAction ? `${secondAction.emoji} · ${secondAction.count} 次` : '还没有')
+  ];
+}
+
+function getFeedbackDetails(flowStats) {
+  return [
+    detail('等 23 秒', countText(getCount(flowStats, 'escape.waited-23-seconds'))),
+    detail('回到主轴', countText(getCount(flowStats, 'escape.returned-focus'))),
+    detail('看五分钟', countText(getCount(flowStats, 'escape.checked-feedback')))
+  ];
+}
+
+function getTiredOptionStats(tiredOptionClicks) {
+  return TIRED_OPTIONS.map((option) => ({
+    id: option.id,
+    emoji: option.emoji,
+    label: option.label,
+    count: tiredOptionClicks[option.id] || 0
+  }));
+}
+
+function getEmotionDetails(tiredOptionStats, flowStats) {
+  const totalCareCount = tiredOptionStats.reduce((sum, option) => sum + option.count, 0);
+  const rankedOptions = sortByCount(tiredOptionStats).filter((option) => option.count > 0);
+  const topOption = rankedOptions[0];
+
+  return [
+    detail('照顾自己', countText(totalCareCount)),
+    detail('最常方式', topOption ? `${topOption.emoji} · ${topOption.count} 次` : '还没有'),
+    detail('集气次数', countText(getCount(flowStats, 'tired-care.reassurance')))
+  ];
+}
+
+function getStimulationDetails(stateClicks) {
+  return [
+    detail('暗格状态', '开发中'),
+    detail('打开次数', countText(stateClicks.stimulation || 0)),
+    detail('留到以后', '先锁着')
+  ];
+}
+
+function getStateDetails(stateId, context) {
+  switch (stateId) {
+    case 'drag-start':
+      return getStartDetails(context.flowStats);
+    case 'empty-dreaming':
+      return getCourageDetails(context.courageItems);
+    case 'escaped':
+      return getEscapedDetails(context.escapedActionStats);
+    case 'escape':
+      return getFeedbackDetails(context.flowStats);
+    case 'emotion-amplitude':
+      return getEmotionDetails(context.tiredOptionStats, context.flowStats);
+    case 'stimulation':
+      return getStimulationDetails(context.stateClicks);
+    default:
+      return [];
+  }
+}
+
+function getStrongestState(summaries) {
+  return summaries.reduce((strongest, state) => {
+    if (!strongest || state.count > strongest.count) {
+      return state;
+    }
+
+    return strongest;
+  }, null);
+}
+
 function buildStateSummaries() {
   const stateClicks = getStoredStateClicks();
   const flowStats = getStoredFlowStats();
   const tiredOptionClicks = getStoredTiredOptionClicks();
-
-  const sortedTiredOptions = [...TIRED_OPTIONS]
-    .map((option) => ({
-      ...option,
-      count: tiredOptionClicks[option.id] || 0
-    }))
-    .sort((left, right) => right.count - left.count);
-
-  const escapedActions = ESCAPED_ACTIONS
-    .map((action) => ({
-      label: action.label,
-      count: flowStats[`escaped.${action.id}`] || 0
-    }))
-    .sort((left, right) => right.count - left.count);
-
-  const stateDetails = {
-    'drag-start': [
-      `已经开始 ${flowStats['drag-start.started'] || 0} 次`,
-      `走完 2 分钟 ${flowStats['drag-start.completed'] || 0} 次`
-    ],
-    escape: [
-      `还是去看 ${flowStats['escape.checked-feedback'] || 0} 次`,
-      `先回去做 ${flowStats['escape.returned-focus'] || 0} 次`
-    ],
-    escaped: [
-      escapedActions[0] && escapedActions[0].count > 0 ? `最常做 ${escapedActions[0].label} · ${escapedActions[0].count} 次` : '最常做 还没有',
-      escapedActions[1] && escapedActions[1].count > 0 ? `其次 ${escapedActions[1].label} · ${escapedActions[1].count} 次` : '其次 还没有'
-    ],
-    'empty-dreaming': ['细分记录 还没接上', '流程状态 先留在这里'],
-    'emotion-amplitude': ['细分记录 还没接上', '流程状态 先留在这里'],
-    stimulation: ['细分记录 还没接上', '流程状态 先留在这里']
+  const context = {
+    courageItems: getStoredCourageList(),
+    escapedActionStats: getEscapedActionStats(flowStats),
+    flowStats,
+    stateClicks,
+    tiredOptionStats: getTiredOptionStats(tiredOptionClicks)
   };
 
   const summaries = LOW_QUALITY_STATES.map((state) => ({
@@ -60,23 +171,31 @@ function buildStateSummaries() {
     name: state.name,
     shortLabel: state.shortLabel,
     count: stateClicks[state.id] || 0,
-    details: stateDetails[state.id] || []
+    countLabel: countText(stateClicks[state.id] || 0),
+    details: getStateDetails(state.id, context)
   }));
+  const totalClicks = LOW_QUALITY_STATES.reduce((sum, state) => sum + (stateClicks[state.id] || 0), 0);
+  const strongestState = getStrongestState(summaries);
+  const topTiredOption = getTopItem(context.tiredOptionStats);
 
   return {
-    totalClicks: LOW_QUALITY_STATES.reduce((sum, state) => sum + (stateClicks[state.id] || 0), 0),
+    totalClicks,
+    strongestText: strongestState && strongestState.count > 0
+      ? `${strongestState.emoji} · ${strongestState.count} 次`
+      : '等第一条记录',
+    tiredText: topTiredOption
+      ? `${topTiredOption.emoji} · ${topTiredOption.count} 次`
+      : '还没有照顾记录',
     summaryRows: chunkItems(summaries),
-    tiredSummary: sortedTiredOptions[0] && sortedTiredOptions[0].count > 0
-      ? `最常选 ${sortedTiredOptions[0].label} · ${sortedTiredOptions[0].count} 次`
-      : '最常选 还没有'
   };
 }
 
 Page({
   data: {
     totalClicks: 0,
+    strongestText: '',
+    tiredText: '',
     summaryRows: [],
-    tiredSummary: ''
   },
 
   onShow() {
@@ -84,8 +203,9 @@ Page({
 
     this.setData({
       totalClicks: stats.totalClicks,
+      strongestText: stats.strongestText,
+      tiredText: stats.tiredText,
       summaryRows: stats.summaryRows,
-      tiredSummary: stats.tiredSummary
     });
   }
 });
