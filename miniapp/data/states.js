@@ -9,6 +9,15 @@ const LOW_QUALITY_STATES = [
     cta: '问 2 分钟'
   },
   {
+    id: 'escape',
+    emoji: '📥',
+    name: '我想看反馈',
+    shortLabel: '反馈依赖',
+    description: '先缓 23 秒再看',
+    route: '/pages/escape/index',
+    cta: '先缓一下'
+  },
+  {
     id: 'empty-dreaming',
     emoji: '🔥',
     name: '我需要勇气',
@@ -20,20 +29,11 @@ const LOW_QUALITY_STATES = [
   {
     id: 'escaped',
     emoji: '🫣',
-    name: '我在逃避',
+    name: '我正在逃避',
     shortLabel: '重新接管',
     description: '先把自己拉回来',
     route: '/pages/escaped/index',
     cta: '先拉回'
-  },
-  {
-    id: 'escape',
-    emoji: '📥',
-    name: '我想看反馈',
-    shortLabel: '反馈依赖',
-    description: '先缓 23 秒再看',
-    route: '/pages/escape/index',
-    cta: '先缓一下'
   },
   {
     id: 'emotion-amplitude',

@@ -4,7 +4,7 @@
       <view class="top-copy">
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -21,7 +21,7 @@
       </view>
 
       <view class="drag-choice-row">
-        <button class="drag-choice-card {{selectedAnswer === 'yes' ? 'drag-choice-card--selected' : ''}}" bindtap="handleSelect" data-answer="yes">
+        <button class="drag-choice-card drag-choice-card--preferred {{selectedAnswer === 'yes' ? 'drag-choice-card--selected' : ''}}" bindtap="handleSelect" data-answer="yes">
           <text class="drag-choice-title">可以</text>
           <text class="drag-choice-desc">先碰第一步</text>
         </button>
@@ -40,7 +40,7 @@
 
         <block wx:if="{{encouragementOpened}}">
           <view class="drag-choice-row drag-choice-row--retry">
-            <button class="drag-choice-card {{retryAnswer === 'yes' ? 'drag-choice-card--selected' : ''}}" bindtap="handleRetrySelect" data-answer="yes">
+            <button class="drag-choice-card drag-choice-card--preferred {{retryAnswer === 'yes' ? 'drag-choice-card--selected' : ''}}" bindtap="handleRetrySelect" data-answer="yes">
               <text class="drag-choice-title">可以</text>
               <text class="drag-choice-desc">只推开一点</text>
             </button>
@@ -53,7 +53,7 @@
       </block>
 
       <block wx:if="{{retryAnswer === 'no'}}">
-        <navigator url="/pages/home/index" class="button-secondary">休息一下</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="button-secondary">休息一下</navigator>
       </block>
     </view>
   </view>

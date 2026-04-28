@@ -1,4 +1,4 @@
-<view class="page-shell">
+<view class="page-shell home-page-shell">
   <view class="panel">
     <view class="top-bar">
       <view class="top-copy">
@@ -19,8 +19,8 @@
         <block wx:if="{{hasTodayAxisTask}}">
           <navigator url="/pages/axis-today/index" class="home-axis-card home-axis-card--saved">
             <view class="home-axis-head">
+              <text class="home-axis-pin">📌</text>
               <text class="summary-label">今日主轴</text>
-              <text class="home-axis-chip">已钉住</text>
             </view>
             <text class="home-axis-task">{{todayAxisTask}}</text>
           </navigator>
@@ -30,21 +30,38 @@
           <view class="home-axis-card home-axis-card--draft">
             <view class="home-axis-head">
               <text class="summary-label">今日主轴</text>
-              <text class="home-axis-chip">只留一件</text>
             </view>
             <textarea
               class="home-axis-input"
               value="{{todayAxisDraft}}"
-              placeholder="写下今天最重要的一件事"
+              placeholder="{{inputPlaceholders.todayAxis}}"
+              data-placeholder-key="todayAxis"
+              data-placeholder-text="写下今天最重要的一件事"
               bindinput="handleTodayAxisInput"
+              bindfocus="handleInputFocus"
+              bindblur="handleInputBlur"
             />
-            <view class="button-group button-group--axis">
-              <button class="home-axis-submit" bindtap="handleSaveTodayAxis" disabled="{{!canSaveTodayAxis}}">
-                写下今天
-              </button>
-            </view>
           </view>
         </block>
+
+        <view class="button-group button-group--split home-checkin-actions">
+          <button
+            class="button-secondary button-secondary--panel home-checkin-button home-checkin-button--start {{canStartToday && !hasStartedToday && !canEndToday ? 'button-preferred' : ''}}"
+            bindtap="handleStartToday"
+            disabled="{{!canStartToday || hasStartedToday}}"
+          >
+            <text class="button-panel-title">启动今天</text>
+            <text class="button-panel-meta">{{startMeta}}</text>
+          </button>
+          <button
+            class="button-secondary button-secondary--panel home-checkin-button home-checkin-button--end {{!canEndToday ? 'home-checkin-button--disabled' : ''}} {{canEndToday && !hasEndedToday ? 'button-preferred' : ''}}"
+            bindtap="handleEndToday"
+            disabled="{{!canEndToday}}"
+          >
+            <text class="button-panel-title">收束今天</text>
+            <text class="button-panel-meta">{{endMeta}}</text>
+          </button>
+        </view>
       </view>
 
       <view class="card-list state-grid">
@@ -56,7 +73,7 @@
             class="state-cell"
           >
             <view
-              class="card card--interactive card--grid"
+              class="card card--interactive card--grid home-state-card {{pressedStateId === state.id ? 'home-state-card--pressed' : ''}}"
               bindtap="handleStateTap"
               data-id="{{state.id}}"
               data-route="{{state.route}}"
@@ -69,25 +86,6 @@
             </view>
           </view>
         </view>
-      </view>
-
-      <view class="button-group button-group--split home-checkin-actions">
-        <button
-          class="button-secondary button-secondary--panel"
-          bindtap="handleStartToday"
-          disabled="{{!canStartToday || hasStartedToday}}"
-        >
-          <text class="button-panel-title">开始今天</text>
-          <text class="button-panel-meta">{{startMeta}}</text>
-        </button>
-        <button
-          class="button-secondary button-secondary--panel"
-          bindtap="handleEndToday"
-          disabled="{{!canEndToday}}"
-        >
-          <text class="button-panel-title">收束今天</text>
-          <text class="button-panel-meta">{{endMeta}}</text>
-        </button>
       </view>
 
       <view wx:if="{{canResetTodayForTest}}" class="test-tools">

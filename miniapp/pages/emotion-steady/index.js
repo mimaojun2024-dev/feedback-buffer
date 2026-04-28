@@ -33,7 +33,31 @@ const CALM_STEPS = [
 
 Page({
   data: {
-    stepRows: chunkSteps(CALM_STEPS)
+    stepRows: chunkSteps(CALM_STEPS),
+    selectedStepId: '',
+    selectedStepPrompt: '',
+    showNextActions: false
+  },
+
+  handleSelect(event) {
+    const stepId = event.currentTarget.dataset.id;
+    const step = getCalmStepById(stepId);
+
+    this.setData({
+      selectedStepId: stepId,
+      selectedStepPrompt: step ? `那就${step.title}` : '',
+      showNextActions: false
+    });
+  },
+
+  handleOpenNextActions() {
+    if (!this.data.selectedStepPrompt) {
+      return;
+    }
+
+    this.setData({
+      showNextActions: true
+    });
   }
 });
 
@@ -45,4 +69,14 @@ function chunkSteps(steps) {
   }
 
   return rows;
+}
+
+function getCalmStepById(stepId) {
+  for (let index = 0; index < CALM_STEPS.length; index += 1) {
+    if (CALM_STEPS[index].id === stepId) {
+      return CALM_STEPS[index];
+    }
+  }
+
+  return null;
 }

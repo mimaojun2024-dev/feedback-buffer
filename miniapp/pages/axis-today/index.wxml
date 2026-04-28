@@ -5,15 +5,15 @@
         <text class="eyebrow">主轴</text>
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
     <view class="stack today-axis-stack">
-      <view class="nav-rail">
+      <view class="nav-rail today-axis-nav">
         <navigator url="/pages/axis-year/index" class="nav-rail-link">年度</navigator>
         <navigator url="/pages/axis-month/index" class="nav-rail-link">月度</navigator>
-        <text class="nav-rail-link nav-rail-link--active">今天</text>
+        <navigator url="/pages/axis-today/index" class="nav-rail-link nav-rail-link--active">今天</navigator>
       </view>
 
       <view class="flow-hero today-axis-hero">
@@ -23,19 +23,19 @@
 
       <view class="button-group button-group--split today-checkin-actions">
         <button
-          class="button-secondary button-secondary--panel"
+          class="button-secondary button-secondary--panel today-checkin-button {{canStartToday && !hasStartedToday && !canEndToday ? 'button-preferred' : ''}}"
           bindtap="handleStartToday"
           disabled="{{!canStartToday || hasStartedToday}}"
         >
-          <text class="button-panel-title">今天开始</text>
+          <text class="button-panel-title">启动今天</text>
           <text class="button-panel-meta">{{startMeta}}</text>
         </button>
         <button
-          class="button-secondary button-secondary--panel"
+          class="button-secondary button-secondary--panel today-checkin-button {{canEndToday && !hasEndedToday ? 'button-preferred' : ''}}"
           bindtap="handleEndToday"
           disabled="{{!canEndToday}}"
         >
-          <text class="button-panel-title">今天收束</text>
+          <text class="button-panel-title">收束今天</text>
           <text class="button-panel-meta">{{endMeta}}</text>
         </button>
       </view>
@@ -45,13 +45,22 @@
           <view class="month-completed-card-head">
             <text class="summary-label">今日主轴</text>
           </view>
-          <textarea class="textarea textarea--compact month-completed-textarea" value="{{task}}" placeholder="写下今天最重要的那件事" bindinput="handleTaskInput" />
+          <textarea
+            class="textarea textarea--compact month-completed-textarea"
+            value="{{task}}"
+            placeholder="{{inputPlaceholders.todayTask}}"
+            data-placeholder-key="todayTask"
+            data-placeholder-text="写下今天最重要的那件事"
+            bindinput="handleTaskInput"
+            bindfocus="handleInputFocus"
+            bindblur="handleInputBlur"
+          />
           <button class="button-primary month-completed-save-button" bindtap="handleSave" disabled="{{!canSave}}">钉住今天</button>
         </view>
       </block>
 
       <block wx:else>
-        <view class="summary action-summary month-completed-summary">
+        <view class="summary action-summary month-completed-summary today-axis-summary-card">
           <text class="summary-label">今日主轴</text>
           <text class="summary-value">{{task}}</text>
           <button class="button-ghost micro-action-button action-summary-button" bindtap="handleEdit">修改</button>
@@ -64,7 +73,16 @@
             <view class="month-completed-card-head">
               <text class="summary-label">今天真正推进的轴线</text>
             </view>
-            <textarea class="textarea textarea--compact month-completed-textarea" value="{{completedThing}}" placeholder="比如 把第一版小程序跑起来" bindinput="handleCompletionInput" />
+            <textarea
+              class="textarea textarea--compact month-completed-textarea"
+              value="{{completedThing}}"
+              placeholder="{{inputPlaceholders.completedThing}}"
+              data-placeholder-key="completedThing"
+              data-placeholder-text="比如 把第一版小程序跑起来"
+              bindinput="handleCompletionInput"
+              bindfocus="handleInputFocus"
+              bindblur="handleInputBlur"
+            />
             <button class="button-primary month-completed-save-button" bindtap="handleSaveCompletion" disabled="{{!canSaveCompletion}}">主轴推进完成</button>
           </view>
         </block>
@@ -77,7 +95,7 @@
       </block>
 
       <block wx:else>
-        <view class="summary action-summary month-completed-summary">
+        <view class="summary action-summary month-completed-summary today-axis-summary-card">
           <text class="summary-label">今天真正推进的轴线</text>
           <text class="summary-value">{{completedThing}}</text>
           <button class="button-ghost micro-action-button action-summary-button" bindtap="handleEditCompletion">修改</button>

@@ -2,10 +2,9 @@
   <view class="panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">反馈缓冲</text>
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -46,7 +45,7 @@
           </view>
         </block>
         <block wx:else>
-          <text class="feedback-axis-empty">本月重点还没填。可以先留空，但这里会提醒你补上。</text>
+          <text class="feedback-axis-empty">这个月的重点还没有填写哦。</text>
         </block>
       </view>
 

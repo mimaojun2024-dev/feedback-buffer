@@ -2,10 +2,9 @@
   <view class="panel stats-panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">记录</text>
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 

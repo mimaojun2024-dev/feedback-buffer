@@ -4,7 +4,7 @@
       <view class="top-copy">
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -22,8 +22,8 @@
       </block>
 
       <view class="button-group flow-action-row drag-done-actions">
-        <button class="button-primary" bindtap="handleStartHalfHour">再做半小时</button>
-        <navigator url="/pages/home/index" class="button-secondary">回到主页</navigator>
+        <button class="button-primary button-preferred" bindtap="handleStartHalfHour">再做半小时</button>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="button-secondary">回到主页</navigator>
       </view>
     </view>
   </view>

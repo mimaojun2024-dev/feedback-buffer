@@ -1,7 +1,12 @@
 const { getStoredMonthlyDailyCheckins } = require('../../utils/storage');
+const {
+  clearInputPlaceholder,
+  restoreInputPlaceholder
+} = require('../../utils/placeholders');
 const { formatDateLabel, normalizeText } = require('../../utils/time');
 
 const MONTH_COMPLETED_LIMIT = 5;
+const TRIGGER_PLACEHOLDER = '一句话，一个消息，还是其他什么？';
 
 function getMonthCompletedItems() {
   return getStoredMonthlyDailyCheckins()
@@ -20,6 +25,9 @@ Page({
   data: {
     trigger: '',
     canContinue: false,
+    inputPlaceholders: {
+      trigger: TRIGGER_PLACEHOLDER
+    },
     monthCompletedItems: [],
     hasMonthCompletedItems: false
   },
@@ -45,6 +53,10 @@ Page({
       canContinue: normalizeText(trigger).length > 0
     });
   },
+
+  handleInputFocus: clearInputPlaceholder,
+
+  handleInputBlur: restoreInputPlaceholder,
 
   handleContinue() {
     wx.navigateTo({ url: '/pages/emotion-steady/index' });

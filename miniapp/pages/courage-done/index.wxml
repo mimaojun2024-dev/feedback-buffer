@@ -2,10 +2,9 @@
   <view class="panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">勇气练习</text>
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -16,7 +15,7 @@
       </view>
 
       <view class="button-group flow-action-row courage-done-actions">
-        <navigator url="/pages/axis-today/index" class="button-primary">回到今天主轴</navigator>
+        <navigator url="/pages/axis-today/index" class="button-primary button-preferred">回到今天主轴</navigator>
         <navigator url="/pages/escape/index" class="button-secondary">我好想知道结果</navigator>
       </view>
     </view>

@@ -4,7 +4,7 @@
       <view class="top-copy">
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -17,7 +17,16 @@
       <block wx:if="{{isEditingTask}}">
         <view class="flow-card">
           <text class="input-label">我现在要做的是</text>
-          <textarea class="textarea textarea--compact" value="{{draftTask}}" placeholder="比如：先把文档打开，写下第一段提纲" bindinput="handleInput" />
+          <textarea
+            class="textarea textarea--compact"
+            value="{{draftTask}}"
+            placeholder="{{inputPlaceholders.startTask}}"
+            data-placeholder-key="startTask"
+            data-placeholder-text="比如：先把文档打开，写下第一段提纲"
+            bindinput="handleInput"
+            bindfocus="handleInputFocus"
+            bindblur="handleInputBlur"
+          />
           <button class="button-primary" bindtap="handleSubmit">只做两分钟</button>
         </view>
       </block>

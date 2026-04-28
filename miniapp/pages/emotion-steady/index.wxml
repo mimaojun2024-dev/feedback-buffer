@@ -4,7 +4,7 @@
       <view class="top-copy">
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -17,7 +17,11 @@
       <view class="card-list state-grid emotion-calm-grid">
         <view wx:for="{{stepRows}}" wx:for-item="row" wx:key="index" class="state-row">
           <view wx:for="{{row}}" wx:for-item="step" wx:key="id" class="state-cell">
-            <view class="card card--grid emotion-calm-card">
+            <view
+              class="card card--interactive card--grid emotion-calm-card {{selectedStepId === step.id ? 'card--selected' : ''}}"
+              bindtap="handleSelect"
+              data-id="{{step.id}}"
+            >
               <view class="state-card-head">
                 <text class="state-card-emoji">{{step.emoji}}</text>
                 <text class="state-card-name">{{step.title}}</text>
@@ -27,9 +31,14 @@
         </view>
       </view>
 
-      <view class="button-group flow-action-row">
-        <navigator url="/pages/tired-care/index" class="button-secondary">先去休息</navigator>
-        <navigator url="/pages/month-completed/index" class="button-secondary">看看完成</navigator>
+      <view wx:if="{{selectedStepPrompt}}" class="emotion-steady-prompt-card" bindtap="handleOpenNextActions">
+        <text class="emotion-steady-prompt-main">{{selectedStepPrompt}}</text>
+        <text class="emotion-steady-prompt-hint">点一下，给自己留个出口</text>
+      </view>
+
+      <view wx:if="{{showNextActions}}" class="button-group flow-action-row emotion-steady-actions">
+        <navigator url="/pages/tired-care/index" class="button-secondary button-preferred">先去休息</navigator>
+        <navigator url="/pages/month-completed/index" class="button-secondary">看看已经完成</navigator>
       </view>
     </view>
   </view>

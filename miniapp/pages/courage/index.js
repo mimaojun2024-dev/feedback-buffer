@@ -3,7 +3,13 @@ const {
   deleteStoredCourageItem,
   getStoredCourageList
 } = require('../../utils/storage');
+const {
+  clearInputPlaceholder,
+  restoreInputPlaceholder
+} = require('../../utils/placeholders');
 const { formatDateTime, normalizeText } = require('../../utils/time');
+
+const COURAGE_TASK_PLACEHOLDER = '写下那件需要勇气去做的事';
 
 function getCourageItems() {
   return getStoredCourageList().map((item) => ({
@@ -22,6 +28,9 @@ Page({
     encouragementOpened: false,
     courageItems: [],
     hasCourageItems: false,
+    inputPlaceholders: {
+      courageTask: COURAGE_TASK_PLACEHOLDER
+    },
     isManagingCourage: false,
     canToggleCouragePreviewForTest: false,
     isPreviewingEmptyCourageForTest: false
@@ -56,6 +65,10 @@ Page({
       canSubmit: normalizeText(task).length > 0
     });
   },
+
+  handleInputFocus: clearInputPlaceholder,
+
+  handleInputBlur: restoreInputPlaceholder,
 
   handleSubmit() {
     const task = normalizeText(this.data.task);
@@ -111,7 +124,7 @@ function getIsTestBuild() {
   try {
     const accountInfo = wx.getAccountInfoSync ? wx.getAccountInfoSync() : null;
     const envVersion = accountInfo && accountInfo.miniProgram && accountInfo.miniProgram.envVersion;
-    return envVersion === 'develop' || envVersion === 'trial';
+    return envVersion === 'develop';
   } catch (error) {
     return false;
   }

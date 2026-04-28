@@ -2,10 +2,9 @@
   <view class="panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">勇气挑战</text>
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -16,9 +15,18 @@
       </view>
 
       <view class="flow-card courage-flow-card">
-        <textarea class="textarea textarea--compact courage-input" value="{{task}}" placeholder="写下那件需要勇气去做的事" bindinput="handleInput" />
+        <textarea
+          class="textarea textarea--compact courage-input"
+          value="{{task}}"
+          placeholder="{{inputPlaceholders.courageTask}}"
+          data-placeholder-key="courageTask"
+          data-placeholder-text="写下那件需要勇气去做的事"
+          bindinput="handleInput"
+          bindfocus="handleInputFocus"
+          bindblur="handleInputBlur"
+        />
         <view class="button-group courage-action-group">
-          <button class="button-primary courage-action-button" bindtap="handleSubmit" disabled="{{!canSubmit}}">我可以现在做</button>
+          <button class="button-primary button-preferred courage-action-button" bindtap="handleSubmit" disabled="{{!canSubmit}}">我可以现在做</button>
           <button class="button-secondary courage-action-button" bindtap="handleNeedTime">我还需要一点时间</button>
         </view>
       </view>
@@ -32,8 +40,8 @@
 
         <block wx:if="{{encouragementOpened}}">
           <view class="button-group courage-action-group courage-action-group--retry">
-            <button class="button-primary courage-action-button" bindtap="handleSubmit" disabled="{{!canSubmit}}">我可以现在做</button>
-            <navigator url="/pages/home/index" class="button-secondary courage-action-button">那就再积蓄能量</navigator>
+            <button class="button-primary button-preferred courage-action-button" bindtap="handleSubmit" disabled="{{!canSubmit}}">我可以现在做</button>
+            <navigator url="/pages/home/index" open-type="reLaunch" class="button-secondary courage-action-button">那就再积蓄能量</navigator>
           </view>
         </block>
       </block>

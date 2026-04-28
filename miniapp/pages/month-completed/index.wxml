@@ -5,7 +5,7 @@
         <text class="eyebrow">我的轴线</text>
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -14,7 +14,7 @@
           <navigator url="/pages/axis-year/index" class="nav-rail-link">年度</navigator>
           <navigator url="/pages/axis-month/index" class="nav-rail-link">月度</navigator>
           <navigator url="/pages/axis-today/index" class="nav-rail-link">今天</navigator>
-          <text class="nav-rail-link nav-rail-link--active month-completed-nav-link">本月完成</text>
+          <navigator url="/pages/month-completed/index" class="nav-rail-link nav-rail-link--active month-completed-nav-link">本月完成</navigator>
         </view>
 
         <view class="flow-hero month-completed-hero">

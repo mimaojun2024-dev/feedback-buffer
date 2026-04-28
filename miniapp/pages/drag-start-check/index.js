@@ -13,7 +13,7 @@ Page({
     incrementStoredFlowStat(`drag-start.check.${answer}`);
 
     if (answer === 'yes') {
-      wx.navigateTo({ url: '/pages/drag-start/index' });
+      wx.redirectTo({ url: '/pages/drag-start/index' });
       return;
     }
 
@@ -40,7 +40,7 @@ Page({
     incrementStoredFlowStat(`drag-start.check.retry.${answer}`);
 
     if (answer === 'yes') {
-      wx.navigateTo({ url: '/pages/drag-start/index' });
+      wx.redirectTo({ url: '/pages/drag-start/index' });
     }
   }
 });

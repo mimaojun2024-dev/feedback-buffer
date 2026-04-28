@@ -50,19 +50,22 @@ function getStartDetails(flowStats) {
   const completedCount = getCount(flowStats, 'drag-start.completed');
 
   return [
-    detail('问过自己', countText(checkCount)),
-    detail('真正启动', countText(startedCount)),
-    detail('启动成功', countText(completedCount))
+    detail('慢下半拍', countText(checkCount)),
+    detail('启动成功', countText(startedCount)),
+    detail('走完两分钟', countText(completedCount))
   ];
 }
 
 function getCourageDetails(courageItems) {
   const latestCourage = courageItems[0] ? courageItems[0].title : '还没有';
+  const earliestCourage = courageItems.length > 0
+    ? courageItems[courageItems.length - 1].title
+    : '还没有';
 
   return [
-    detail('写下勇气', courageItems.length > 0 ? `${courageItems.length} 条` : '还没有'),
+    detail('写下难题', courageItems.length > 0 ? `${courageItems.length} 条` : '还没有'),
     detail('最近一条', latestCourage, true),
-    detail('最前一条', latestCourage, true)
+    detail('最早一条', earliestCourage, true)
   ];
 }
 
@@ -121,7 +124,7 @@ function getStimulationDetails(stateClicks) {
   return [
     detail('暗格状态', '开发中'),
     detail('打开次数', countText(stateClicks.stimulation || 0)),
-    detail('留到以后', '先锁着')
+    detail('提出需求', '「中熊猫」公众号')
   ];
 }
 

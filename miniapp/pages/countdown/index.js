@@ -114,7 +114,7 @@ function getIsTestBuild() {
   try {
     const accountInfo = wx.getAccountInfoSync ? wx.getAccountInfoSync() : null;
     const envVersion = accountInfo && accountInfo.miniProgram && accountInfo.miniProgram.envVersion;
-    return envVersion === 'develop' || envVersion === 'trial';
+    return envVersion === 'develop';
   } catch (error) {
     return false;
   }

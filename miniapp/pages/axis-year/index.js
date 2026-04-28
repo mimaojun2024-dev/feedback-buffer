@@ -1,5 +1,11 @@
 const { getStoredMainAxisSection, setStoredMainAxisSection } = require('../../utils/storage');
+const {
+  clearInputPlaceholder,
+  restoreInputPlaceholder
+} = require('../../utils/placeholders');
 const { normalizeText } = require('../../utils/time');
+
+const YEAR_ENTRY_PLACEHOLDER = '写下这一条方向';
 
 function createEntries(entries) {
   return (entries || []).map((entry) => ({
@@ -15,7 +21,10 @@ Page({
   data: {
     entries: [{ task: '' }, { task: '' }, { task: '' }],
     isEditing: true,
-    canSave: false
+    canSave: false,
+    inputPlaceholders: {
+      axisEntry: YEAR_ENTRY_PLACEHOLDER
+    }
   },
 
   onShow() {
@@ -39,6 +48,10 @@ Page({
       canSave: hasEntries(entries)
     });
   },
+
+  handleInputFocus: clearInputPlaceholder,
+
+  handleInputBlur: restoreInputPlaceholder,
 
   handleSave() {
     if (!hasEntries(this.data.entries)) {

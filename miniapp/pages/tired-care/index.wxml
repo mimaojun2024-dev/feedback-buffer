@@ -4,7 +4,7 @@
       <view class="top-copy">
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -48,7 +48,7 @@
           <text class="tired-care-spark tired-care-spark--seven">✦</text>
           <text class="tired-care-spark tired-care-spark--eight">✧</text>
         </view>
-        <text class="tired-care-reassurance-main">会好起来的</text>
+        <text class="tired-care-reassurance-main">{{reassuranceMainText}}</text>
         <text wx:if="{{reassuranceCelebrationText}}" class="tired-care-celebration-text">{{reassuranceCelebrationText}}</text>
         <text class="tired-care-reassurance-count">{{reassuranceCountText}}</text>
       </view>

@@ -7,10 +7,16 @@ const {
   setStoredDailyCheckinEvent,
   setStoredMainAxisSection
 } = require('../../utils/storage');
+const {
+  clearInputPlaceholder,
+  restoreInputPlaceholder
+} = require('../../utils/placeholders');
 const { formatTime, normalizeText } = require('../../utils/time');
 
 const COMPLETION_PREVIEW_MODES = ['actual', 'empty', 'filled'];
 const PREVIEW_COMPLETION = '把今天的主轴往前推了一步';
+const TODAY_TASK_PLACEHOLDER = '写下今天最重要的那件事';
+const COMPLETION_PLACEHOLDER = '比如 把第一版小程序跑起来';
 
 function getCompletionState(previewMode = 'actual') {
   const dailyCheckin = getStoredDailyCheckinForToday();
@@ -67,6 +73,10 @@ Page({
     canSaveCompletion: false,
     canWriteCompletion: false,
     canToggleCompletionPreviewForTest: false,
+    inputPlaceholders: {
+      todayTask: TODAY_TASK_PLACEHOLDER,
+      completedThing: COMPLETION_PLACEHOLDER
+    },
     completionPreviewButtonLabel: '预览无记录'
   },
 
@@ -97,6 +107,10 @@ Page({
       canSave: normalizeText(task).length > 0
     });
   },
+
+  handleInputFocus: clearInputPlaceholder,
+
+  handleInputBlur: restoreInputPlaceholder,
 
   handleSave() {
     const task = normalizeText(this.data.task);
@@ -228,7 +242,7 @@ function getIsTestBuild() {
   try {
     const accountInfo = wx.getAccountInfoSync ? wx.getAccountInfoSync() : null;
     const envVersion = accountInfo && accountInfo.miniProgram && accountInfo.miniProgram.envVersion;
-    return envVersion === 'develop' || envVersion === 'trial';
+    return envVersion === 'develop';
   } catch (error) {
     return false;
   }

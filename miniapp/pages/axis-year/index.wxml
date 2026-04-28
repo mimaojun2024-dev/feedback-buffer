@@ -5,13 +5,13 @@
         <text class="eyebrow">主轴</text>
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
     <view class="stack axis-page-stack">
       <view class="nav-rail">
-        <text class="nav-rail-link nav-rail-link--active">年度</text>
+        <navigator url="/pages/axis-year/index" class="nav-rail-link nav-rail-link--active">年度</navigator>
         <navigator url="/pages/axis-month/index" class="nav-rail-link">月度</navigator>
         <navigator url="/pages/axis-today/index" class="nav-rail-link">今天</navigator>
       </view>
@@ -26,7 +26,17 @@
         <view class="axis-entry-list">
           <view wx:for="{{entries}}" wx:key="index" class="axis-entry-card">
             <text class="axis-entry-label">方向 {{index + 1}}</text>
-            <textarea class="axis-entry-input" value="{{item.task}}" placeholder="写下这一条方向" bindinput="handleInput" data-index="{{index}}" />
+            <textarea
+              class="axis-entry-input"
+              value="{{item.task}}"
+              placeholder="{{inputPlaceholders.axisEntry}}"
+              data-index="{{index}}"
+              data-placeholder-key="axisEntry"
+              data-placeholder-text="写下这一条方向"
+              bindinput="handleInput"
+              bindfocus="handleInputFocus"
+              bindblur="handleInputBlur"
+            />
           </view>
           <button class="axis-save-button" bindtap="handleSave" disabled="{{!canSave}}">保存这几条</button>
         </view>

@@ -9,7 +9,13 @@ const {
   setStoredDailyCheckinEvent,
   setStoredMainAxisSection
 } = require('../../utils/storage');
+const {
+  clearInputPlaceholder,
+  restoreInputPlaceholder
+} = require('../../utils/placeholders');
 const { formatTime, normalizeText } = require('../../utils/time');
+
+const TODAY_AXIS_PLACEHOLDER = '写下今天最重要的一件事';
 
 function chunkStates(states) {
   const rows = [];
@@ -49,7 +55,7 @@ function getHomeState() {
       ? formatTime(dailyCheckin.endedAt)
       : canEndToday
         ? '可收束'
-        : '18:30 后'
+        : '18:30 后可收束'
   };
 }
 
@@ -57,7 +63,7 @@ function getIsTestBuild() {
   try {
     const accountInfo = wx.getAccountInfoSync ? wx.getAccountInfoSync() : null;
     const envVersion = accountInfo && accountInfo.miniProgram && accountInfo.miniProgram.envVersion;
-    return envVersion === 'develop' || envVersion === 'trial';
+    return envVersion === 'develop';
   } catch (error) {
     return false;
   }
@@ -80,7 +86,10 @@ Page({
     canStartToday: false,
     canEndToday: false,
     canResetTodayForTest: false,
-    canSaveTodayAxis: false,
+    inputPlaceholders: {
+      todayAxis: TODAY_AXIS_PLACEHOLDER
+    },
+    pressedStateId: '',
     startMeta: '',
     endMeta: ''
   },
@@ -93,12 +102,17 @@ Page({
   },
 
   onShow() {
+    this.isNavigatingState = false;
     this.refreshPage();
   },
 
   onUnload() {
     if (this.clockTimer) {
       clearInterval(this.clockTimer);
+    }
+
+    if (this.stateTapTimer) {
+      clearTimeout(this.stateTapTimer);
     }
   },
 
@@ -112,34 +126,56 @@ Page({
     });
 
     nextState.todayAxisDraft = nextDraft;
-    nextState.canSaveTodayAxis = normalizeText(nextDraft).length > 0;
 
     this.setData(nextState);
   },
 
   handleStateTap(event) {
+    if (this.isNavigatingState) {
+      return;
+    }
+
     const dataset = event.currentTarget.dataset || {};
     const id = dataset.id;
     const route = dataset.route;
 
+    this.isNavigatingState = true;
+    this.setData({
+      pressedStateId: id
+    });
     incrementStoredStateClick(id);
-    wx.navigateTo({ url: route });
+
+    this.stateTapTimer = setTimeout(() => {
+      wx.navigateTo({
+        url: route,
+        complete: () => {
+          this.setData({ pressedStateId: '' });
+          this.isNavigatingState = false;
+        }
+      });
+    }, 90);
   },
 
   handleTodayAxisInput(event) {
     const value = event.detail.value;
 
     this.setData({
-      todayAxisDraft: value,
-      canSaveTodayAxis: normalizeText(value).length > 0
+      todayAxisDraft: value
     });
   },
 
-  handleSaveTodayAxis() {
+  handleInputFocus: clearInputPlaceholder,
+
+  handleInputBlur(event) {
+    restoreInputPlaceholder.call(this, event);
+    this.saveTodayAxisDraft();
+  },
+
+  saveTodayAxisDraft() {
     const nextTask = normalizeText(this.data.todayAxisDraft);
 
     if (!nextTask) {
-      return;
+      return null;
     }
 
     const nextAxis = setStoredMainAxisSection('today', { task: nextTask });
@@ -147,9 +183,10 @@ Page({
     this.setData({
       todayAxisTask: nextAxis.today.task,
       todayAxisDraft: nextAxis.today.task,
-      hasTodayAxisTask: Boolean(nextAxis.today.task),
-      canSaveTodayAxis: true
+      hasTodayAxisTask: Boolean(nextAxis.today.task)
     });
+
+    return nextAxis.today.task;
   },
 
   handleStartToday() {
@@ -157,6 +194,7 @@ Page({
       return;
     }
 
+    this.saveTodayAxisDraft();
     setStoredDailyCheckinEvent('start');
     this.refreshPage(false);
   },
@@ -182,6 +220,7 @@ Page({
       return;
     }
 
+    this.saveTodayAxisDraft();
     setStoredDailyCheckinEvent('end');
     wx.navigateTo({ url: '/pages/axis-today/index' });
   }

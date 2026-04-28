@@ -32,6 +32,9 @@ function getReassuranceDisplay(nextCount) {
     reassuranceCountText: count >= REASSURANCE_MAX_COUNT
       ? '提气值拉满'
       : `已经给自己提气 ${count} 次`,
+    reassuranceMainText: count >= REASSURANCE_MAX_COUNT
+      ? '真的好起来了！'
+      : '会好起来的',
     reassuranceCelebrationClass: milestone ? milestone.className : '',
     reassuranceCelebrationText: milestone ? milestone.text : '',
     showReassuranceFirework: Boolean(milestone)
@@ -48,6 +51,7 @@ Page({
     showReassuranceFirework: false,
     reassuranceCount: 0,
     reassuranceCountText: '已经给自己提气 0 次',
+    reassuranceMainText: '会好起来的',
     reassuranceCelebrationClass: '',
     reassuranceCelebrationText: ''
   },

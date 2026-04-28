@@ -2,10 +2,9 @@
   <view class="panel">
     <view class="top-bar">
       <view class="top-copy">
-        <text class="eyebrow">反馈缓冲</text>
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -23,7 +22,7 @@
       </block>
 
       <view class="button-group flow-action-row">
-        <button class="button-primary" bindtap="handleReturnAxis">回到今天主轴</button>
+        <button class="button-primary button-preferred" bindtap="handleReturnAxis">回到今天主轴</button>
         <button class="button-secondary" bindtap="handleShowFeedbackPause">还是想看</button>
       </view>
 
@@ -37,7 +36,7 @@
 
       <block wx:if="{{isFeedbackPauseOpened}}">
         <view class="button-group flow-action-row">
-          <button class="button-primary" bindtap="handleReturnAxis">回到今天主轴</button>
+          <button class="button-primary button-preferred" bindtap="handleReturnAxis">回到今天主轴</button>
           <button class="button-secondary" bindtap="handleStartFiveMinuteCountdown">那就看五分钟</button>
         </view>
       </block>

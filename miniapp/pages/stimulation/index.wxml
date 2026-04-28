@@ -4,7 +4,7 @@
       <view class="top-copy">
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -17,11 +17,11 @@
       <view class="summary choice-summary">
         <text class="state-card-emoji">🗝️</text>
         <text class="summary-value">这格先锁着</text>
-        <text class="body">不是每个入口都要现在打开。</text>
+        <text class="body">到公众号「中熊猫」后台提建议</text>
       </view>
 
       <view class="button-group flow-action-row">
-        <navigator url="/pages/home/index" class="button-primary">回到主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="button-secondary">回到主页</navigator>
       </view>
     </view>
   </view>

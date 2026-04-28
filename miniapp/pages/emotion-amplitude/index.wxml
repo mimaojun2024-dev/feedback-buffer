@@ -4,7 +4,7 @@
       <view class="top-copy">
       </view>
       <view class="top-actions">
-        <navigator url="/pages/home/index" class="pill-link">主页</navigator>
+        <navigator url="/pages/home/index" open-type="reLaunch" class="pill-link">主页</navigator>
       </view>
     </view>
 
@@ -19,8 +19,12 @@
         <textarea
           class="textarea textarea--compact emotion-trigger-input"
           value="{{trigger}}"
-          placeholder="一句话、一个消息，或者一个没有推进的下午"
+          placeholder="{{inputPlaceholders.trigger}}"
+          data-placeholder-key="trigger"
+          data-placeholder-text="一句话，一个消息，还是其他什么？"
           bindinput="handleInput"
+          bindfocus="handleInputFocus"
+          bindblur="handleInputBlur"
         />
         <button class="button-primary emotion-continue-button" bindtap="handleContinue" disabled="{{!canContinue}}">没事的宝，先稳住</button>
       </view>

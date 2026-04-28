@@ -5,7 +5,13 @@ const {
   setStoredStartTask,
   START_COUNTDOWN_SECONDS
 } = require('../../utils/storage');
+const {
+  clearInputPlaceholder,
+  restoreInputPlaceholder
+} = require('../../utils/placeholders');
 const { formatDateTime, normalizeText } = require('../../utils/time');
+
+const START_TASK_PLACEHOLDER = '比如：先把文档打开，写下第一段提纲';
 
 function getStartHistoryItems() {
   return getStoredStartHistory().map((item) => ({
@@ -24,6 +30,9 @@ Page({
     isManagingHistory: false,
     startHistoryItems: [],
     hasStartHistory: false,
+    inputPlaceholders: {
+      startTask: START_TASK_PLACEHOLDER
+    },
     countdownMinutes: Math.floor(START_COUNTDOWN_SECONDS / 60)
   },
 
@@ -56,6 +65,10 @@ Page({
   handleInput(event) {
     this.setData({ draftTask: event.detail.value });
   },
+
+  handleInputFocus: clearInputPlaceholder,
+
+  handleInputBlur: restoreInputPlaceholder,
 
   handleSubmit() {
     const nextTask = setStoredStartTask(this.data.draftTask);
