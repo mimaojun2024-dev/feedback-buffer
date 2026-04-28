@@ -10,7 +10,7 @@ Page({
 
   handleSelect(event) {
     const actionId = event.currentTarget.dataset.id;
-    const action = ESCAPED_ACTIONS.find((item) => item.id === actionId);
+    const action = getEscapedActionById(actionId);
 
     incrementStoredFlowStat(`escaped.${actionId}`);
     this.setData({
@@ -19,3 +19,13 @@ Page({
     });
   }
 });
+
+function getEscapedActionById(actionId) {
+  for (let index = 0; index < ESCAPED_ACTIONS.length; index += 1) {
+    if (ESCAPED_ACTIONS[index].id === actionId) {
+      return ESCAPED_ACTIONS[index];
+    }
+  }
+
+  return null;
+}

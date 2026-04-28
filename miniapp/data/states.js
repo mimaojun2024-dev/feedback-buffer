@@ -56,7 +56,13 @@ const LOW_QUALITY_STATES = [
 ];
 
 function getStateById(id) {
-  return LOW_QUALITY_STATES.find((state) => state.id === id) || null;
+  for (let index = 0; index < LOW_QUALITY_STATES.length; index += 1) {
+    if (LOW_QUALITY_STATES[index].id === id) {
+      return LOW_QUALITY_STATES[index];
+    }
+  }
+
+  return null;
 }
 
 module.exports = {

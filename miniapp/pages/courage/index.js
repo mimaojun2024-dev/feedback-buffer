@@ -7,7 +7,9 @@ const { formatDateTime, normalizeText } = require('../../utils/time');
 
 function getCourageItems() {
   return getStoredCourageList().map((item) => ({
-    ...item,
+    id: item.id,
+    title: item.title,
+    createdAt: item.createdAt,
     createdAtLabel: formatDateTime(item.createdAt)
   }));
 }

@@ -32,14 +32,15 @@ Page({
 
   onShow() {
     this.hasCompletedCountdown = false;
-    this.setData({
-      remainingSeconds: FIVE_MINUTE_SECONDS,
-      progressPercent: 100,
-      timeLabel: formatRemainingTime(FIVE_MINUTE_SECONDS),
-      canUseTestTools: getIsTestBuild(),
-      isComplete: false,
-      ...buildYearAxisState(this.previewMode)
-    });
+    const nextState = buildYearAxisState(this.previewMode);
+
+    nextState.remainingSeconds = FIVE_MINUTE_SECONDS;
+    nextState.progressPercent = 100;
+    nextState.timeLabel = formatRemainingTime(FIVE_MINUTE_SECONDS);
+    nextState.canUseTestTools = getIsTestBuild();
+    nextState.isComplete = false;
+
+    this.setData(nextState);
 
     if (!this.hasTrackedStart) {
       this.hasTrackedStart = true;

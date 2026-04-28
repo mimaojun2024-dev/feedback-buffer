@@ -31,7 +31,7 @@ Page({
   handleInput(event) {
     const index = Number(event.currentTarget.dataset.index);
     const entries = this.data.entries.map((entry, entryIndex) => (
-      entryIndex === index ? { ...entry, task: event.detail.value } : entry
+      entryIndex === index ? { task: event.detail.value } : entry
     ));
 
     this.setData({

@@ -80,13 +80,13 @@ Page({
 
   refreshPage() {
     const storedToday = getStoredMainAxisSection('today') || { task: '' };
+    const nextState = getCompletionState(this.completionPreviewMode);
 
-    this.setData({
-      task: storedToday.task || '',
-      isEditing: !storedToday.task,
-      canSave: normalizeText(storedToday.task).length > 0,
-      ...getCompletionState(this.completionPreviewMode)
-    });
+    nextState.task = storedToday.task || '';
+    nextState.isEditing = !storedToday.task;
+    nextState.canSave = normalizeText(storedToday.task).length > 0;
+
+    this.setData(nextState);
   },
 
   handleTaskInput(event) {

@@ -1,5 +1,6 @@
 function pad(value) {
-  return `${value}`.padStart(2, '0');
+  const text = `${value}`;
+  return text.length >= 2 ? text : `0${text}`;
 }
 
 function normalizeText(value) {
@@ -8,7 +9,7 @@ function normalizeText(value) {
 
 function toDate(value) {
   const date = value ? new Date(value) : null;
-  return date && !Number.isNaN(date.getTime()) ? date : null;
+  return date && !isNaN(date.getTime()) ? date : null;
 }
 
 function formatTime(value) {

@@ -8,7 +8,9 @@ Page({
 
   onShow() {
     const items = getStoredCourageList().map((item) => ({
-      ...item,
+      id: item.id,
+      title: item.title,
+      createdAt: item.createdAt,
       createdAtLabel: formatDateTime(item.createdAt)
     }));
 

@@ -1,4 +1,4 @@
-const { normalizeText } = require('./time');
+const { normalizeText, pad } = require('./time');
 
 const STORAGE_KEY = 'feedback-buffer.daily-counts';
 const PRIORITY_TASK_KEY = 'feedback-buffer.priority-task';
@@ -40,11 +40,21 @@ function safeSetStorage(key, value) {
   return value;
 }
 
+function copyObject(value) {
+  const nextValue = {};
+
+  Object.keys(value || {}).forEach((key) => {
+    nextValue[key] = value[key];
+  });
+
+  return nextValue;
+}
+
 function getTodayKey() {
   const now = new Date();
   const year = now.getFullYear();
-  const month = `${now.getMonth() + 1}`.padStart(2, '0');
-  const day = `${now.getDate()}`.padStart(2, '0');
+  const month = pad(now.getMonth() + 1);
+  const day = pad(now.getDate());
   return `${year}-${month}-${day}`;
 }
 
@@ -100,10 +110,9 @@ function setStoredDailyCheckinEvent(eventId) {
     todayCheckin.endedAt = new Date().toISOString();
   }
 
-  safeSetStorage(DAILY_CHECKIN_KEY, {
-    ...storedCheckins,
-    [today]: todayCheckin
-  });
+  const nextCheckins = copyObject(storedCheckins);
+  nextCheckins[today] = todayCheckin;
+  safeSetStorage(DAILY_CHECKIN_KEY, nextCheckins);
 
   return todayCheckin;
 }
@@ -116,7 +125,7 @@ function resetStoredDailyCheckinForToday() {
     return createEmptyDailyCheckin();
   }
 
-  const nextCheckins = { ...storedCheckins };
+  const nextCheckins = copyObject(storedCheckins);
   delete nextCheckins[today];
   safeSetStorage(DAILY_CHECKIN_KEY, nextCheckins);
 
@@ -130,26 +139,31 @@ function setStoredDailyCheckinCompletion(value) {
 
   todayCheckin.completedThing = normalizeText(value);
 
-  safeSetStorage(DAILY_CHECKIN_KEY, {
-    ...storedCheckins,
-    [today]: todayCheckin
-  });
+  const nextCheckins = copyObject(storedCheckins);
+  nextCheckins[today] = todayCheckin;
+  safeSetStorage(DAILY_CHECKIN_KEY, nextCheckins);
 
   return todayCheckin;
 }
 
 function getStoredMonthlyDailyCheckins(now = new Date()) {
   const year = now.getFullYear();
-  const month = `${now.getMonth() + 1}`.padStart(2, '0');
+  const month = pad(now.getMonth() + 1);
   const monthKey = `${year}-${month}`;
   const storedCheckins = getStoredDailyCheckins();
 
   return Object.keys(storedCheckins)
     .filter((dateKey) => dateKey.indexOf(monthKey) === 0)
-    .map((dateKey) => ({
-      dateKey,
-      ...normalizeDailyCheckin(storedCheckins[dateKey])
-    }))
+    .map((dateKey) => {
+      const checkin = normalizeDailyCheckin(storedCheckins[dateKey]);
+
+      return {
+        dateKey,
+        startedAt: checkin.startedAt,
+        endedAt: checkin.endedAt,
+        completedThing: checkin.completedThing
+      };
+    })
     .filter((entry) => entry.startedAt || entry.endedAt || entry.completedThing)
     .sort((left, right) => right.dateKey.localeCompare(left.dateKey));
 }
@@ -233,7 +247,7 @@ function appendStoredStartHistory(task) {
     completedAt: new Date().toISOString()
   };
 
-  safeSetStorage(START_HISTORY_KEY, [nextItem, ...getStoredStartHistory()].slice(0, START_HISTORY_LIMIT));
+  safeSetStorage(START_HISTORY_KEY, [nextItem].concat(getStoredStartHistory()).slice(0, START_HISTORY_LIMIT));
   return nextItem;
 }
 
@@ -335,7 +349,7 @@ function appendStoredCourageItem(title) {
     createdAt: new Date().toISOString()
   };
 
-  safeSetStorage(COURAGE_LIST_KEY, [nextItem, ...getStoredCourageList()].slice(0, COURAGE_LIST_LIMIT));
+  safeSetStorage(COURAGE_LIST_KEY, [nextItem].concat(getStoredCourageList()).slice(0, COURAGE_LIST_LIMIT));
   return nextItem;
 }
 
@@ -359,7 +373,13 @@ function createEmptyAxisItem() {
 }
 
 function createEmptyAxisList() {
-  return Array.from({ length: MAIN_AXIS_LIST_LIMIT }, () => createEmptyAxisItem());
+  const items = [];
+
+  for (let index = 0; index < MAIN_AXIS_LIST_LIMIT; index += 1) {
+    items.push(createEmptyAxisItem());
+  }
+
+  return items;
 }
 
 function normalizeAxisItem(item) {
@@ -385,7 +405,7 @@ function normalizeAxisList(list) {
   }
 
   if (typeof list === 'string' && normalizeText(list)) {
-    return [normalizeAxisItem(list), ...createEmptyAxisList().slice(1)];
+    return [normalizeAxisItem(list)].concat(createEmptyAxisList().slice(1));
   }
 
   return createEmptyAxisList();
@@ -393,14 +413,18 @@ function normalizeAxisList(list) {
 
 function createEmptyTodayAxisItem() {
   return {
-    ...createEmptyAxisItem(),
+    task: '',
+    owner: '',
     dateKey: getTodayKey()
   };
 }
 
 function normalizeTodayAxisItem(item) {
+  const axisItem = normalizeAxisItem(item);
+
   return {
-    ...normalizeAxisItem(item),
+    task: axisItem.task,
+    owner: axisItem.owner,
     dateKey: normalizeText(item && item.dateKey) || getTodayKey()
   };
 }

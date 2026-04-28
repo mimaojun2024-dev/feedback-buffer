@@ -69,15 +69,15 @@ Page({
       clearTimeout(this.fireworkTimer);
     }
 
-    this.setData({
-      ...getReassuranceDisplay(0),
-      showReassuranceFirework: false
-    });
+    const nextDisplay = getReassuranceDisplay(0);
+    nextDisplay.showReassuranceFirework = false;
+
+    this.setData(nextDisplay);
   },
 
   handleSelect(event) {
     const optionId = event.currentTarget.dataset.id;
-    const option = TIRED_OPTIONS.find((item) => item.id === optionId);
+    const option = getTiredOptionById(optionId);
 
     incrementStoredTiredOptionClick(optionId);
     this.refreshOptions();
@@ -107,9 +107,7 @@ Page({
     const nextCount = Math.min(this.data.reassuranceCount + 1, REASSURANCE_MAX_COUNT);
     const nextDisplay = getReassuranceDisplay(nextCount);
 
-    this.setData({
-      ...nextDisplay
-    });
+    this.setData(nextDisplay);
 
     if (nextDisplay.showReassuranceFirework) {
       this.restartFirework();
@@ -145,4 +143,14 @@ function chunkOptions(options) {
   }
 
   return rows;
+}
+
+function getTiredOptionById(optionId) {
+  for (let index = 0; index < TIRED_OPTIONS.length; index += 1) {
+    if (TIRED_OPTIONS[index].id === optionId) {
+      return TIRED_OPTIONS[index];
+    }
+  }
+
+  return null;
 }

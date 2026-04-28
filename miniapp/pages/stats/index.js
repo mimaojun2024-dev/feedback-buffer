@@ -35,11 +35,12 @@ function detail(label, value, isWide = false) {
 }
 
 function sortByCount(items) {
-  return [...items].sort((left, right) => right.count - left.count);
+  return items.slice().sort((left, right) => right.count - left.count);
 }
 
 function getTopItem(items) {
-  const [topItem] = sortByCount(items).filter((item) => item.count > 0);
+  const rankedItems = sortByCount(items).filter((item) => item.count > 0);
+  const topItem = rankedItems[0];
   return topItem || null;
 }
 

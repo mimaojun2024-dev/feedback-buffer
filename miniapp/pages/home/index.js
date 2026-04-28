@@ -105,16 +105,22 @@ Page({
   refreshPage(resetDraft = true) {
     const homeState = getHomeState();
     const nextDraft = resetDraft ? homeState.todayAxisTask : this.data.todayAxisDraft;
+    const nextState = {};
 
-    this.setData({
-      ...homeState,
-      todayAxisDraft: nextDraft,
-      canSaveTodayAxis: normalizeText(nextDraft).length > 0
+    Object.keys(homeState).forEach((key) => {
+      nextState[key] = homeState[key];
     });
+
+    nextState.todayAxisDraft = nextDraft;
+    nextState.canSaveTodayAxis = normalizeText(nextDraft).length > 0;
+
+    this.setData(nextState);
   },
 
   handleStateTap(event) {
-    const { id, route } = event.currentTarget.dataset;
+    const dataset = event.currentTarget.dataset || {};
+    const id = dataset.id;
+    const route = dataset.route;
 
     incrementStoredStateClick(id);
     wx.navigateTo({ url: route });

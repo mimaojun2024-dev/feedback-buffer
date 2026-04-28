@@ -5,7 +5,10 @@ const { formatDateLabel } = require('../../utils/time');
 
 function getMonthEntries() {
   return getStoredMonthlyDailyCheckins().map((entry) => ({
-    ...entry,
+    dateKey: entry.dateKey,
+    startedAt: entry.startedAt,
+    endedAt: entry.endedAt,
+    completedThing: entry.completedThing,
     dateLabel: formatDateLabel(entry.dateKey)
   }));
 }

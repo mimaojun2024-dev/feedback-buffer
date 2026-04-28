@@ -8,7 +8,10 @@ function getMonthCompletedItems() {
     .filter((entry) => entry.completedThing)
     .slice(0, MONTH_COMPLETED_LIMIT)
     .map((entry) => ({
-      ...entry,
+      dateKey: entry.dateKey,
+      startedAt: entry.startedAt,
+      endedAt: entry.endedAt,
+      completedThing: entry.completedThing,
       dateLabel: formatDateLabel(entry.dateKey)
     }));
 }

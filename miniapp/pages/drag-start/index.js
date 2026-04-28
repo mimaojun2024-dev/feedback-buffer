@@ -9,7 +9,9 @@ const { formatDateTime, normalizeText } = require('../../utils/time');
 
 function getStartHistoryItems() {
   return getStoredStartHistory().map((item) => ({
-    ...item,
+    id: item.id,
+    task: item.task,
+    completedAt: item.completedAt,
     completedAtLabel: formatDateTime(item.completedAt)
   }));
 }
@@ -32,13 +34,13 @@ Page({
   onShow() {
     const storedTask = getStoredStartTask();
     const isEditMode = this.routeOptions && this.routeOptions.edit === '1';
+    const nextState = this.getHistoryState();
 
-    this.setData({
-      startTask: storedTask,
-      draftTask: storedTask,
-      isEditingTask: !storedTask || isEditMode,
-      ...this.getHistoryState()
-    });
+    nextState.startTask = storedTask;
+    nextState.draftTask = storedTask;
+    nextState.isEditingTask = !storedTask || isEditMode;
+
+    this.setData(nextState);
   },
 
   getHistoryState(isManagingHistory = this.data.isManagingHistory) {
