@@ -19,7 +19,9 @@ const TODAY_AXIS_PLACEHOLDER = '写下今天最重要的一件事';
 const LOCKED_STATE_ID = 'stimulation';
 const LOCKED_STATE_DEFAULT_COPY = '这格先锁着';
 const LOCKED_STATE_WARNING_COPY = '都说锁着了😠';
-const LOCKED_STATE_MAX_COPY = '锁孔都被你敲热了🗝️';
+const LOCKED_STATE_MAX_COPY = '锁孔都被你敲亮了😤';
+const LOCKED_STATE_BROKEN_COPY = '咔，裂开了，别敲了😭';
+const LOCKED_STATE_BROKEN_COUNT = 99;
 
 function chunkStates(states) {
   const rows = [];
@@ -49,7 +51,10 @@ function getHomeState() {
     hasEndedToday,
     canStartToday,
     canEndToday,
+    canUseHomeTestTools: isTestBuild,
     canResetTodayForTest: isTestBuild && (hasStartedToday || hasEndedToday),
+    startTitle: hasStartedToday ? '今天已启动' : '启动今天',
+    endTitle: hasEndedToday ? '今天已收束' : '收束今天',
     startMeta: hasStartedToday
       ? formatTime(dailyCheckin.startedAt)
       : canStartToday
@@ -89,6 +94,7 @@ Page({
     hasEndedToday: false,
     canStartToday: false,
     canEndToday: false,
+    canUseHomeTestTools: false,
     canResetTodayForTest: false,
     inputPlaceholders: {
       todayAxis: TODAY_AXIS_PLACEHOLDER
@@ -96,6 +102,8 @@ Page({
     pressedStateId: '',
     lockedStateTapCount: 0,
     lockedStateDescription: LOCKED_STATE_DEFAULT_COPY,
+    startTitle: '',
+    endTitle: '',
     startMeta: '',
     endMeta: ''
   },
@@ -173,6 +181,10 @@ Page({
   },
 
   handleLockedStateTap() {
+    if (this.data.lockedStateTapCount >= LOCKED_STATE_BROKEN_COUNT) {
+      return;
+    }
+
     const nextCount = this.data.lockedStateTapCount + 1;
 
     if (this.lockedStateTimer) {
@@ -186,9 +198,11 @@ Page({
       pressedStateId: LOCKED_STATE_ID
     });
 
-    this.lockedStateTimer = setTimeout(() => {
-      this.setData({ pressedStateId: '' });
-    }, 180);
+    if (nextCount < LOCKED_STATE_BROKEN_COUNT) {
+      this.lockedStateTimer = setTimeout(() => {
+        this.setData({ pressedStateId: '' });
+      }, 180);
+    }
   },
 
   resetLockedStateSession() {
@@ -262,6 +276,22 @@ Page({
     }
   },
 
+  handleBreakLockedStateForTest() {
+    if (!this.data.canUseHomeTestTools) {
+      return;
+    }
+
+    if (this.lockedStateTimer) {
+      clearTimeout(this.lockedStateTimer);
+    }
+
+    this.setData({
+      lockedStateTapCount: LOCKED_STATE_BROKEN_COUNT,
+      lockedStateDescription: getLockedStateCopy(LOCKED_STATE_BROKEN_COUNT),
+      pressedStateId: LOCKED_STATE_ID
+    });
+  },
+
   handleEndToday() {
     if (!this.data.canEndToday) {
       return;
@@ -274,6 +304,10 @@ Page({
 });
 
 function getLockedStateCopy(count) {
+  if (count >= LOCKED_STATE_BROKEN_COUNT) {
+    return LOCKED_STATE_BROKEN_COPY;
+  }
+
   if (count >= 10) {
     return LOCKED_STATE_MAX_COPY;
   }

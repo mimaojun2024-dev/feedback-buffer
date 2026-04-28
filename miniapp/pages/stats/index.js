@@ -44,15 +44,16 @@ function getTopItem(items) {
   return topItem || null;
 }
 
-function getStartDetails(flowStats) {
-  const checkCount = getCount(flowStats, 'drag-start.check.yes') + getCount(flowStats, 'drag-start.check.no');
-  const startedCount = getCount(flowStats, 'drag-start.started');
+function getStartDetails(flowStats, stateClicks) {
+  const entryCount = getCount(stateClicks, 'drag-start');
+  const attemptCount = getCount(flowStats, 'drag-start.check.yes')
+    + getCount(flowStats, 'drag-start.check.retry.yes');
   const completedCount = getCount(flowStats, 'drag-start.completed');
 
   return [
-    detail('慢下半拍', countText(checkCount)),
-    detail('启动成功', countText(startedCount)),
-    detail('走完两分钟', countText(completedCount))
+    detail('慢下半拍', countText(entryCount)),
+    detail('尝试启动', countText(attemptCount)),
+    detail('启动成功', countText(completedCount))
   ];
 }
 
@@ -131,7 +132,7 @@ function getStimulationDetails(stateClicks) {
 function getStateDetails(stateId, context) {
   switch (stateId) {
     case 'drag-start':
-      return getStartDetails(context.flowStats);
+      return getStartDetails(context.flowStats, context.stateClicks);
     case 'empty-dreaming':
       return getCourageDetails(context.courageItems);
     case 'escaped':

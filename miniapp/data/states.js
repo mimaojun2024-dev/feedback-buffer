@@ -2,8 +2,8 @@ const LOW_QUALITY_STATES = [
   {
     id: 'drag-start',
     emoji: '⏳',
-    name: '我不想启动',
-    shortLabel: '不想启动',
+    name: '启动真困难',
+    shortLabel: '启动困难',
     description: '先只压到第一步',
     route: '/pages/drag-start-check/index',
     cta: '问 2 分钟'

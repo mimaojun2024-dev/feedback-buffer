@@ -46,19 +46,19 @@
 
         <view class="button-group button-group--split home-checkin-actions">
           <button
-            class="button-secondary button-secondary--panel home-checkin-button home-checkin-button--start {{canStartToday && !hasStartedToday && !canEndToday ? 'button-preferred' : ''}}"
+            class="button-secondary button-secondary--panel home-checkin-button home-checkin-button--start {{hasStartedToday ? 'home-checkin-button--done' : ''}} {{canStartToday && !hasStartedToday ? 'home-checkin-button--ready button-preferred' : ''}} {{!canStartToday && !hasStartedToday ? 'home-checkin-button--waiting' : ''}}"
             bindtap="handleStartToday"
             disabled="{{!canStartToday || hasStartedToday}}"
           >
-            <text class="button-panel-title">启动今天</text>
+            <text class="button-panel-title">{{startTitle}}</text>
             <text class="button-panel-meta">{{startMeta}}</text>
           </button>
           <button
-            class="button-secondary button-secondary--panel home-checkin-button home-checkin-button--end {{!canEndToday ? 'home-checkin-button--disabled' : ''}} {{canEndToday && !hasEndedToday ? 'button-preferred' : ''}}"
+            class="button-secondary button-secondary--panel home-checkin-button home-checkin-button--end {{hasEndedToday ? 'home-checkin-button--done' : ''}} {{canEndToday && !hasEndedToday ? 'home-checkin-button--ready button-preferred' : ''}} {{!canEndToday && !hasEndedToday ? 'home-checkin-button--waiting' : ''}}"
             bindtap="handleEndToday"
             disabled="{{!canEndToday}}"
           >
-            <text class="button-panel-title">收束今天</text>
+            <text class="button-panel-title">{{endTitle}}</text>
             <text class="button-panel-meta">{{endMeta}}</text>
           </button>
         </view>
@@ -73,11 +73,16 @@
             class="state-cell"
           >
             <view
-              class="card card--interactive card--grid home-state-card {{state.id === 'stimulation' ? 'home-state-card--locked' : ''}} {{pressedStateId === state.id && state.id !== 'stimulation' ? 'home-state-card--pressed' : ''}} {{pressedStateId === state.id && state.id === 'stimulation' ? 'home-state-card--locked-pressed' : ''}} {{state.id === 'stimulation' && lockedStateTapCount >= 10 ? 'home-state-card--locked-max' : ''}}"
+              class="card card--interactive card--grid home-state-card {{state.id === 'stimulation' ? 'home-state-card--locked' : ''}} {{pressedStateId === state.id && state.id !== 'stimulation' ? 'home-state-card--pressed' : ''}} {{pressedStateId === state.id && state.id === 'stimulation' ? 'home-state-card--locked-pressed' : ''}} {{state.id === 'stimulation' && lockedStateTapCount >= 10 ? 'home-state-card--locked-max' : ''}} {{state.id === 'stimulation' && lockedStateTapCount >= 99 ? 'home-state-card--locked-broken' : ''}}"
               bindtap="handleStateTap"
               data-id="{{state.id}}"
               data-route="{{state.route}}"
             >
+              <block wx:if="{{state.id === 'stimulation' && lockedStateTapCount >= 99}}">
+                <view class="locked-crack locked-crack--one"></view>
+                <view class="locked-crack locked-crack--two"></view>
+                <view class="locked-crack locked-crack--three"></view>
+              </block>
               <view class="state-card-head">
                 <text class="state-card-emoji">{{state.emoji}}</text>
                 <text class="state-card-name">{{state.name}}</text>
@@ -88,9 +93,12 @@
         </view>
       </view>
 
-      <view wx:if="{{canResetTodayForTest}}" class="test-tools">
-        <button class="button-ghost test-reset-button" bindtap="handleResetTodayForTest">
+      <view wx:if="{{canUseHomeTestTools || canResetTodayForTest}}" class="test-tools home-test-tools">
+        <button wx:if="{{canResetTodayForTest}}" class="button-ghost test-reset-button" bindtap="handleResetTodayForTest">
           重置今日测试
+        </button>
+        <button wx:if="{{canUseHomeTestTools}}" class="button-ghost test-reset-button" bindtap="handleBreakLockedStateForTest">
+          暗格到 99 下
         </button>
       </view>
 
