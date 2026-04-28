@@ -16,6 +16,10 @@ const {
 const { formatTime, normalizeText } = require('../../utils/time');
 
 const TODAY_AXIS_PLACEHOLDER = '写下今天最重要的一件事';
+const LOCKED_STATE_ID = 'stimulation';
+const LOCKED_STATE_DEFAULT_COPY = '这格先锁着';
+const LOCKED_STATE_WARNING_COPY = '都说锁着了😠';
+const LOCKED_STATE_MAX_COPY = '锁孔都被你敲热了🗝️';
 
 function chunkStates(states) {
   const rows = [];
@@ -90,6 +94,8 @@ Page({
       todayAxis: TODAY_AXIS_PLACEHOLDER
     },
     pressedStateId: '',
+    lockedStateTapCount: 0,
+    lockedStateDescription: LOCKED_STATE_DEFAULT_COPY,
     startMeta: '',
     endMeta: ''
   },
@@ -103,6 +109,7 @@ Page({
 
   onShow() {
     this.isNavigatingState = false;
+    this.resetLockedStateSession();
     this.refreshPage();
   },
 
@@ -113,6 +120,10 @@ Page({
 
     if (this.stateTapTimer) {
       clearTimeout(this.stateTapTimer);
+    }
+
+    if (this.lockedStateTimer) {
+      clearTimeout(this.lockedStateTimer);
     }
   },
 
@@ -139,6 +150,11 @@ Page({
     const id = dataset.id;
     const route = dataset.route;
 
+    if (id === LOCKED_STATE_ID) {
+      this.handleLockedStateTap();
+      return;
+    }
+
     this.isNavigatingState = true;
     this.setData({
       pressedStateId: id
@@ -154,6 +170,37 @@ Page({
         }
       });
     }, 90);
+  },
+
+  handleLockedStateTap() {
+    const nextCount = this.data.lockedStateTapCount + 1;
+
+    if (this.lockedStateTimer) {
+      clearTimeout(this.lockedStateTimer);
+    }
+
+    incrementStoredStateClick(LOCKED_STATE_ID);
+    this.setData({
+      lockedStateTapCount: nextCount,
+      lockedStateDescription: getLockedStateCopy(nextCount),
+      pressedStateId: LOCKED_STATE_ID
+    });
+
+    this.lockedStateTimer = setTimeout(() => {
+      this.setData({ pressedStateId: '' });
+    }, 180);
+  },
+
+  resetLockedStateSession() {
+    if (this.lockedStateTimer) {
+      clearTimeout(this.lockedStateTimer);
+    }
+
+    this.setData({
+      lockedStateTapCount: 0,
+      lockedStateDescription: LOCKED_STATE_DEFAULT_COPY,
+      pressedStateId: ''
+    });
   },
 
   handleTodayAxisInput(event) {
@@ -225,3 +272,15 @@ Page({
     wx.navigateTo({ url: '/pages/axis-today/index' });
   }
 });
+
+function getLockedStateCopy(count) {
+  if (count >= 10) {
+    return LOCKED_STATE_MAX_COPY;
+  }
+
+  if (count >= 3) {
+    return LOCKED_STATE_WARNING_COPY;
+  }
+
+  return LOCKED_STATE_DEFAULT_COPY;
+}

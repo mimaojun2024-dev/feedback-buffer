@@ -73,7 +73,7 @@
             class="state-cell"
           >
             <view
-              class="card card--interactive card--grid home-state-card {{pressedStateId === state.id ? 'home-state-card--pressed' : ''}}"
+              class="card card--interactive card--grid home-state-card {{state.id === 'stimulation' ? 'home-state-card--locked' : ''}} {{pressedStateId === state.id && state.id !== 'stimulation' ? 'home-state-card--pressed' : ''}} {{pressedStateId === state.id && state.id === 'stimulation' ? 'home-state-card--locked-pressed' : ''}} {{state.id === 'stimulation' && lockedStateTapCount >= 10 ? 'home-state-card--locked-max' : ''}}"
               bindtap="handleStateTap"
               data-id="{{state.id}}"
               data-route="{{state.route}}"
@@ -82,7 +82,7 @@
                 <text class="state-card-emoji">{{state.emoji}}</text>
                 <text class="state-card-name">{{state.name}}</text>
               </view>
-              <text class="card-desc">{{state.description}}</text>
+              <text class="card-desc">{{state.id === 'stimulation' ? lockedStateDescription : state.description}}</text>
             </view>
           </view>
         </view>

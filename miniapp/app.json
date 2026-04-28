@@ -20,7 +20,6 @@
     "pages/emotion-amplitude/index",
     "pages/emotion-steady/index",
     "pages/tired-care/index",
-    "pages/stimulation/index",
     "pages/stats/index"
   ],
   "entryPagePath": "pages/home/index",

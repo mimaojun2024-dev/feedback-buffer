@@ -50,7 +50,7 @@ const LOW_QUALITY_STATES = [
     name: '暗格开发中',
     shortLabel: '暗格',
     description: '这格先锁着',
-    route: '/pages/stimulation/index',
+    route: '',
     cta: '晚点打开'
   }
 ];

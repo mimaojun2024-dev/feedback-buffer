@@ -423,6 +423,36 @@ button::after {
   box-shadow: var(--action-soft-shadow);
 }
 
+.home-state-card--locked-pressed {
+  transform: translateY(2rpx);
+  border-color: rgba(51, 51, 47, 0.22);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(44, 43, 39, 0.06), transparent 36%),
+    linear-gradient(180deg, rgba(249, 247, 241, 0.96), rgba(218, 216, 207, 0.9));
+  box-shadow:
+    0 10rpx 22rpx rgba(44, 43, 39, 0.12),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.72);
+}
+
+.home-state-card--locked-max {
+  border-color: rgba(41, 42, 38, 0.28);
+  background:
+    radial-gradient(circle at 50% 22%, rgba(30, 31, 28, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(239, 237, 229, 0.98), rgba(201, 200, 191, 0.92));
+  box-shadow:
+    0 12rpx 26rpx rgba(41, 42, 38, 0.14),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.62);
+}
+
+.home-state-card--locked-max .state-card-name {
+  color: #252521;
+}
+
+.home-state-card--locked-max .card-desc {
+  color: #3f403b;
+  font-weight: 650;
+}
+
 .card--selected {
   border-color: rgba(126, 104, 76, 0.26);
   background: linear-gradient(180deg, #fbf5e9, #eee1cc);
